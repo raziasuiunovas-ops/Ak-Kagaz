@@ -1,0 +1,105 @@
+// API client configuration
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+
+export interface FetchOptions extends RequestInit {
+  params?: Record<string, string | number | boolean>;
+}
+
+/**
+ * Base API client
+ * Handles authentication, headers, and error responses
+ */
+class ApiClient {
+  private baseURL: string;
+
+  constructor(baseURL: string) {
+    this.baseURL = baseURL;
+  }
+
+  private getHeaders(): HeadersInit {
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+
+    // Add auth token if exists
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return headers;
+  }
+
+  private buildURL(endpoint: string, params?: Record<string, string | number | boolean>): string {
+    const url = new URL(endpoint, this.baseURL);
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, String(value));
+      });
+    }
+
+    return url.toString();
+  }
+
+  async request<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
+    const { params, ...fetchOptions } = options;
+
+    const url = this.buildURL(endpoint, params);
+    const headers = this.getHeaders();
+
+    const response = await fetch(url, {
+      ...fetchOptions,
+      headers: {
+        ...headers,
+        ...fetchOptions.headers,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        message: 'An error occurred',
+        statusCode: response.status,
+      }));
+
+      throw new Error(error.message || `HTTP error ${response.status}`);
+    }
+
+    return response.json() as Promise<T>;
+  }
+
+  async get<T>(endpoint: string, options?: FetchOptions): Promise<T> {
+    return this.request<T>(endpoint, { ...options, method: 'GET' });
+  }
+
+  async post<T>(endpoint: string, data?: unknown, options?: FetchOptions): Promise<T> {
+    return this.request<T>(endpoint, {
+      ...options,
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async put<T>(endpoint: string, data?: unknown, options?: FetchOptions): Promise<T> {
+    return this.request<T>(endpoint, {
+      ...options,
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async patch<T>(endpoint: string, data?: unknown, options?: FetchOptions): Promise<T> {
+    return this.request<T>(endpoint, {
+      ...options,
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async delete<T>(endpoint: string, options?: FetchOptions): Promise<T> {
+    return this.request<T>(endpoint, { ...options, method: 'DELETE' });
+  }
+}
+
+export const apiClient = new ApiClient(API_BASE_URL);

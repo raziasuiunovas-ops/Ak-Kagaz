@@ -1,0 +1,47 @@
+{
+  "name": "ak-kagaz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AK KAGAZ - PWA интернет-магазин канцтоваров",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "dev:frontend": "npm run dev --workspace=@ak-kagaz/frontend",
+    "dev:backend": "npm run dev --workspace=@ak-kagaz/backend",
+    "build:frontend": "npm run build --workspace=@ak-kagaz/frontend",
+    "build:backend": "npm run build --workspace=@ak-kagaz/backend",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "keywords": [
+    "stationery",
+    "e-commerce",
+    "pwa",
+    "kyrgyzstan"
+  ],
+  "author": "AK KAGAZ",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "prettier": "^3.2.5",
+    "tsx": "^4.23.15"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1163.0",
+    "@aws-sdk/s3-request-presigner": "^3.1163.0",
+    "@neon/config": "^1.11.3",
+    "@neon/env": "^1.6.15",
+    "dotenv": "^18.0.9"
+  }
+}

@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+build
+coverage
+
+# Generated files
+.next
+.nuxt
+.output
+
+# Prisma
+prisma/migrations
+
+# PWA
+**/public/sw.js
+**/public/workbox-*.js
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
