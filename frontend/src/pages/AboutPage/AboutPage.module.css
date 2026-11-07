@@ -1,0 +1,112 @@
+.aboutPage {
+  padding: 2rem 0;
+  min-height: 60vh;
+}
+
+.title {
+  margin: 1.5rem 0 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section {
+  padding: 2rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+}
+
+.sectionTitle {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #374151;
+}
+
+.text + .text {
+  margin-top: 1rem;
+}
+
+.imageSection {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  max-width: 32rem;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 1rem;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.feature {
+  display: flex;
+  gap: 1rem;
+}
+
+.featureIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: #eff6ff;
+  border-radius: 0.75rem;
+  flex-shrink: 0;
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #2563eb;
+}
+
+.featureContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.featureTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.featureText {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

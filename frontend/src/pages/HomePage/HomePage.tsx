@@ -1,0 +1,225 @@
+import { Link } from 'react-router-dom';
+import { ArrowRight, Star } from 'lucide-react';
+import { Container } from '@/components/Container';
+import { RecommendationsBlock } from '@/components/RecommendationsBlock';
+import { CampaignBanner } from '@/components/CampaignBanner';
+import { RepeatPurchases } from '@/components/RepeatPurchases';
+import { useLocale } from '@/contexts/LocaleContext';
+import {
+  usePersonalRecommendations,
+  useGuestRecommendations,
+  usePopularProducts,
+  useTrendingProducts,
+  useActiveCampaigns,
+} from '@/hooks';
+import { isAuthenticated, getSessionId } from '@/utils/session';
+import styles from './HomePage.module.css';
+
+export function HomePage() {
+  const { t, locale } = useLocale();
+  const authenticated = isAuthenticated();
+  const sessionId = getSessionId();
+
+  // Fetch recommendations based on auth status
+  const personalRecommendations = usePersonalRecommendations({
+    limit: 8,
+    locale,
+  });
+
+  const guestRecommendations = useGuestRecommendations({
+    limit: 8,
+    locale,
+    sessionId,
+  });
+
+  const popularProducts = usePopularProducts({
+    limit: 8,
+    locale,
+  });
+
+  const trendingProducts = useTrendingProducts({
+    limit: 8,
+    locale,
+  });
+
+  const activeCampaigns = useActiveCampaigns(locale);
+
+  // Choose which recommendations to show
+  const recommendations = authenticated ? personalRecommendations : guestRecommendations;
+
+  return (
+    <div className={styles.homePage}>
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <Container>
+          <div className={styles.heroContent}>
+            <h1 className={styles.heroTitle}>{t('home.hero.title')}</h1>
+            <p className={styles.heroSubtitle}>{t('home.hero.subtitle')}</p>
+            <Link to="/catalog" className={styles.heroCta}>
+              <span>{t('home.hero.cta')}</span>
+              <ArrowRight className={styles.heroCtaIcon} />
+            </Link>
+          </div>
+          <div className={styles.heroVisual}>
+            {/* Placeholder for future hero image/illustration */}
+            <div className={styles.heroVisualPlaceholder} />
+          </div>
+        </Container>
+      </section>
+
+      {/* Categories Section */}
+      <section className={styles.section}>
+        <Container>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>{t('home.categories.title')}</h2>
+          </div>
+          <div className={styles.categoriesGrid}>
+            {/* Future: Dynamic categories from API */}
+            <div className={styles.categoryCardPlaceholder}>
+              <div className={styles.categoryImage} />
+              <h3 className={styles.categoryName}>Категория 1</h3>
+            </div>
+            <div className={styles.categoryCardPlaceholder}>
+              <div className={styles.categoryImage} />
+              <h3 className={styles.categoryName}>Категория 2</h3>
+            </div>
+            <div className={styles.categoryCardPlaceholder}>
+              <div className={styles.categoryImage} />
+              <h3 className={styles.categoryName}>Категория 3</h3>
+            </div>
+            <div className={styles.categoryCardPlaceholder}>
+              <div className={styles.categoryImage} />
+              <h3 className={styles.categoryName}>Категория 4</h3>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Active Campaigns */}
+      {activeCampaigns.data && activeCampaigns.data.length > 0 && (
+        <section className={styles.section}>
+          <Container>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>
+                {locale === 'ru' ? 'Акции и спецпредложения' : 'Акциялар жана атайын сунуштар'}
+              </h2>
+            </div>
+            <div className={styles.campaignsGrid}>
+              {activeCampaigns.data.slice(0, 3).map((campaign) => (
+                <CampaignBanner key={campaign.id} campaign={campaign} size="medium" />
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
+      {/* Popular Products Section */}
+      <section className={styles.section}>
+        <Container>
+          <RecommendationsBlock
+            title={t('home.popular.title')}
+            products={popularProducts.data}
+            isLoading={popularProducts.isLoading}
+            error={popularProducts.error}
+            linkTo="/catalog?sort=popular"
+            linkText={t('common.showMore')}
+          />
+        </Container>
+      </section>
+
+      {/* Personalized Recommendations */}
+      {authenticated && (
+        <section className={styles.section}>
+          <Container>
+            <RecommendationsBlock
+              title={t('recommendations.forYou')}
+              products={recommendations.data}
+              isLoading={recommendations.isLoading}
+              error={recommendations.error}
+              linkTo="/catalog"
+              linkText={t('common.showMore')}
+            />
+          </Container>
+        </section>
+      )}
+
+      {/* Repeat Purchases - for authenticated users */}
+      {authenticated && (
+        <section className={styles.section}>
+          <Container>
+            <RepeatPurchases />
+          </Container>
+        </section>
+      )}
+
+      {/* Trending Products */}
+      <section className={styles.section}>
+        <Container>
+          <RecommendationsBlock
+            title={t('recommendations.trending')}
+            products={trendingProducts.data}
+            isLoading={trendingProducts.isLoading}
+            error={trendingProducts.error}
+            linkTo="/catalog?sort=trending"
+            linkText={t('common.showMore')}
+          />
+        </Container>
+      </section>
+
+      {/* About Section */}
+      <section className={styles.aboutSection}>
+        <Container>
+          <div className={styles.aboutGrid}>
+            <div className={styles.aboutContent}>
+              <h2 className={styles.sectionTitle}>{t('home.about.title')}</h2>
+              <p className={styles.aboutText}>
+                {/* Placeholder text */}
+                АК КАГАЗ — это современный интернет-магазин канцелярских товаров в городе Ош.
+                Мы предлагаем широкий ассортимент качественной продукции для офиса, учёбы и творчества.
+              </p>
+              <Link to="/about" className={styles.aboutLink}>
+                <span>{t('nav.about')}</span>
+                <ArrowRight className={styles.sectionLinkIcon} />
+              </Link>
+            </div>
+            <div className={styles.aboutVisual}>
+              {/* Placeholder for about image */}
+              <div className={styles.aboutImagePlaceholder} />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Customer Reviews Section */}
+      <section className={styles.section}>
+        <Container>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>{t('home.reviews.title')}</h2>
+          </div>
+          <div className={styles.reviewsGrid}>
+            {/* Future: Dynamic reviews from API */}
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className={styles.reviewCardPlaceholder}>
+                <div className={styles.reviewRating}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className={styles.reviewStar} />
+                  ))}
+                </div>
+                <p className={styles.reviewText}>
+                  Отличный магазин! Большой выбор товаров и быстрая доставка.
+                </p>
+                <div className={styles.reviewAuthor}>
+                  <div className={styles.reviewAvatar} />
+                  <div className={styles.reviewAuthorInfo}>
+                    <p className={styles.reviewAuthorName}>Покупатель</p>
+                    <p className={styles.reviewDate}>Дата отзыва</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+    </div>
+  );
+}

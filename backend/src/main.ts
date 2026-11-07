@@ -36,15 +36,16 @@ async function bootstrap() {
   );
 
   // Swagger documentation
-  const config = new DocumentBuilder()
-    .setTitle('AK KAGAZ API')
-    .setDescription('API documentation for AK KAGAZ e-commerce platform')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+  // Temporarily disabled due to type inference issues
+  // const config = new DocumentBuilder()
+  //   .setTitle('AK KAGAZ API')
+  //   .setDescription('API documentation for AK KAGAZ e-commerce platform')
+  //   .setVersion('1.0')
+  //   .addBearerAuth()
+  //   .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  // const document = SwaggerModule.createDocument(app, config);
+  // SwaggerModule.setup('api/docs', app, document);
 
   const port = configService.get<number>('PORT', 4000);
   await app.listen(port);

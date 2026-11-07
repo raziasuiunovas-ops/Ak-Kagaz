@@ -1,68 +1,302 @@
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
+  min-height: 100vh;
 }
 
+/* ============================================
+   SECTION 1: HERO
+   ============================================ */
 .hero {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  padding: 4rem 1.5rem;
   text-align: center;
-  padding: var(--spacing-2xl) 0;
-  margin-bottom: var(--spacing-xl);
 }
 
-.title {
-  font-size: var(--font-size-4xl);
+.heroContent {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: var(--spacing-md);
+  margin: 0 0 1rem;
+  line-height: 1.2;
 }
 
-.subtitle {
-  font-size: var(--font-size-xl);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-md);
+.heroSubtitle {
+  font-size: 1.125rem;
+  margin: 0 0 2rem;
+  opacity: 0.95;
+  line-height: 1.6;
 }
 
-.description {
-  font-size: var(--font-size-lg);
-  color: var(--color-primary);
+.heroButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background-color: white;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.heroButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.heroButtonIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ============================================
+   COMMON SECTION STYLES
+   ============================================ */
+.section {
+  padding: 3rem 1.5rem;
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.sectionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #3b82f6;
+  text-decoration: none;
   font-weight: 500;
+  font-size: 0.9375rem;
+  transition: color 0.2s ease;
 }
 
-.info {
+.sectionLink:hover {
+  color: #2563eb;
+}
+
+.sectionLinkIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ============================================
+   SECTION 2: CATEGORIES
+   ============================================ */
+.categoriesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
-  margin-top: var(--spacing-2xl);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
-.infoCard {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
+/* ============================================
+   SECTION 3: FEATURED PRODUCTS
+   ============================================ */
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
 }
 
-.infoCard h2 {
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--spacing-md);
-  color: var(--color-text);
+/* ============================================
+   SECTION 4: BUNDLES
+   ============================================ */
+.bundlesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
 }
 
-.infoCard ul {
-  list-style: none;
-  padding: 0;
+/* ============================================
+   SECTION 5: ABOUT / USP
+   ============================================ */
+.aboutSection {
+  background-color: #f9fafb;
+  padding: 3rem 1.5rem;
 }
 
-.infoCard li {
-  padding: var(--spacing-sm) 0;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-base);
+.aboutContent {
+  max-width: 75rem;
+  margin: 0 auto;
 }
 
-.infoCard li::before {
-  content: '✓';
-  color: var(--color-success);
-  font-weight: bold;
-  margin-right: var(--spacing-sm);
+.aboutTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+  margin: 0 0 2.5rem;
+}
+
+.uspGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+}
+
+.uspCard {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.uspIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.uspTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem;
+}
+
+.uspText {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================
+   SECTION 6: REVIEWS
+   ============================================ */
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ============================================
+   EMPTY STATES
+   ============================================ */
+.emptyState {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+  border: 2px dashed #d1d5db;
+}
+
+.emptyIcon {
+  width: 3rem;
+  height: 3rem;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.emptyText {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0 0 0.5rem;
+}
+
+.emptyHint {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet */
+@media (min-width: 768px) {
+  .hero {
+    padding: 5rem 2rem;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.25rem;
+  }
+
+  .section {
+    padding: 4rem 2rem;
+  }
+
+  .aboutSection {
+    padding: 4rem 2rem;
+  }
+
+  .sectionTitle,
+  .aboutTitle {
+    font-size: 2rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .hero {
+    padding: 6rem 2rem;
+  }
+
+  .heroTitle {
+    font-size: 3rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.375rem;
+  }
+
+  .section {
+    padding: 5rem 2rem;
+  }
+
+  .aboutSection {
+    padding: 5rem 2rem;
+  }
+
+  .sectionTitle,
+  .aboutTitle {
+    font-size: 2.25rem;
+  }
+
+  .categoriesGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .bundlesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .uspGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .reviewsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

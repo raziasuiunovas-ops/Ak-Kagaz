@@ -4,9 +4,11 @@ import {
   ConflictException,
   BadRequestException,
   Logger,
+  Inject,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../common/services/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
@@ -17,8 +19,9 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Inject(JwtService) private readonly jwtService: JwtService,
+    @Inject(NotificationsService) private readonly notificationsService: NotificationsService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -89,7 +92,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, ipAddress?: string, userAgent?: string) {
     const user = await this.validateUser(dto.email, dto.password);
 
     if (!user) {
@@ -100,7 +103,35 @@ export class AuthService {
       throw new UnauthorizedException('Account is blocked');
     }
 
-    // Update last login
+    // Проверяем, является ли пользователь админом
+    const hasAdminRole = user.userRoles.some(
+      (ur) =>
+        ur.role.name === 'SUPER_ADMIN' ||
+        ur.role.name === 'ADMIN' ||
+        ur.role.name === 'MANAGER' ||
+        ur.role.name === 'WAREHOUSE',
+    );
+
+    // Если админ - требуем 2FA
+    if (hasAdminRole) {
+      const result = await this.notificationsService.create2FACode(
+        user.id,
+        ipAddress,
+        userAgent,
+      );
+
+      this.logger.log(`Admin login initiated (2FA required) for: ${user.email}`);
+
+      return {
+        userId: user.id,
+        email: user.email,
+        requires2FA: true,
+        codeSent: result.success,
+        expiresInMinutes: result.expiresInMinutes,
+      };
+    }
+
+    // Для обычных пользователей - сразу выдаём токен
     await this.prisma.user.update({
       where: { id: user.id },
       data: { lastLoginAt: new Date() },
@@ -233,5 +264,102 @@ export class AuthService {
   private sanitizeUser(user: any) {
     const { passwordHash, ...sanitized } = user;
     return sanitized;
+  }
+
+  // ============================================================
+  // ADMIN LOGIN WITH 2FA
+  // ============================================================
+
+  /**
+   * Административный вход - этап 1: проверка credentials и отправка 2FA кода
+   */
+  async adminLogin(
+    dto: LoginDto,
+    ipAddress?: string,
+    userAgent?: string,
+  ) {
+    const user = await this.validateUser(dto.email, dto.password);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    if (user.status === UserStatus.BLOCKED) {
+      throw new UnauthorizedException('Account is blocked');
+    }
+
+    // Проверяем роль пользователя (не должен быть просто CUSTOMER)
+    const hasAdminRole = user.userRoles.some(
+      (ur) =>
+        ur.role.name === 'SUPER_ADMIN' ||
+        ur.role.name === 'ADMIN' ||
+        ur.role.name === 'MANAGER' ||
+        ur.role.name === 'WAREHOUSE',
+    );
+
+    if (!hasAdminRole) {
+      throw new UnauthorizedException('Access denied. Admin role required.');
+    }
+
+    // Создаем и отправляем 2FA код
+    const result = await this.notificationsService.create2FACode(
+      user.id,
+      ipAddress,
+      userAgent,
+    );
+
+    this.logger.log(`Admin login initiated for: ${user.email}`);
+
+    return {
+      userId: user.id,
+      email: user.email,
+      requires2FA: true,
+      codeSent: result.success,
+      expiresInMinutes: result.expiresInMinutes,
+    };
+  }
+
+  /**
+   * Административный вход - этап 2: проверка 2FA кода и выдача токена
+   */
+  async adminVerify2FA(userId: string, code: string) {
+    const result = await this.notificationsService.verify2FACode(userId, code);
+
+    if (!result.valid) {
+      throw new UnauthorizedException(result.message || 'Invalid 2FA code');
+    }
+
+    // Получаем пользователя
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        profile: true,
+        userRoles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Обновляем последний вход
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { lastLoginAt: new Date() },
+    });
+
+    // Генерируем токен
+    const token = this.generateToken(user.id, user.email);
+
+    this.logger.log(`Admin 2FA verified for: ${user.email}`);
+
+    return {
+      user: this.sanitizeUser(user),
+      token,
+    };
   }
 }

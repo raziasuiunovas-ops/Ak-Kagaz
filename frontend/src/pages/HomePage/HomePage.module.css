@@ -1,0 +1,367 @@
+.homePage {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding-bottom: 4rem;
+}
+
+/* Hero Section */
+.hero {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.heroContent {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.heroTitle {
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.heroSubtitle {
+  margin: 0 0 2rem 0;
+  font-size: 1.125rem;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background-color: #2563eb;
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.heroCta:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.heroCtaIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.heroVisual {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.heroVisualPlaceholder {
+  width: 100%;
+  max-width: 32rem;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 1rem;
+  opacity: 0.2;
+}
+
+/* Section */
+.section {
+  padding: 2rem 0;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.sectionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.sectionLink:hover {
+  color: #1d4ed8;
+}
+
+.sectionLinkIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Categories Grid */
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.categoryCardPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.categoryCardPlaceholder:hover {
+  background-color: #f3f4f6;
+  transform: translateY(-2px);
+}
+
+.categoryImage {
+  width: 5rem;
+  height: 5rem;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  border-radius: 0.5rem;
+}
+
+.categoryName {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+}
+
+/* Products Grid */
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.productCardPlaceholder {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.productCardPlaceholder:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.productImage {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+.productInfo {
+  padding: 1rem;
+}
+
+.productName {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.productPrice {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* About Section */
+.aboutSection {
+  padding: 3rem 0;
+  background-color: #f9fafb;
+}
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.aboutText {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #374151;
+}
+
+.aboutLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: color 0.15s ease;
+  width: fit-content;
+}
+
+.aboutLink:hover {
+  color: #1d4ed8;
+}
+
+.aboutVisual {
+  display: flex;
+  justify-content: center;
+}
+
+.aboutImagePlaceholder {
+  width: 100%;
+  max-width: 24rem;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  border-radius: 1rem;
+}
+
+/* Reviews Grid */
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.reviewCardPlaceholder {
+  padding: 1.5rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+}
+
+.reviewRating {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.reviewStar {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: #fbbf24;
+  color: #fbbf24;
+}
+
+.reviewText {
+  margin: 0 0 1.5rem 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.reviewAuthor {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reviewAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.reviewAuthorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.reviewAuthorName {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.reviewDate {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .categoriesGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .aboutGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .reviewsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .heroTitle {
+    font-size: 3rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Campaigns Grid */
+.campaignsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .campaignsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

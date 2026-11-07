@@ -1,4 +1,8 @@
 import { PrismaClient } from '@prisma/client';
+import * as dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 const prisma = new PrismaClient();
 
@@ -99,6 +103,51 @@ async function main() {
   }
 
   console.log('✅ Permissions assigned to SUPER_ADMIN');
+
+  // Create admin user from environment variables
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@ak-kagaz.kg';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'AkKagaz2026!';
+  
+  // Import bcrypt for password hashing
+  const bcrypt = await import('bcrypt');
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
+  const adminUser = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {},
+    create: {
+      email: adminEmail,
+      passwordHash: hashedPassword,
+      phone: '+996700000000',
+      emailVerified: true,
+      status: 'ACTIVE',
+      profile: {
+        create: {
+          firstName: 'Admin',
+          lastName: 'User',
+        },
+      },
+    },
+  });
+
+  // Assign SUPER_ADMIN role to admin user
+  if (superAdminRole) {
+    await prisma.userRole.upsert({
+      where: {
+        userId_roleId: {
+          userId: adminUser.id,
+          roleId: superAdminRole.id,
+        },
+      },
+      update: {},
+      create: {
+        userId: adminUser.id,
+        roleId: superAdminRole.id,
+      },
+    });
+    console.log(`✅ Admin user created: ${adminEmail}`);
+  }
+
   console.log('🎉 Database seeding completed!');
 }
 

@@ -1,0 +1,244 @@
+.footer {
+  background-color: #111827;
+  color: #d1d5db;
+  margin-top: auto;
+}
+
+.topSection {
+  padding-top: 3rem;
+  padding-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Brand Section */
+.brandSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoPlaceholder {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.brandName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.description {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  max-width: 20rem;
+}
+
+/* Links Section */
+.linksSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.linksList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.linkItem {
+  margin: 0;
+}
+
+.link {
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.15s ease;
+}
+
+.link:hover {
+  color: white;
+}
+
+/* Contacts Section */
+.contactsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.contactIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.contactText {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #d1d5db;
+}
+
+.contactPlaceholder {
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* Social Links */
+.socialLinks {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: #374151;
+  border-radius: 0.375rem;
+  color: #d1d5db;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  text-decoration: none;
+}
+
+.socialLink:hover {
+  background-color: #4b5563;
+  color: white;
+}
+
+.socialIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* Bottom Section */
+.bottomSection {
+  border-top: 1px solid #374151;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.bottomContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.copyright {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.legalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.legalLink {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.15s ease;
+}
+
+.legalLink:hover {
+  color: #d1d5db;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .brandSection {
+    grid-column: span 2;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .brandSection {
+    grid-column: span 1;
+  }
+
+  .bottomContent {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+/* Phone Links */
+.phoneLink {
+  display: block;
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  transition: color 0.15s ease;
+}
+
+.phoneLink:hover {
+  color: #3b82f6;
+}
+
+.phoneLink:active {
+  color: #2563eb;
+}
+
+@media (max-width: 768px) {
+  .phoneLink {
+    font-size: 0.875rem;
+  }
+}

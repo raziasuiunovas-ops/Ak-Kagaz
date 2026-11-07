@@ -1,0 +1,1 @@
+export { SmartCartSuggestions } from './SmartCartSuggestions';

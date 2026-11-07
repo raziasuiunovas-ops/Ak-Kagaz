@@ -14,6 +14,11 @@ import { OrdersModule } from './orders/orders.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { PaymentsModule } from './payments/payments.module';
+import { BundlesModule } from './bundles/bundles.module';
+import { CampaignsModule } from './campaigns/campaigns.module';
+import { RecommendationsModule } from './recommendations/recommendations.module';
+import { AiModule } from './ai/ai.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -33,8 +38,11 @@ import { PaymentsModule } from './payments/payments.module';
     WarehouseModule,
     ReviewsModule,
     PaymentsModule,
-    // Other modules will be added here:
-    // NotificationsModule,
+    BundlesModule,
+    CampaignsModule,
+    RecommendationsModule,
+    AiModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

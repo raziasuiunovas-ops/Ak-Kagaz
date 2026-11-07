@@ -1,0 +1,262 @@
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Heart, Minus, Plus, ShoppingCart, Star, Tag } from 'lucide-react';
+import { Container } from '@/components/Container';
+import { Breadcrumbs, type BreadcrumbItem } from '@/components/Breadcrumbs';
+import { BackButton } from '@/components/BackButton';
+import { FrequentlyBoughtTogether } from '@/components/FrequentlyBoughtTogether';
+import { RecommendationsBlock } from '@/components/RecommendationsBlock';
+import { LoadingState } from '@/components/LoadingState';
+import { ErrorState } from '@/components/ErrorState';
+import { useLocale } from '@/contexts/LocaleContext';
+import { useProductBySlug, useSimilarProducts, useTrackView, useProductCampaigns } from '@/hooks';
+import { getSessionId } from '@/utils/session';
+import styles from './ProductPage.module.css';
+
+export function ProductPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const { t, locale } = useLocale();
+  const [quantity, setQuantity] = useState(1);
+  const [selectedTab, setSelectedTab] = useState<'description' | 'specifications' | 'reviews'>('description');
+
+  const { data: product, isLoading, error } = useProductBySlug(slug || '', locale);
+  const trackView = useTrackView();
+
+  const similarProducts = useSimilarProducts(product?.id || '', {
+    limit: 8,
+    locale,
+  });
+
+  const productCampaigns = useProductCampaigns(product?.id || '', locale);
+
+  // Track product view
+  useEffect(() => {
+    if (product?.id) {
+      trackView.mutate({
+        productId: product.id,
+        sessionId: getSessionId(),
+      });
+    }
+  }, [product?.id]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.productPage}>
+        <Container>
+          <LoadingState message={t('common.loading')} fullHeight />
+        </Container>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className={styles.productPage}>
+        <Container>
+          <ErrorState
+            message={error?.message || t('error.404')}
+            onRetry={() => window.location.reload()}
+          />
+        </Container>
+      </div>
+    );
+  }
+
+  const translation = product.translations.find((tr) => tr.locale === locale) || product.translations[0];
+  const price = product.prices.find((p) => p.isActive)?.sellingPrice || 0;
+
+  // Check if product is in active campaign
+  const activeCampaign = productCampaigns.data?.[0];
+  const campaignProduct = activeCampaign?.products.find((cp) => cp.productId === product.id);
+  const campaignPrice = campaignProduct?.specialPrice || (price * (100 - (campaignProduct?.discountPercentage || 0)) / 100);
+  const hasDiscount = !!campaignProduct && (campaignPrice < price);
+
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: t('nav.home'), path: '/' },
+    { label: t('nav.catalog'), path: '/catalog' },
+    ...(product.category ? [{ label: product.category.translations.find(tr => tr.locale === locale)?.name || '', path: `/catalog/${product.category.slug}` }] : []),
+    { label: translation?.name || 'Product' },
+  ];
+
+  const handleQuantityChange = (delta: number) => {
+    setQuantity(Math.max(1, quantity + delta));
+  };
+
+  return (
+    <div className={styles.productPage}>
+      <Container>
+        <BackButton fallback="/catalog" />
+        <Breadcrumbs items={breadcrumbs} />
+
+        <div className={styles.productGrid}>
+          {/* Product Images Gallery */}
+          <div className={styles.gallery}>
+            <div className={styles.mainImage}>
+              {product.thumbnailUrl ? (
+                <img src={product.thumbnailUrl} alt={translation?.name} />
+              ) : (
+                <div className={styles.imagePlaceholder} />
+              )}
+            </div>
+            {product.images && product.images.length > 0 && (
+              <div className={styles.thumbnails}>
+                {product.images.slice(0, 4).map((img) => (
+                  <div key={img.id} className={styles.thumbnail}>
+                    <img src={img.url} alt={img.altText || translation?.name} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Product Info */}
+          <div className={styles.productInfo}>
+            <h1 className={styles.productName}>{translation?.name}</h1>
+
+            {activeCampaign && (
+              <Link to={`/campaigns/${activeCampaign.slug}`} className={styles.campaignTag}>
+                <Tag className={styles.tagIcon} />
+                <span>
+                  {activeCampaign.translations.find((tr) => tr.locale === locale)?.name || activeCampaign.slug}
+                </span>
+              </Link>
+            )}
+            
+            <div className={styles.productMeta}>
+              <div className={styles.rating}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className={styles.star} />
+                ))}
+                <span className={styles.ratingText}>(0 {t('product.reviews')})</span>
+              </div>
+              <div className={styles.availability}>
+                <span className={`${styles.availabilityBadge} ${product.status === 'ACTIVE' ? styles.inStock : styles.outOfStock}`}>
+                  {product.status === 'ACTIVE' ? t('product.inStock') : t('product.outOfStock')}
+                </span>
+              </div>
+            </div>
+
+            <div className={styles.priceSection}>
+              {hasDiscount && (
+                <p className={styles.oldPrice}>{price.toLocaleString()} сом</p>
+              )}
+              <p className={styles.price}>{(hasDiscount ? campaignPrice : price).toLocaleString()} сом</p>
+              {hasDiscount && campaignProduct && (
+                <p className={styles.discount}>
+                  {locale === 'ru' ? 'Скидка' : 'Арзандатуу'}: {campaignProduct.discountPercentage}%
+                </p>
+              )}
+            </div>
+
+            {translation?.shortDescription && (
+              <p className={styles.shortDescription}>{translation.shortDescription}</p>
+            )}
+
+            <div className={styles.quantitySection}>
+              <label className={styles.quantityLabel}>{t('common.quantity')}</label>
+              <div className={styles.quantityControl}>
+                <button 
+                  className={styles.quantityBtn}
+                  onClick={() => handleQuantityChange(-1)}
+                  disabled={quantity <= 1}
+                >
+                  <Minus className={styles.quantityIcon} />
+                </button>
+                <input 
+                  type="number"
+                  className={styles.quantityInput}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  min="1"
+                />
+                <button 
+                  className={styles.quantityBtn}
+                  onClick={() => handleQuantityChange(1)}
+                >
+                  <Plus className={styles.quantityIcon} />
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.actions}>
+              <button className={styles.addToCartBtn} disabled={product.status !== 'ACTIVE'}>
+                <ShoppingCart className={styles.btnIcon} />
+                <span>{t('product.addToCart')}</span>
+              </button>
+              <button className={styles.favoriteBtn}>
+                <Heart className={styles.btnIcon} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Frequently Bought Together */}
+        {product.status === 'ACTIVE' && (
+          <div className={styles.fbtSection}>
+            <FrequentlyBoughtTogether productId={product.id} currentProduct={product} />
+          </div>
+        )}
+
+        {/* Product Tabs */}
+        <div className={styles.tabs}>
+          <div className={styles.tabsList}>
+            <button 
+              className={`${styles.tab} ${selectedTab === 'description' ? styles.tabActive : ''}`}
+              onClick={() => setSelectedTab('description')}
+            >
+              {t('product.description')}
+            </button>
+            <button 
+              className={`${styles.tab} ${selectedTab === 'specifications' ? styles.tabActive : ''}`}
+              onClick={() => setSelectedTab('specifications')}
+            >
+              {t('product.specifications')}
+            </button>
+            <button 
+              className={`${styles.tab} ${selectedTab === 'reviews' ? styles.tabActive : ''}`}
+              onClick={() => setSelectedTab('reviews')}
+            >
+              {t('product.reviews')}
+            </button>
+          </div>
+
+          <div className={styles.tabContent}>
+            {selectedTab === 'description' && (
+              <div>
+                {translation?.description ? (
+                  <div className={styles.description}>{translation.description}</div>
+                ) : (
+                  <p className={styles.placeholder}>{locale === 'ru' ? 'Описание отсутствует' : 'Сүрөттөмө жок'}</p>
+                )}
+              </div>
+            )}
+            {selectedTab === 'specifications' && (
+              <div>
+                <p className={styles.placeholder}>
+                  {locale === 'ru' ? 'Характеристики скоро появятся' : 'Мүнөздөмөлөр жакында'}
+                </p>
+              </div>
+            )}
+            {selectedTab === 'reviews' && (
+              <div>
+                <p className={styles.placeholder}>
+                  {locale === 'ru' ? 'Отзывы отсутствуют' : 'Пикирлер жок'}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Similar Products */}
+        <RecommendationsBlock
+          title={t('recommendations.similar')}
+          products={similarProducts.data}
+          isLoading={similarProducts.isLoading}
+          error={similarProducts.error}
+          linkTo="/catalog"
+          linkText={t('common.showMore')}
+        />
+      </Container>
+    </div>
+  );
+}

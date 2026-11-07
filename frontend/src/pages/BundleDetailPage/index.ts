@@ -1,0 +1,1 @@
+export { BundleDetailPage } from './BundleDetailPage';

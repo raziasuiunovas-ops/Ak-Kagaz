@@ -1,0 +1,134 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 1.5rem;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.menuBtn:hover {
+  background-color: #f3f4f6;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.iconBtn:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.divider {
+  width: 1px;
+  height: 2rem;
+  background-color: #e5e7eb;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.userName {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.logoutBtn {
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.logoutBtn:hover {
+  background-color: #dc2626;
+}
+
+/* Tablet & Mobile */
+@media (max-width: 1024px) {
+  .menuBtn {
+    display: flex;
+  }
+
+  .title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .userName {
+    display: none;
+  }
+
+  .iconBtn {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .logoutBtn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
