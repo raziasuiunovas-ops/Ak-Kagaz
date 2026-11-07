@@ -17,12 +17,14 @@ describe('AppService', () => {
   });
 
   describe('getHealth', () => {
-    it('should return health status', () => {
+    it('should return health status with all required fields', () => {
       const result = service.getHealth();
       expect(result).toHaveProperty('status', 'ok');
       expect(result).toHaveProperty('timestamp');
       expect(result).toHaveProperty('uptime');
       expect(result).toHaveProperty('environment');
+      expect(typeof result.timestamp).toBe('string');
+      expect(typeof result.uptime).toBe('number');
     });
   });
 

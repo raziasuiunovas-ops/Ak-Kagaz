@@ -5,6 +5,15 @@ import { AppService } from './app.service';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { RolesModule } from './roles/roles.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
+import { PricingModule } from './pricing/pricing.module';
+import { CartModule } from './cart/cart.module';
+import { OrdersModule } from './orders/orders.module';
+import { WarehouseModule } from './warehouse/warehouse.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -15,13 +24,16 @@ import { UsersModule } from './users/users.module';
     CommonModule,
     AuthModule,
     UsersModule,
+    RolesModule,
+    CategoriesModule,
+    ProductsModule,
+    PricingModule,
+    CartModule,
+    OrdersModule,
+    WarehouseModule,
+    ReviewsModule,
+    PaymentsModule,
     // Other modules will be added here:
-    // RolesModule,
-    // ProductsModule,
-    // CategoriesModule,
-    // OrdersModule,
-    // WarehouseModule,
-    // PaymentsModule,
     // NotificationsModule,
   ],
   controllers: [AppController],
