@@ -14,6 +14,9 @@
 
 .inner > button:first-child {
   margin-bottom: 1.2rem;
+  border-color: var(--color-border-medium);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }
 
 .contentsNav a:focus-visible,
@@ -323,4 +326,27 @@
   .contentsNav a {
     transition: none;
   }
+}
+
+:global([data-theme='dark']) .hero h1,
+:global([data-theme='dark']) .ownerNotice strong,
+:global([data-theme='dark']) .contentsTitle,
+:global([data-theme='dark']) .contentsNav a:hover,
+:global([data-theme='dark']) .mobileContents summary,
+:global([data-theme='dark']) .sectionBody h2,
+:global([data-theme='dark']) .references h2,
+:global([data-theme='dark']) .references a {
+  color: #a9cbe3;
+}
+
+:global([data-theme='dark']) .ownerNotice {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+:global([data-theme='dark']) .ownerNotice .reviewNote {
+  color: #a9cbe3;
+}
+
+:global([data-theme='dark']) .contentsNav a:hover {
+  background: rgba(169, 203, 227, 0.1);
 }
