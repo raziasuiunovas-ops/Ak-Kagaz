@@ -55,31 +55,31 @@ export function RegisterPage() {
   return (
     <div className={styles.registerPage}>
       <Container size="narrow">
-        <button 
-          type="button" 
-          onClick={handleGoBack} 
-          className={styles.backButton}
-          aria-label={t('common.back')}
-        >
-          <svg 
-            width="20" 
-            height="20" 
-            viewBox="0 0 20 20" 
-            fill="none" 
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path 
-              d="M12.5 5L7.5 10L12.5 15" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span>{t('common.back')}</span>
-        </button>
-
         <div className={styles.formCard}>
+          <button 
+            type="button" 
+            onClick={handleGoBack} 
+            className={styles.backButton}
+            aria-label={t('common.back')}
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 20 20" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M12.5 5L7.5 10L12.5 15" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span>{t('common.back')}</span>
+          </button>
+
           <h1 className={styles.title}>{t('auth.register')}</h1>
 
           <form onSubmit={handleSubmit} className={styles.form}>
@@ -137,6 +137,7 @@ export function RegisterPage() {
                 className={styles.input}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="example@mail.com"
                 required
                 disabled={registerMutation.isPending}
               />
@@ -144,7 +145,7 @@ export function RegisterPage() {
 
             <div className={styles.formGroup}>
               <label htmlFor="phone" className={styles.label}>
-                {t('auth.phone')}
+                {t('auth.phone')} <span className={styles.optional}>({t('common.optional')})</span>
               </label>
               <input
                 type="tel"
@@ -152,9 +153,11 @@ export function RegisterPage() {
                 className={styles.input}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="+996"
+                placeholder="+996 XXX XXX XXX"
+                pattern="^\+996\d{9}$"
                 disabled={registerMutation.isPending}
               />
+              <span className={styles.hint}>{t('auth.phoneHint')}</span>
             </div>
 
             <div className={styles.formGroup}>

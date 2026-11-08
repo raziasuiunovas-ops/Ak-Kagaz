@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   background-color: #f9fafb;
 }
 
@@ -13,7 +13,7 @@
   gap: 0.5rem;
   margin-bottom: 1.5rem;
   padding: 0.5rem 1rem;
-  background-color: white;
+  background-color: transparent;
   color: #374151;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
@@ -26,6 +26,7 @@
 .backButton:hover {
   background-color: #f9fafb;
   color: #111827;
+  border-color: #d1d5db;
 }
 
 .backButton svg {
@@ -34,7 +35,8 @@
 
 .formCard {
   width: 100%;
-  max-width: 32rem;
+  max-width: 36rem;
+  margin: 0 auto;
   padding: 2rem;
   background-color: white;
   border: 1px solid #e5e7eb;
@@ -74,6 +76,12 @@
   color: #374151;
 }
 
+.optional {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
 .input {
   padding: 0.75rem;
   background-color: white;
@@ -81,12 +89,22 @@
   border-radius: 0.5rem;
   font-size: 1rem;
   color: #111827;
-  transition: border-color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .input:focus {
   outline: none;
   border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.input:invalid:not(:placeholder-shown) {
+  border-color: #dc2626;
+}
+
+.input:invalid:not(:placeholder-shown):focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .submitBtn {
@@ -262,11 +280,11 @@
 /* Tablet (641px - 1024px) */
 @media (min-width: 641px) and (max-width: 1024px) {
   .registerPage {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
   }
 
   .formCard {
-    max-width: 36rem;
+    max-width: 38rem;
   }
 }
 
