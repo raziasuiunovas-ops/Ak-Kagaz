@@ -108,15 +108,22 @@
   cursor: pointer;
   width: 100%;
   text-align: left;
+  border-color: #fecaca;
 }
 
 .logoutBtn .menuIcon {
   color: #dc2626;
 }
 
+.logoutBtn .menuTitle {
+  color: #dc2626;
+}
+
 .logoutBtn:hover {
   background-color: #fef2f2;
-  border-color: #fecaca;
+  border-color: #fca5a5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
 }
 
 /* Tablet */

@@ -244,11 +244,14 @@ export class AuthService {
     }
 
     const resend = new Resend(apiKey);
+    const isKyrgyz = user.locale === 'ky';
     const { error } = await resend.emails.send({
       from,
       to: user.email,
-      subject: 'Сброс пароля AK KAGAZ',
-      html: `<p>Чтобы изменить пароль, перейдите по <a href="${resetUrl}">ссылке сброса пароля</a>.</p><p>Ссылка действительна один час.</p>`,
+      subject: isKyrgyz ? 'AK KAGAZ сырсөзүн калыбына келтирүү' : 'Сброс пароля AK KAGAZ',
+      html: isKyrgyz
+        ? `<p>Сырсөздү өзгөртүү үчүн <a href="${resetUrl}">калыбына келтирүү шилтемесине</a> өтүңүз.</p><p>Шилтеме бир саат жарактуу.</p>`
+        : `<p>Чтобы изменить пароль, перейдите по <a href="${resetUrl}">ссылке сброса пароля</a>.</p><p>Ссылка действительна один час.</p>`,
     });
     if (error) {
       this.logger.error('Resend could not deliver a password reset email.', error.message);

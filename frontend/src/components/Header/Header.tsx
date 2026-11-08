@@ -7,6 +7,7 @@ import { ThemeSwitcher } from './ThemeSwitcher';
 import { SearchBar } from './SearchBar';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './Header.module.css';
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -148,6 +149,7 @@ export function Header() {
             </div>
           </div>
         </div>
+    
 
       {/* Navigation Menu (Sidebar for mobile) */}
       <NavigationMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

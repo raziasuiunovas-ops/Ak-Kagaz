@@ -197,14 +197,20 @@ const translationsRu: Record<string, string> = {
   'auth.telegramCodeSent': '6-значный код отправлен в Telegram-бот',
   'auth.confirmationCode': 'Код подтверждения',
   'auth.confirm': 'Подтвердить',
+  'auth.logoutConfirmTitle': 'Выйти из аккаунта?',
+  'auth.logoutConfirmMessage': 'Вы уверены, что хотите выйти? Вам потребуется снова войти для доступа к заказам и избранному.',
   
   // Profile
   'profile.title': 'Профиль',
   'profile.orders': 'Мои заказы',
+  'profile.ordersSubtitle': 'История ваших заказов',
   'profile.personalInfo': 'Личные данные',
   'profile.addresses': 'Адреса',
   'profile.favorites': 'Избранное',
+  'profile.favoritesSubtitle': 'Избранные товары',
   'profile.settings': 'Настройки',
+  'profile.settingsSubtitle': 'Личные данные и адреса',
+  'profile.logoutSubtitle': 'Выйти из аккаунта',
   
   // Orders
   'orders.title': 'История заказов',
@@ -405,14 +411,20 @@ const translationsKy: Record<string, string> = {
   'auth.telegramCodeSent': '6 орундуу код Telegram-ботко жөнөтүлдү',
   'auth.confirmationCode': 'Ырастоо коду',
   'auth.confirm': 'Ырастоо',
+  'auth.logoutConfirmTitle': 'Аккаунттан чыгасызбы?',
+  'auth.logoutConfirmMessage': 'Чыныгы чыккыңыз келеби? Буюртмалар жана тандалмаларга кирүү үчүн кайра кирүү керек болот.',
   
   // Profile
   'profile.title': 'Профиль',
   'profile.orders': 'Менин буюртмаларым',
+  'profile.ordersSubtitle': 'Буюртмалар тарыхы',
   'profile.personalInfo': 'Жеке маалыматтар',
   'profile.addresses': 'Дареги',
   'profile.favorites': 'Тандалмалар',
+  'profile.favoritesSubtitle': 'Тандалган товарлар',
   'profile.settings': 'Тууралоолор',
+  'profile.settingsSubtitle': 'Жеке маалыматтар жана дареги',
+  'profile.logoutSubtitle': 'Аккаунттан чыгуу',
   
   // Orders
   'orders.title': 'Буюртмалар тарыхы',

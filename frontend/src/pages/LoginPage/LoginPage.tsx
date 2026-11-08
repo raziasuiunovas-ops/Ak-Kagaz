@@ -107,6 +107,9 @@ export function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className={styles.form}>
+            {searchParams.get('oauthError') && (
+              <div className={styles.errorMessage} role="alert">{t('auth.googleError')}</div>
+            )}
             {(loginMutation.isError || adminLoginMutation.isError || verify2FAMutation.isError) && (
               <div className={styles.errorMessage}>
                 {loginMutation.error instanceof Error

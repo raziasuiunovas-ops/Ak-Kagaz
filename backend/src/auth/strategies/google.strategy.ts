@@ -22,7 +22,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: Profile,
   ) {
     const email = profile.emails?.[0];
-    if (!email?.value || email.verified === false) {
+    if (!email?.value || !email.verified) {
       return null;
     }
 

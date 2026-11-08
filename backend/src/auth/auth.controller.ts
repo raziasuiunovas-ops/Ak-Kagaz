@@ -73,11 +73,15 @@ export class AuthController {
     const result = await this.authService.loginWithGoogle(req.user);
     const frontendUrl = this.config.get<string>('NEXTAUTH_URL') || 'http://localhost:3000';
 
-    if ('requires2FA' in result) {
+    if ('requires2FA' in result && result.userId) {
       return res.redirect(`${frontendUrl}/login?oauth2fa=${encodeURIComponent(result.userId)}`);
     }
 
-    return res.redirect(`${frontendUrl}/auth/google/callback#token=${encodeURIComponent(result.token)}`);
+    if ('token' in result && result.token) {
+      return res.redirect(`${frontendUrl}/auth/google/callback#token=${encodeURIComponent(result.token)}`);
+    }
+
+    return res.redirect(`${frontendUrl}/login?oauthError=google`);
   }
 
   @Post('verify-2fa')

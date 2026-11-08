@@ -18,10 +18,10 @@
 }
 
 .scrollButton:hover {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #26577C;
+  border-color: #26577C;
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 8px 20px rgba(38, 87, 124, 0.25);
 }
 
 .scrollButton:hover .icon {
@@ -35,7 +35,7 @@
 .icon {
   width: 24px;
   height: 24px;
-  color: #2563eb;
+  color: #26577C;
   transition: color 0.2s ease;
 }
 

@@ -1,12 +1,29 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { User, Package, Heart, Settings, LogOut } from 'lucide-react';
 import { Container } from '@/components/Container';
 import { BackButton } from '@/components/BackButton';
+import { LogoutConfirmModal } from '@/components/LogoutConfirmModal';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './ProfilePage.module.css';
 
 export function ProfilePage() {
   const { t } = useLocale();
+  const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogout = () => {
+    // Очистить auth данные
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('refresh_token');
+    
+    // Закрыть модалку
+    setShowLogoutModal(false);
+    
+    // Перенаправить на главную
+    navigate('/');
+  };
 
   return (
     <div className={styles.profilePage}>
@@ -30,7 +47,7 @@ export function ProfilePage() {
               <Package className={styles.menuIcon} />
               <div className={styles.menuText}>
                 <span className={styles.menuTitle}>{t('profile.orders')}</span>
-                <span className={styles.menuSubtitle}>История ваших заказов</span>
+                <span className={styles.menuSubtitle}>{t('profile.ordersSubtitle')}</span>
               </div>
             </Link>
 
@@ -38,7 +55,7 @@ export function ProfilePage() {
               <Heart className={styles.menuIcon} />
               <div className={styles.menuText}>
                 <span className={styles.menuTitle}>{t('profile.favorites')}</span>
-                <span className={styles.menuSubtitle}>Избранные товары</span>
+                <span className={styles.menuSubtitle}>{t('profile.favoritesSubtitle')}</span>
               </div>
             </Link>
 
@@ -46,19 +63,28 @@ export function ProfilePage() {
               <Settings className={styles.menuIcon} />
               <div className={styles.menuText}>
                 <span className={styles.menuTitle}>{t('profile.settings')}</span>
-                <span className={styles.menuSubtitle}>Личные данные и адреса</span>
+                <span className={styles.menuSubtitle}>{t('profile.settingsSubtitle')}</span>
               </div>
             </Link>
 
-            <button className={`${styles.menuItem} ${styles.logoutBtn}`}>
+            <button 
+              className={`${styles.menuItem} ${styles.logoutBtn}`}
+              onClick={() => setShowLogoutModal(true)}
+            >
               <LogOut className={styles.menuIcon} />
               <div className={styles.menuText}>
                 <span className={styles.menuTitle}>{t('auth.logout')}</span>
-                <span className={styles.menuSubtitle}>Выйти из аккаунта</span>
+                <span className={styles.menuSubtitle}>{t('profile.logoutSubtitle')}</span>
               </div>
             </button>
           </div>
         </div>
+
+        <LogoutConfirmModal 
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={handleLogout}
+        />
       </Container>
     </div>
   );
