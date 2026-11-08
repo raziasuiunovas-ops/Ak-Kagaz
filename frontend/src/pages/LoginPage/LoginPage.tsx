@@ -43,8 +43,8 @@ export function LoginPage() {
         loginMutation.mutate(
           { email, password },
           {
-            onSuccess: (data: any) => {
-              if (data.requires2FA) {
+            onSuccess: (data) => {
+              if ('requires2FA' in data && data.requires2FA) {
                 setRequires2FA(true);
                 setUserId(data.userId);
               }

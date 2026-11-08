@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, Shield, Truck, Heart } from 'lucide-react';
 import { useLocale } from '@/contexts/LocaleContext';
+import { HeroComposition } from './HeroComposition';
 import styles from './HeroSection.module.css';
 
 // Rotating phrases for animated heading
@@ -109,28 +110,19 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right Column - Placeholder for future images */}
+          {/* Right Column - Stationery Composition */}
           <div className={styles.rightColumn}>
-            {/* Images will be added here */}
+            <HeroComposition />
           </div>
         </div>
       </div>
 
-      {/* Decorative Background Elements with Kyrgyz letters */}
+      {/* Decorative Background Elements */}
       <div className={styles.backgroundDecor}>
         <div className={styles.decorCircle1}></div>
         <div className={styles.decorCircle2}></div>
         <div className={styles.decorCircle3}></div>
-        <div className={styles.kyrgyzLetters}>
-          <span className={styles.letter}>А</span>
-          <span className={styles.letter}>Б</span>
-          <span className={styles.letter}>В</span>
-          <span className={styles.letter}>Г</span>
-          <span className={styles.letter}>Д</span>
-          <span className={styles.letter}>Ө</span>
-          <span className={styles.letter}>Ү</span>
-          <span className={styles.letter}>Ң</span>
-        </div>
+        <div className={styles.kyrgyzLetters}></div>
       </div>
     </section>
   );

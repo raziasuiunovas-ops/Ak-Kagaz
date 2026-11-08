@@ -84,11 +84,6 @@ export function AdminVerify2FAPage() {
       return;
     }
 
-    console.log('=== ADMIN VERIFY 2FA DEBUG ===');
-    console.log('userId:', userId);
-    console.log('code:', codeToSubmit);
-    console.log('code length:', codeToSubmit.length);
-
     verify2FAMutation.mutate({
       userId,
       code: codeToSubmit,

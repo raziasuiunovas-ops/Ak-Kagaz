@@ -30,14 +30,25 @@ interface AuthResponse {
       firstName: string;
       lastName: string;
     };
+    userRoles?: Array<{ role: { name: string } }>;
   };
   token: string;
 }
 
+interface TwoFactorRequiredResponse {
+  requires2FA: true;
+  userId: string;
+  email: string;
+  codeSent: boolean;
+  expiresInMinutes: number;
+}
+
+type LoginResponse = AuthResponse | TwoFactorRequiredResponse;
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 // Auth API calls
-async function loginAPI(credentials: LoginCredentials): Promise<AuthResponse> {
+async function loginAPI(credentials: LoginCredentials): Promise<LoginResponse> {
   try {
     const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
@@ -50,9 +61,12 @@ async function loginAPI(credentials: LoginCredentials): Promise<AuthResponse> {
       throw new Error(error.message || 'Login failed');
     }
 
-    const result = await response.json();
-    // Backend wraps response in { data: { user, token } } or { data: { requires2FA, userId, ... } }
-    return result.data;
+    const payload = await response.json();
+    const data = payload.data ?? payload;
+    if (data.requires2FA && !data.codeSent) {
+      throw new Error('Код 2FA не доставлен в Telegram. Проверьте настройки Telegram-бота на backend.');
+    }
+    return data;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('Не удалось подключиться к серверу. Убедитесь, что backend запущен на http://localhost:4000');
@@ -74,8 +88,8 @@ async function verify2FAAPI(data: Verify2FAData): Promise<AuthResponse> {
       throw new Error(error.message || '2FA verification failed');
     }
 
-    const result = await response.json();
-    return result.data;
+    const payload = await response.json();
+    return payload.data ?? payload;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('Не удалось подключиться к серверу');
@@ -97,9 +111,8 @@ async function registerAPI(data: RegisterData): Promise<AuthResponse> {
       throw new Error(error.message || 'Registration failed');
     }
 
-    const result = await response.json();
-    // Backend wraps response in { data: { user, token } }
-    return result.data;
+    const payload = await response.json();
+    return payload.data ?? payload;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('Не удалось подключиться к серверу. Убедитесь, что backend запущен на http://localhost:4000');
@@ -119,7 +132,8 @@ async function getMeAPI(token: string) {
     throw new Error('Failed to fetch user');
   }
 
-  return response.json();
+  const payload = await response.json();
+  return payload.data ?? payload;
 }
 
 // Token management
@@ -146,9 +160,9 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: loginAPI,
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
       // Если требуется 2FA, не редиректим - остаёмся на странице
-      if (data.requires2FA) {
+      if ('requires2FA' in data) {
         return;
       }
 
@@ -157,8 +171,8 @@ export function useLogin() {
       queryClient.setQueryData(['auth', 'user'], data.user);
       
       // Проверяем роль пользователя для автоматического перенаправления
-      const userRoles = (data.user as any).userRoles || [];
-      const isAdmin = userRoles.some((ur: any) => 
+      const userRoles = data.user.userRoles || [];
+      const isAdmin = userRoles.some((ur) =>
         ['SUPER_ADMIN', 'ADMIN', 'MANAGER', 'WAREHOUSE'].includes(ur.role?.name)
       );
       

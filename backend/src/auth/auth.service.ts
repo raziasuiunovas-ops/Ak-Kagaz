@@ -323,17 +323,8 @@ export class AuthService {
    * Административный вход - этап 2: проверка 2FA кода и выдача токена
    */
   async adminVerify2FA(userId: string, code: string) {
-    this.logger.log(`Admin 2FA verification attempt for userId: ${userId}, code: ${code}`);
+    this.logger.log(`Admin 2FA verification attempt for userId: ${userId}`);
     
-    const result = await this.notificationsService.verify2FACode(userId, code);
-
-    this.logger.log(`2FA verification result: ${JSON.stringify(result)}`);
-
-    if (!result.valid) {
-      this.logger.warn(`2FA verification failed for userId: ${userId} - ${result.message}`);
-      throw new UnauthorizedException(result.message || 'Invalid 2FA code');
-    }
-
     // Получаем пользователя
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -349,6 +340,23 @@ export class AuthService {
 
     if (!user) {
       throw new UnauthorizedException('User not found');
+    }
+
+    if (user.status === UserStatus.BLOCKED) {
+      throw new UnauthorizedException('Account is blocked');
+    }
+
+    const hasAdminRole = user.userRoles.some((userRole) =>
+      ['SUPER_ADMIN', 'ADMIN', 'MANAGER', 'WAREHOUSE'].includes(userRole.role.name),
+    );
+    if (!hasAdminRole) {
+      throw new UnauthorizedException('Access denied. Admin role required.');
+    }
+
+    const result = await this.notificationsService.verify2FACode(userId, code);
+    if (!result.valid) {
+      this.logger.warn(`2FA verification failed for userId: ${userId} - ${result.message}`);
+      throw new UnauthorizedException(result.message || 'Invalid 2FA code');
     }
 
     // Обновляем последний вход

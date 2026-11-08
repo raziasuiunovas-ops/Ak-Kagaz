@@ -36,6 +36,21 @@ interface Verify2FAResponse {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
+async function getResponseError(response: Response, fallback: string): Promise<string> {
+  const body = await response.text();
+  if (!body) return fallback;
+
+  try {
+    const data = JSON.parse(body) as { message?: string | string[] };
+    if (Array.isArray(data.message)) return data.message.join(', ');
+    if (data.message) return data.message;
+  } catch {
+    // Proxy errors may return plain text rather than JSON.
+  }
+
+  return body;
+}
+
 async function adminLoginAPI(credentials: AdminLoginCredentials): Promise<AdminLoginResponse> {
   try {
     const response = await fetch(`${API_URL}/auth/admin/login`, {
@@ -45,11 +60,24 @@ async function adminLoginAPI(credentials: AdminLoginCredentials): Promise<AdminL
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Admin login failed' }));
-      throw new Error(error.message || 'Admin login failed');
+      throw new Error(await getResponseError(response, 'Не удалось войти в админ-панель'));
     }
 
-    return response.json();
+    const payload = (await response.json()) as {
+      data?: AdminLoginResponse;
+    } & Partial<AdminLoginResponse>;
+    const data = payload.data ?? (payload as AdminLoginResponse);
+    if (!data.userId || !data.email) {
+      throw new Error('Сервер не вернул данные для подтверждения входа');
+    }
+    if (!data.requires2FA) {
+      throw new Error('Сервер не запросил подтверждение 2FA для администратора');
+    }
+    if (data.requires2FA && !data.codeSent) {
+      throw new Error('Код 2FA не доставлен в Telegram. Проверьте настройки Telegram-бота на backend.');
+    }
+
+    return data;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('Не удалось подключиться к серверу. Убедитесь, что backend запущен на http://localhost:4000');
@@ -67,11 +95,17 @@ async function adminVerify2FAAPI(data: Verify2FAData): Promise<Verify2FAResponse
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: '2FA verification failed' }));
-      throw new Error(error.message || '2FA verification failed');
+      throw new Error(await getResponseError(response, 'Не удалось подтвердить код 2FA'));
     }
 
-    return response.json();
+    const payload = (await response.json()) as {
+      data?: Verify2FAResponse;
+    } & Partial<Verify2FAResponse>;
+    const result = payload.data ?? (payload as Verify2FAResponse);
+    if (!result.token || !result.user?.id) {
+      throw new Error('Сервер не вернул данные завершённого входа');
+    }
+    return result;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('Не удалось подключиться к серверу. Убедитесь, что backend запущен на http://localhost:4000');
@@ -86,32 +120,14 @@ export function useAdminLogin() {
   return useMutation({
     mutationFn: adminLoginAPI,
     onSuccess: (data) => {
-      console.log('=== ADMIN LOGIN SUCCESS ===');
-      console.log('Full response:', data);
-      console.log('userId:', data.userId);
-      console.log('email:', data.email);
-      console.log('requires2FA:', data.requires2FA);
-      
-      if (!data.userId) {
-        console.error('ERROR: userId is missing!');
-        return;
-      }
       
       // Сохраняем userId для следующего этапа (2FA)
       sessionStorage.setItem('admin_2fa_userId', data.userId);
       sessionStorage.setItem('admin_2fa_email', data.email);
       
-      console.log('Saved to sessionStorage:');
-      console.log('  userId:', sessionStorage.getItem('admin_2fa_userId'));
-      console.log('  email:', sessionStorage.getItem('admin_2fa_email'));
       
       // Переходим на страницу верификации 2FA
-      console.log('Navigating to /admin/verify-2fa');
       navigate('/admin/verify-2fa');
-    },
-    onError: (error) => {
-      console.error('=== ADMIN LOGIN ERROR ===');
-      console.error(error);
     },
   });
 }

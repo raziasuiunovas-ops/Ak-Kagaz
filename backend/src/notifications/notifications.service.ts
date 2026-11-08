@@ -4,6 +4,7 @@ import {
   Logger,
   Inject,
 } from '@nestjs/common';
+import { randomInt } from 'node:crypto';
 import { PrismaService } from '../common/services/prisma.service';
 import { TelegramService } from './telegram.service';
 
@@ -22,7 +23,7 @@ export class NotificationsService {
    * Генерирует 6-значный код
    */
   private generateCode(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    return randomInt(100000, 1000000).toString();
   }
 
   /**

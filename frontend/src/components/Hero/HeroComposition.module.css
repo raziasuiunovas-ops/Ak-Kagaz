@@ -1,0 +1,635 @@
+/* ============================================
+   HERO COMPOSITION - Multi-Layer Stationery Scene
+   ============================================ */
+
+.composition {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 1rem;
+}
+
+/* ============================================
+   LAYER 1: Background Ribbon
+   ============================================ */
+
+.ribbonLayer {
+  position: absolute;
+  bottom: 50%;
+  left: -8%;
+  width: 45%;
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ribbon {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  animation: ribbonFloat 7s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes ribbonFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) translateX(5px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(5px) translateX(-3px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-3px) translateX(4px) rotate(1deg);
+  }
+}
+
+/* ============================================
+   MAIN LAYERS: Platform, Books, Organizer
+   ============================================ */
+
+.mainLayers {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 2;
+  transform: translateY(130px);
+}
+
+/* Platform - Bottom layer */
+.platformLayer {
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+.platform {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Books - Middle layer */
+.booksLayer {
+  position: absolute;
+  bottom: 19%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  z-index: 3;
+}
+
+.books {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  animation: booksFloat 6.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+  transform-origin: center bottom;
+}
+
+@keyframes booksFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-6px) rotate(0.5deg);
+  }
+  60% {
+    transform: translateY(3px) rotate(-0.3deg);
+  }
+  85% {
+    transform: translateY(-2px) rotate(0.2deg);
+  }
+}
+
+/* Organizer - Top layer */
+.organizerLayer {
+  position: absolute;
+  bottom: 54%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  z-index: 4;
+}
+
+.organizer {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  animation: organizerFloat 6s ease-in-out infinite;
+  animation-delay: 1s;
+  transform-origin: center bottom;
+}
+
+@keyframes organizerFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(5px) rotate(-0.5deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(0.3deg);
+  }
+}
+
+/* ============================================
+   LAYER 4: Sticker (Foreground)
+   ============================================ */
+
+.stickerLayer {
+  position: absolute;
+  top: 8%;
+  left: 3%;
+  width: 22%;
+  max-width: 150px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.sticker {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  animation: stickerFloat 5s ease-in-out infinite;
+  animation-delay: 0.3s;
+  transform-origin: center center;
+}
+
+@keyframes stickerFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-8deg) scale(1);
+  }
+  30% {
+    transform: translateY(-8px) rotate(-10deg) scale(1.02);
+  }
+  65% {
+    transform: translateY(5px) rotate(-6deg) scale(0.99);
+  }
+  90% {
+    transform: translateY(-3px) rotate(-9deg) scale(1.01);
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Desktop Large
+   ============================================ */
+
+@media (min-width: 1440px) {
+  .mainLayers {
+    max-width: 720px;
+    transform: translateY(140px);
+  }
+
+  .stickerLayer {
+    width: 21%;
+    max-width: 160px;
+    top: 9%;
+  }
+
+  .ribbonLayer {
+    width: 48%;
+  }
+
+  .booksLayer {
+    width: 62%;
+  }
+
+  .organizerLayer {
+    width: 42%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Desktop
+   ============================================ */
+
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .mainLayers {
+    max-width: 680px;
+    transform: translateY(130px);
+  }
+
+  .stickerLayer {
+    width: 22%;
+    max-width: 150px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Laptop
+   ============================================ */
+
+@media (max-width: 1279px) and (min-width: 1024px) {
+  .mainLayers {
+    max-width: 600px;
+    transform: translateY(110px);
+  }
+
+  .booksLayer {
+    width: 58%;
+    bottom: 18%;
+  }
+
+  .organizerLayer {
+    width: 38%;
+    bottom: 53%;
+  }
+
+  .stickerLayer {
+    width: 23%;
+    max-width: 140px;
+    top: 10%;
+    left: 4%;
+  }
+
+  .ribbonLayer {
+    width: 43%;
+    left: -6%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Tablet
+   ============================================ */
+
+@media (max-width: 1023px) {
+  .composition {
+    margin-top: 2rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .mainLayers {
+    max-width: 520px;
+    transform: translateY(80px);
+  }
+
+  .ribbonLayer {
+    width: 42%;
+    left: -4%;
+    bottom: 48%;
+  }
+
+  .booksLayer {
+    width: 56%;
+    bottom: 18%;
+  }
+
+  .organizerLayer {
+    width: 36%;
+    bottom: 53%;
+  }
+
+  .stickerLayer {
+    width: 24%;
+    top: 12%;
+    left: 5%;
+    max-width: 125px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Mobile
+   ============================================ */
+
+@media (max-width: 640px) {
+  .composition {
+    margin-top: 1.5rem;
+    padding: 0 0.5rem 0.5rem;
+    align-items: center;
+  }
+
+  .mainLayers {
+    max-width: 380px;
+    transform: translateY(50px);
+  }
+
+  .ribbonLayer {
+    width: 40%;
+    bottom: 46%;
+    left: -2%;
+  }
+
+  .booksLayer {
+    width: 58%;
+    bottom: 17%;
+  }
+
+  .organizerLayer {
+    width: 38%;
+    bottom: 52%;
+  }
+
+  .stickerLayer {
+    width: 26%;
+    max-width: 110px;
+    top: 15%;
+    left: 6%;
+  }
+
+  /* Reduce animation amplitude on mobile for performance */
+  .ribbon {
+    animation: ribbonFloatMobile 7s ease-in-out infinite;
+  }
+
+  .books {
+    animation: booksFloatMobile 6.5s ease-in-out infinite;
+    animation-delay: 0.5s;
+  }
+
+  .organizer {
+    animation: organizerFloatMobile 6s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  .sticker {
+    animation: stickerFloatMobile 5s ease-in-out infinite;
+    animation-delay: 0.3s;
+  }
+
+  @keyframes ribbonFloatMobile {
+    0%, 100% {
+      transform: translateY(0) translateX(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-4px) translateX(3px) rotate(1deg);
+    }
+  }
+
+  @keyframes booksFloatMobile {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-3px) rotate(0.2deg);
+    }
+  }
+
+  @keyframes organizerFloatMobile {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-5px) rotate(0.5deg);
+    }
+  }
+
+  @keyframes stickerFloatMobile {
+    0%, 100% {
+      transform: translateY(0) rotate(-5deg) scale(1);
+    }
+    50% {
+      transform: translateY(-4px) rotate(-7deg) scale(1.01);
+    }
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ribbon,
+  .books,
+  .organizer,
+  .sticker {
+    animation: none;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Desktop Large
+   ============================================ */
+
+@media (min-width: 1440px) {
+  .mainLayers {
+    max-width: 700px;
+  }
+
+  .stickerLayer {
+    width: 32%;
+    max-width: 250px;
+  }
+
+  .ribbonLayer {
+    width: 125%;
+    left: -22%;
+  }
+
+  .booksLayer {
+    width: 90%;
+  }
+
+  .organizerLayer {
+    width: 64%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Desktop
+   ============================================ */
+
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .mainLayers {
+    max-width: 650px;
+  }
+
+  .stickerLayer {
+    width: 34%;
+    max-width: 230px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Laptop
+   ============================================ */
+
+@media (max-width: 1279px) and (min-width: 1024px) {
+  .mainLayers {
+    max-width: 550px;
+  }
+
+  .booksLayer {
+    width: 85%;
+    bottom: 20%;
+  }
+
+  .organizerLayer {
+    width: 58%;
+    bottom: 58%;
+  }
+
+  .stickerLayer {
+    width: 32%;
+    max-width: 200px;
+    top: 5%;
+  }
+
+  .ribbonLayer {
+    width: 115%;
+    left: -18%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Tablet
+   ============================================ */
+
+@media (max-width: 1023px) {
+  .composition {
+    margin-top: 2rem;
+  }
+
+  .mainLayers {
+    max-width: 480px;
+  }
+
+  .ribbonLayer {
+    width: 100%;
+    left: -12%;
+    bottom: 30%;
+  }
+
+  .booksLayer {
+    width: 82%;
+    bottom: 20%;
+  }
+
+  .organizerLayer {
+    width: 58%;
+    bottom: 58%;
+  }
+
+  .stickerLayer {
+    width: 34%;
+    top: 8%;
+    right: -5%;
+    max-width: 180px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - Mobile
+   ============================================ */
+
+@media (max-width: 640px) {
+  .composition {
+    margin-top: 1.5rem;
+    padding: 0 0.5rem;
+    align-items: center;
+  }
+
+  .mainLayers {
+    max-width: 360px;
+  }
+
+  .ribbonLayer {
+    width: 95%;
+    bottom: 28%;
+    left: -8%;
+  }
+
+  .booksLayer {
+    width: 84%;
+    bottom: 18%;
+  }
+
+  .organizerLayer {
+    width: 60%;
+    bottom: 56%;
+  }
+
+  .stickerLayer {
+    width: 38%;
+    max-width: 150px;
+    top: 5%;
+    right: -10%;
+  }
+
+  /* Reduce animation amplitude on mobile for performance */
+  .ribbon {
+    animation: ribbonFloatMobile 7s ease-in-out infinite;
+  }
+
+  .books {
+    animation: booksFloatMobile 6.5s ease-in-out infinite;
+    animation-delay: 0.5s;
+  }
+
+  .organizer {
+    animation: organizerFloatMobile 6s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  .sticker {
+    animation: stickerFloatMobile 5s ease-in-out infinite;
+    animation-delay: 0.3s;
+  }
+
+  @keyframes ribbonFloatMobile {
+    0%, 100% {
+      transform: translateY(0) translateX(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-4px) translateX(3px) rotate(1deg);
+    }
+  }
+
+  @keyframes booksFloatMobile {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-3px) rotate(0.2deg);
+    }
+  }
+
+  @keyframes organizerFloatMobile {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-5px) rotate(0.5deg);
+    }
+  }
+
+  @keyframes stickerFloatMobile {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg) scale(1);
+    }
+    50% {
+      transform: translateY(-4px) rotate(-1deg) scale(1.01);
+    }
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ribbon,
+  .books,
+  .organizer,
+  .sticker {
+    animation: none;
+  }
+}
