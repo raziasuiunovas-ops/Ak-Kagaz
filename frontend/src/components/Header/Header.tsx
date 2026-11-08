@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, Heart, ShoppingCart, User, ChevronDown, Menu } from 'lucide-react';
+import { isAuthenticated } from '@/hooks/useAuth';
 import { NavigationMenu } from './NavigationMenu';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeSwitcher } from './ThemeSwitcher';
@@ -9,10 +10,15 @@ import { useLocale } from '@/contexts/LocaleContext';
 import styles from './Header.module.css';
 
 export function Header() {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { t, locale } = useLocale();
+
+  const handleProfileClick = () => {
+    navigate(isAuthenticated() ? '/profile' : '/login');
+  };
 
   // Track scroll for header effects
   useEffect(() => {
@@ -143,9 +149,13 @@ export function Header() {
                 <ShoppingCart size={20} />
               </Link>
 
-              <Link to="/profile" className={styles.iconButton} aria-label={t('nav.profile')}>
+              <button 
+                onClick={handleProfileClick}
+                className={styles.iconButton} 
+                aria-label={t('nav.profile')}
+              >
                 <User size={20} />
-              </Link>
+              </button>
             </div>
           </div>
         </div>

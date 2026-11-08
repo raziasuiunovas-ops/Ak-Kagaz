@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "type-check": "tsc --noEmit",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "prebuild": "node -p \"'Build Node.js ' + process.version\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -41,5 +42,8 @@
     "vite-plugin-pwa": "^0.19.8",
     "vitest": "^1.4.0",
     "workbox-build": "^7.4.1"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

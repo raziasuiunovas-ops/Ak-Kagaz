@@ -65,7 +65,7 @@
   left: 50%;
   width: 68%;
   z-index: 2;
-  transform: translate(-50%, calc(clamp(16px, 2vw, 24px) + 17px));
+  transform: translate(-50%, calc(clamp(16px, 2vw, 24px) + 27px));
 }
 
 .books {

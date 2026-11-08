@@ -3,9 +3,10 @@ import styles from './BackButton.module.css';
 
 interface BackButtonProps {
   fallback?: string;
+  label?: string;
 }
 
-export function BackButton({ fallback = '/admin' }: BackButtonProps) {
+export function BackButton({ fallback = '/admin', label = 'Назад' }: BackButtonProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,11 +26,11 @@ export function BackButton({ fallback = '/admin' }: BackButtonProps) {
   }
 
   return (
-    <button className={styles.backButton} onClick={handleBack}>
+    <button className={styles.backButton} onClick={handleBack} aria-label={label}>
       <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
       </svg>
-      <span>Назад</span>
+      <span>{label}</span>
     </button>
   );
 }

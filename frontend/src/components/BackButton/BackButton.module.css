@@ -19,6 +19,11 @@
   border-color: #d1d5db;
 }
 
+.backButton:focus-visible {
+  outline: 3px solid #e55604;
+  outline-offset: 3px;
+}
+
 .backButton svg {
   flex-shrink: 0;
 }

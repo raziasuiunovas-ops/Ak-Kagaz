@@ -18,7 +18,8 @@
     "dev:backend": "npm run dev --workspace=@ak-kagaz/backend",
     "build:frontend": "npm run build --workspace=@ak-kagaz/frontend",
     "build:backend": "npm run build --workspace=@ak-kagaz/backend",
-    "prisma:seed": "tsx prisma/seed.ts"
+    "prisma:seed": "tsx prisma/seed.ts",
+    "prebuild": "node -p \"'Build Node.js ' + process.version\""
   },
   "keywords": [
     "stationery",
@@ -29,7 +30,7 @@
   "author": "AK KAGAZ",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=18.0.0",
+    "node": "22.x",
     "npm": ">=9.0.0"
   },
   "devDependencies": {

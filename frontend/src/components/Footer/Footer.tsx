@@ -147,7 +147,8 @@ export function Footer() {
               {t('footer.copyright').replace('2026', String(currentYear))}
             </p>
             <div className={styles.legalLinks}>
-              {/* Future: Links to privacy policy and terms */}
+              <Link to="/terms" className={styles.legalLink}>{t('legal.terms.title')}</Link>
+              <Link to="/privacy" className={styles.legalLink}>{t('legal.privacy.title')}</Link>
             </div>
           </div>
         </Container>

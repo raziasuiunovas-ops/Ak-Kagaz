@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { legalTranslations } from './legalTranslations';
 
 export type Locale = 'ru' | 'ky';
 
@@ -33,7 +34,7 @@ export function LocaleProvider({ children }: LocaleProviderProps) {
 
   const t = (key: string): string => {
     const translations = locale === 'ru' ? translationsRu : translationsKy;
-    return translations[key] || key;
+    return translations[key] || legalTranslations[locale][key] || key;
   };
 
   return (

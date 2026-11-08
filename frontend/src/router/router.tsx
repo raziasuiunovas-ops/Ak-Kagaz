@@ -21,6 +21,8 @@ import { AboutPage } from '@/pages/AboutPage';
 import { ContactsPage } from '@/pages/ContactsPage';
 import { DeliveryPage } from '@/pages/DeliveryPage';
 import { InstallmentPage } from '@/pages/InstallmentPage';
+import { TermsPage } from '@/pages/LegalPages/TermsPage';
+import { PrivacyPage } from '@/pages/LegalPages/PrivacyPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { AdminVerify2FAPage } from '@/pages/AdminVerify2FAPage';
 import { AdminLayout } from '@/layouts/AdminLayout';
@@ -120,6 +122,14 @@ export const router = createBrowserRouter([
       {
         path: 'installment',
         element: <InstallmentPage />,
+      },
+      {
+        path: 'terms',
+        element: <TermsPage />,
+      },
+      {
+        path: 'privacy',
+        element: <PrivacyPage />,
       },
 
       // 404 - catch all
