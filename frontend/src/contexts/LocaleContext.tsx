@@ -85,6 +85,7 @@ const translationsRu: Record<string, string> = {
   
   // Header
   'header.search': 'Поиск товаров...',
+  'header.searchPlaceholder': 'Начните вводить название товара',
   'header.menu': 'Меню',
   
   // Footer
@@ -95,6 +96,8 @@ const translationsRu: Record<string, string> = {
   'footer.contacts': 'Контакты',
   'footer.followUs': 'Мы в соцсетях',
   'footer.copyright': '© 2026 АК КАГАЗ. Все права защищены.',
+  'footer.websiteDevelopment': 'Разработка сайта',
+  'footer.developedBy': 'Developed by',
   
   // Home page
   'home.hero.title': 'Добро пожаловать в АК КАГАЗ',
@@ -299,6 +302,7 @@ const translationsKy: Record<string, string> = {
   
   // Header
   'header.search': 'Товарларды издөө...',
+  'header.searchPlaceholder': 'Товардын аталышын киргизип баштаңыз',
   'header.menu': 'Меню',
   
   // Footer
@@ -309,6 +313,8 @@ const translationsKy: Record<string, string> = {
   'footer.contacts': 'Байланыштар',
   'footer.followUs': 'Биз социалдык тармактарда',
   'footer.copyright': '© 2026 АК КАГАЗ. Бардык укуктар корголгон.',
+  'footer.websiteDevelopment': 'Сайтты иштеп чыгуу',
+  'footer.developedBy': 'Developed by',
   
   // Home page
   'home.hero.title': 'АК КАГАЗ дүкөнүнө кош келиңиз',

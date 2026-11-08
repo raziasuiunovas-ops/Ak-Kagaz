@@ -1,29 +1,28 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { User, Package, Heart, Settings, LogOut } from 'lucide-react';
 import { Container } from '@/components/Container';
 import { BackButton } from '@/components/BackButton';
 import { LogoutConfirmModal } from '@/components/LogoutConfirmModal';
+import { useCurrentUser, useLogout } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './ProfilePage.module.css';
 
 export function ProfilePage() {
   const { t } = useLocale();
-  const navigate = useNavigate();
+  const { data: user } = useCurrentUser();
+  const logout = useLogout();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {
-    // Очистить auth данные
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('refresh_token');
-    
-    // Закрыть модалку
     setShowLogoutModal(false);
-    
-    // Перенаправить на главную
-    navigate('/');
+    logout();
   };
+
+  const fullName = [user?.profile?.firstName, user?.profile?.lastName]
+    .filter(Boolean)
+    .join(' ');
+  const displayName = fullName || user?.email?.split('@')[0] || '';
 
   return (
     <div className={styles.profilePage}>
@@ -37,8 +36,8 @@ export function ProfilePage() {
             <div className={styles.avatar}>
               <User className={styles.avatarIcon} />
             </div>
-            <h2 className={styles.userName}>Имя Пользователя</h2>
-            <p className={styles.userEmail}>user@example.com</p>
+            <h2 className={styles.userName}>{displayName}</h2>
+            <p className={styles.userEmail}>{user?.email}</p>
           </div>
 
           {/* Menu Items */}

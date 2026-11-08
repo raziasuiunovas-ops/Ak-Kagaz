@@ -143,10 +143,15 @@ export function getToken(): string | null {
 
 export function setToken(token: string): void {
   localStorage.setItem('auth_token', token);
+  // The shared API client reads this legacy key for authenticated requests.
+  localStorage.setItem('access_token', token);
 }
 
 export function removeToken(): void {
   localStorage.removeItem('auth_token');
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('user_id');
+  localStorage.removeItem('refresh_token');
 }
 
 export function isAuthenticated(): boolean {

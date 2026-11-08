@@ -32,3 +32,20 @@
   color: #6b7280;
   font-size: 0.875rem;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .loadingState {
+  background: transparent;
+}
+
+[data-theme="dark"] .spinner {
+  color: var(--color-primary);
+  filter: drop-shadow(0 0 10px var(--color-glow));
+}
+
+[data-theme="dark"] .message {
+  color: var(--color-text-secondary);
+}

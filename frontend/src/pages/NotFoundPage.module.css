@@ -44,3 +44,32 @@
   background-color: var(--color-primary-hover);
   color: white;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .container {
+  background: var(--color-background);
+}
+
+[data-theme="dark"] .title {
+  color: var(--color-primary);
+  text-shadow: 0 0 30px rgba(38, 87, 124, 0.5);
+}
+
+[data-theme="dark"] .subtitle {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .message {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .link {
+  box-shadow: 0 0 20px rgba(38, 87, 124, 0.4);
+}
+
+[data-theme="dark"] .link:hover {
+  box-shadow: 0 0 30px rgba(38, 87, 124, 0.6);
+}

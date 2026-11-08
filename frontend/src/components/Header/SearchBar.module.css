@@ -1,9 +1,14 @@
-.overlay {
+/* Backdrop - subtle, doesn't block view */
+.backdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
-  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.2s ease;
+}
+
+[data-theme='dark'] .backdrop {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 @keyframes fadeIn {
@@ -15,43 +20,71 @@
   }
 }
 
-.modal {
+/* Dropdown Container - slides from header */
+.searchContainer {
   position: fixed;
-  top: 5rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 50;
-  width: calc(100% - 2rem);
-  max-width: 42rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  animation: slideDown 0.25s ease;
+  padding-top: 5rem; /* Space for header */
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(-1rem);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 
+.searchContent {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Search Form */
 .searchForm {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  gap: 1rem;
+  background: var(--color-white);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--color-primary);
+}
+
+[data-theme='dark'] .searchForm {
+  background: var(--color-charcoal-black);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-color: var(--color-primary);
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-vanilla-canvas);
+  border-radius: 12px;
+  border: none;
+}
+
+[data-theme='dark'] .inputWrapper {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .searchIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #9ca3af;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-primary);
   flex-shrink: 0;
 }
 
@@ -59,47 +92,210 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: 1rem;
-  color: #111827;
+  font-size: 1.125rem;
+  color: var(--color-charcoal-black);
+  background: transparent;
+  font-weight: 400;
+  box-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.searchInput:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+[data-theme='dark'] .searchInput {
+  color: var(--color-white);
 }
 
 .searchInput::placeholder {
-  color: #9ca3af;
+  color: var(--color-warm-gray);
+  opacity: 0.6;
+}
+
+[data-theme='dark'] .searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.clearButton:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .clearButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.clearIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-warm-gray);
+}
+
+[data-theme='dark'] .clearIcon {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .closeButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  background: transparent;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: var(--color-soft-ivory);
   border: none;
-  border-radius: 0.375rem;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.2s ease;
   flex-shrink: 0;
+  padding: 0;
 }
 
 .closeButton:hover {
-  background-color: #f3f4f6;
+  background: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.closeButton:hover .closeIcon {
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .closeButton {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme='dark'] .closeButton:hover {
+  background: var(--color-primary);
 }
 
 .closeIcon {
   width: 1.25rem;
   height: 1.25rem;
-  color: #6b7280;
+  color: var(--color-charcoal-black);
+  transition: color 0.2s ease;
 }
 
-.results {
-  max-height: 24rem;
+[data-theme='dark'] .closeIcon {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Results Area */
+.resultsArea {
+  margin-top: 1rem;
+  background: var(--color-white);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  max-height: 32rem;
   overflow-y: auto;
-  padding: 0.5rem;
+}
+
+[data-theme='dark'] .resultsArea {
+  background: rgba(30, 30, 35, 0.95);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.emptyIcon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--color-primary);
+  opacity: 0.3;
+}
+
+[data-theme='dark'] .emptyIcon {
+  opacity: 0.4;
+}
+
+.emptyText {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-warm-gray);
+  opacity: 0.6;
+}
+
+[data-theme='dark'] .emptyText {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.resultsContainer {
+  padding: 1rem;
 }
 
 .placeholder {
-  padding: 2rem 1rem;
+  padding: 2rem;
   text-align: center;
-  color: #9ca3af;
-  font-size: 0.875rem;
+  color: var(--color-warm-gray);
+  font-size: 0.9375rem;
+  opacity: 0.7;
+}
+
+[data-theme='dark'] .placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .searchContainer {
+    padding-top: 4rem;
+  }
+  
+  .searchForm {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  
+  .inputWrapper {
+    width: 100%;
+  }
+  
+  .searchInput {
+    font-size: 1rem;
+  }
+  
+  .closeButton {
+    width: 100%;
+    height: 2.5rem;
+  }
+  
+  .resultsArea {
+    max-height: 24rem;
+  }
+  
+  .emptyState {
+    padding: 3rem 1.5rem;
+  }
+  
+  .emptyIcon {
+    width: 3rem;
+    height: 3rem;
+  }
 }

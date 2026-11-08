@@ -59,3 +59,37 @@
   width: 1rem;
   height: 1rem;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .errorState {
+  background: transparent;
+}
+
+[data-theme="dark"] .icon {
+  color: var(--color-error);
+}
+
+[data-theme="dark"] .title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .message {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .retryButton {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 20px rgba(38, 87, 124, 0.4);
+}
+
+[data-theme="dark"] .retryButton:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 0 30px rgba(38, 87, 124, 0.6);
+}
+
+[data-theme="dark"] .retryButton:active {
+  background-color: var(--color-primary-active);
+}

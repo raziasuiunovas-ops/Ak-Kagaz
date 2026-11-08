@@ -442,3 +442,176 @@
   font-weight: 600;
   color: #10b981;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .productPage {
+  background: var(--color-background);
+}
+
+[data-theme="dark"] .mainImage {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}
+
+[data-theme="dark"] .thumbnail {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}
+
+[data-theme="dark"] .productName {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .ratingText {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .availabilityBadge {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: var(--color-success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="dark"] .outOfStock {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: var(--color-error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="dark"] .priceSection {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .price {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .oldPrice {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .discount {
+  color: var(--color-success);
+}
+
+[data-theme="dark"] .quantityLabel {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .quantityControl {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+[data-theme="dark"] .quantityBtn {
+  background-color: var(--color-surface);
+}
+
+[data-theme="dark"] .quantityBtn:hover:not(:disabled) {
+  background-color: var(--color-hover);
+}
+
+[data-theme="dark"] .quantityIcon {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .quantityInput {
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .addToCartBtn {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 20px rgba(38, 87, 124, 0.4);
+}
+
+[data-theme="dark"] .addToCartBtn:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 0 30px rgba(38, 87, 124, 0.6);
+}
+
+[data-theme="dark"] .favoriteBtn {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .favoriteBtn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: var(--color-error);
+}
+
+[data-theme="dark"] .tabs {
+  border-top: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .tabsList {
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .tab {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .tab:hover {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .tabActive {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+[data-theme="dark"] .placeholder {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .relatedTitle {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .relatedCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .relatedCard:hover {
+  box-shadow: 0 4px 20px rgba(38, 87, 124, 0.3);
+}
+
+[data-theme="dark"] .relatedImage {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}
+
+[data-theme="dark"] .relatedName {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .relatedPrice {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .imagePlaceholder {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}
+
+[data-theme="dark"] .shortDescription {
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .description {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .campaignTag {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+[data-theme="dark"] .campaignTag:hover {
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.5), 0 0 30px rgba(251, 191, 36, 0.3);
+}

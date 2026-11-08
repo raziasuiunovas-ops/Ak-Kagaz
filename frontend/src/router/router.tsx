@@ -27,6 +27,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { AdminVerify2FAPage } from '@/pages/AdminVerify2FAPage';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { AdminRoute } from '@/components/AdminRoute';
+import { AuthRoute } from '@/components/AuthRoute/AuthRoute';
 
 // Admin pages
 import { DashboardPage } from '@/pages/admin/DashboardPage';
@@ -99,11 +100,11 @@ export const router = createBrowserRouter([
       // Profile (Future: Add auth protection)
       {
         path: 'profile',
-        element: <ProfilePage />,
+        element: <AuthRoute><ProfilePage /></AuthRoute>,
       },
       {
         path: 'profile/orders',
-        element: <OrderHistoryPage />,
+        element: <AuthRoute><OrderHistoryPage /></AuthRoute>,
       },
 
       // Info Pages

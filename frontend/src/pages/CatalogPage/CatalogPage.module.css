@@ -70,3 +70,36 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .catalogPage {
+  background: var(--color-background);
+}
+
+[data-theme="dark"] .title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .categoryCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .categoryCard:hover {
+  box-shadow: 0 4px 20px rgba(38, 87, 124, 0.3);
+}
+
+[data-theme="dark"] .categoryImage {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}
+
+[data-theme="dark"] .categoryName {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .categoryCount {
+  color: var(--color-text-secondary);
+}

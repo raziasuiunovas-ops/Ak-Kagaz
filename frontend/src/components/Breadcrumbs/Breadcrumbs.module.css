@@ -42,3 +42,24 @@
   color: #9ca3af;
   flex-shrink: 0;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .link {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .link:hover {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .current {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .separator {
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+}

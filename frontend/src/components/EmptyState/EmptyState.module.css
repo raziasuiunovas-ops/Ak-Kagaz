@@ -35,3 +35,23 @@
 .action {
   margin-top: 0.5rem;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .emptyState {
+  background: transparent;
+}
+
+[data-theme="dark"] .icon {
+  color: var(--color-border);
+}
+
+[data-theme="dark"] .title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .message {
+  color: var(--color-text-secondary);
+}

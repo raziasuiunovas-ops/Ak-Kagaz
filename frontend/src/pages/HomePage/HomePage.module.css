@@ -365,3 +365,131 @@
     gap: 16px;
   }
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .homePage {
+  background: var(--color-background);
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.2) 0%, rgba(38, 87, 124, 0.1) 100%);
+}
+
+[data-theme="dark"] .heroTitle {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .heroSubtitle {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .heroCta {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 20px rgba(38, 87, 124, 0.4);
+}
+
+[data-theme="dark"] .heroCta:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 0 30px rgba(38, 87, 124, 0.6);
+}
+
+[data-theme="dark"] .heroVisualPlaceholder {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .sectionTitle {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .sectionLink {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .sectionLink:hover {
+  color: var(--color-primary-hover);
+}
+
+[data-theme="dark"] .categoryCardPlaceholder {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .categoryCardPlaceholder:hover {
+  background-color: var(--color-hover);
+  box-shadow: 0 0 20px rgba(38, 87, 124, 0.2);
+}
+
+[data-theme="dark"] .categoryImage {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}
+
+[data-theme="dark"] .categoryName {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .productCardPlaceholder {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .productCardPlaceholder:hover {
+  box-shadow: 0 4px 20px rgba(38, 87, 124, 0.3);
+}
+
+[data-theme="dark"] .productImage {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.2) 0%, rgba(38, 87, 124, 0.1) 100%);
+}
+
+[data-theme="dark"] .productName {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .productPrice {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .aboutSection {
+  background-color: var(--color-surface);
+}
+
+[data-theme="dark"] .aboutText {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .aboutLink {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .aboutLink:hover {
+  color: var(--color-primary-hover);
+}
+
+[data-theme="dark"] .aboutImagePlaceholder {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}
+
+[data-theme="dark"] .reviewCardPlaceholder {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .reviewText {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .reviewAuthorName {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .reviewDate {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .reviewAvatar {
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
+}

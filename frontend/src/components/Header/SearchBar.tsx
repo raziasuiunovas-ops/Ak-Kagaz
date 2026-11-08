@@ -15,12 +15,7 @@ export function SearchBar({ onClose }: SearchBarProps) {
   const { t } = useLocale();
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
     inputRef.current?.focus();
-
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, []);
 
   const handleSubmit = (e: FormEvent) => {
@@ -39,36 +34,60 @@ export function SearchBar({ onClose }: SearchBarProps) {
 
   return (
     <>
-      {/* Overlay */}
-      <div className={styles.overlay} onClick={onClose} />
+      {/* Backdrop */}
+      <div className={styles.backdrop} onClick={onClose} />
 
-      {/* Search Modal */}
-      <div className={styles.modal}>
-        <form className={styles.searchForm} onSubmit={handleSubmit}>
-          <Icon name="search" className={styles.searchIcon} />
-          <input
-            ref={inputRef}
-            type="text"
-            className={styles.searchInput}
-            placeholder={t('header.search')}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <button
-            type="button"
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label={t('common.close')}
-          >
-            <Icon name="close" className={styles.closeIcon} />
-          </button>
-        </form>
+      {/* Dropdown Search Bar */}
+      <div className={styles.searchContainer}>
+        <div className={styles.searchContent}>
+          <form className={styles.searchForm} onSubmit={handleSubmit}>
+            <div className={styles.inputWrapper}>
+              <Icon name="search" className={styles.searchIcon} />
+              <input
+                ref={inputRef}
+                type="text"
+                className={styles.searchInput}
+                placeholder={t('header.search')}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              {query && (
+                <button
+                  type="button"
+                  className={styles.clearButton}
+                  onClick={() => setQuery('')}
+                  aria-label="Clear"
+                >
+                  <Icon name="close" className={styles.clearIcon} />
+                </button>
+              )}
+            </div>
+            <button
+              type="button"
+              className={styles.closeButton}
+              onClick={onClose}
+              aria-label={t('common.close')}
+            >
+              <Icon name="close" className={styles.closeIcon} />
+            </button>
+          </form>
 
-        <div className={styles.results}>
-          {/* Future: Real-time search results */}
-          <div className={styles.placeholder}>
-            {query ? t('common.search') : t('header.search')}
+          {/* Search Results Area */}
+          <div className={styles.resultsArea}>
+            {!query ? (
+              <div className={styles.emptyState}>
+                <Icon name="search" className={styles.emptyIcon} />
+                <p className={styles.emptyText}>{t('header.searchPlaceholder')}</p>
+              </div>
+            ) : (
+              <div className={styles.resultsContainer}>
+                {/* Future: Real-time search results */}
+                <div className={styles.placeholder}>
+                  {t('common.search')}...
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

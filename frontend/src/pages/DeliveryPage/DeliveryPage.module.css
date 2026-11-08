@@ -76,3 +76,42 @@
   color: #92400e;
   font-style: italic;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .deliveryPage {
+  background: var(--color-background);
+}
+
+[data-theme="dark"] .title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .section {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .headerIcon {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .sectionTitle {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .text {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .list {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .note {
+  background-color: rgba(229, 86, 4, 0.15);
+  color: var(--color-secondary);
+  border: 1px solid rgba(229, 86, 4, 0.3);
+}

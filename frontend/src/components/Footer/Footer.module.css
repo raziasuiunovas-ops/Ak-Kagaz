@@ -1,8 +1,18 @@
 .footer {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: var(--footer-bg, var(--color-white));
+  color: var(--footer-text, var(--color-black));
   margin-top: auto;
-  border-top: 1px solid var(--color-primary);
+  border-top: 1px solid var(--footer-border, var(--color-primary));
+}
+
+/* Dark theme */
+[data-theme='dark'] .footer {
+  --footer-bg: #1a1a1a;
+  --footer-text: #e5e5e5;
+  --footer-border: #333;
+  --footer-text-muted: rgba(229, 229, 229, 0.7);
+  --footer-border-light: #2a2a2a;
+  --footer-hover: var(--color-primary);
 }
 
 .topSection {
@@ -40,7 +50,7 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   font-weight: 500;
-  color: var(--color-black);
+  color: var(--footer-text, var(--color-black));
   margin: 0;
 }
 
@@ -49,8 +59,7 @@
   font-size: 0.875rem;
   line-height: 1.5;
   max-width: 20rem;
-  color: var(--color-black);
-  opacity: 0.7;
+  color: var(--footer-text-muted, rgba(0, 0, 0, 0.7));
 }
 
 /* Links Section */
@@ -65,7 +74,7 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--color-black);
+  color: var(--footer-text, var(--color-black));
   letter-spacing: 0.025em;
 }
 
@@ -83,16 +92,14 @@
 }
 
 .link {
-  color: var(--color-black);
+  color: var(--footer-text-muted, rgba(0, 0, 0, 0.7));
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.15s ease;
-  opacity: 0.7;
 }
 
 .link:hover {
-  color: var(--color-primary);
-  opacity: 1;
+  color: var(--footer-hover, var(--color-primary));
 }
 
 /* Contacts Section */
@@ -119,13 +126,12 @@
 .contactText {
   margin: 0;
   font-size: 0.875rem;
-  color: var(--color-black);
+  color: var(--footer-text, var(--color-black));
 }
 
 .contactPlaceholder {
   font-style: italic;
-  color: var(--color-black);
-  opacity: 0.5;
+  color: var(--footer-text-muted, rgba(0, 0, 0, 0.5));
 }
 
 /* Social Links */
@@ -141,10 +147,10 @@
   justify-content: center;
   width: 2.25rem;
   height: 2.25rem;
-  background-color: var(--color-white);
-  border: 1px solid var(--color-black);
+  background-color: var(--footer-bg, var(--color-white));
+  border: 1px solid var(--footer-border-light, rgba(0, 0, 0, 0.2));
   border-radius: 0.5rem;
-  color: var(--color-black);
+  color: var(--footer-text, var(--color-black));
   transition: all 0.15s ease;
   text-decoration: none;
 }
@@ -165,21 +171,28 @@
 .bottomSection {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-  opacity: 0.5;
+  border-top: 1px solid var(--footer-border-light, rgba(0, 0, 0, 0.1));
 }
 
 .bottomContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   text-align: center;
+}
+
+.leftBottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .copyright {
   margin: 0;
   font-size: 0.875rem;
-  color: var(--color-black);
+  color: var(--footer-text-muted, rgba(0, 0, 0, 0.6));
 }
 
 .legalLinks {
@@ -190,14 +203,85 @@
 }
 
 .legalLink {
-  color: var(--color-black);
+  color: var(--footer-text-muted, rgba(0, 0, 0, 0.6));
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.15s ease;
 }
 
 .legalLink:hover {
+  color: var(--footer-hover, var(--color-primary));
+}
+
+/* Developer Credit */
+.developerCredit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(38, 87, 124, 0.03) 0%, rgba(38, 87, 124, 0.01) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(38, 87, 124, 0.1);
+}
+
+.developerInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.developerTitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.whatsappButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  background: #25D366;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+}
+
+.whatsappButton:hover {
+  background: #128C7E;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.whatsappLabel {
+  line-height: 1;
+}
+
+.whatsappButtonIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.developerBy {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-black);
+  opacity: 0.5;
+}
+
+.developerName {
+  font-weight: 600;
   color: var(--color-primary);
+  opacity: 1;
 }
 
 /* Tablet */
@@ -225,14 +309,23 @@
   .bottomContent {
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     text-align: left;
+  }
+  
+  .leftBottom {
+    align-items: flex-start;
+  }
+  
+  .developerCredit {
+    align-items: flex-end;
   }
 }
 
 /* Phone Links */
 .phoneLink {
   display: block;
-  color: var(--color-black);
+  color: var(--footer-text, var(--color-black));
   text-decoration: none;
   font-size: 0.9375rem;
   line-height: 1.8;
@@ -240,16 +333,49 @@
 }
 
 .phoneLink:hover {
-  color: var(--color-primary);
+  color: var(--footer-hover, var(--color-primary));
 }
 
 .phoneLink:active {
-  color: var(--color-primary);
+  color: var(--footer-hover, var(--color-primary));
   opacity: 0.8;
+}
+
+/* WhatsApp Link */
+.whatsappLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #25D366 !important;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.1) 0%, rgba(37, 211, 102, 0.05) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  transition: all 0.2s ease;
+}
+
+.whatsappLink:hover {
+  color: #128C7E !important;
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.15) 0%, rgba(37, 211, 102, 0.08) 100%);
+  border-color: rgba(37, 211, 102, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+}
+
+.whatsappIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
   .phoneLink {
+    font-size: 0.875rem;
+  }
+  
+  .whatsappLink {
     font-size: 0.875rem;
   }
 }

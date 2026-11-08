@@ -135,3 +135,51 @@
 .navItem.active {
   color: #2563eb;
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .nav {
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 0 30px var(--color-glow);
+}
+
+[data-theme="dark"] .navItem {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .navItem::before {
+  background: rgba(38, 87, 124, 0.3);
+  box-shadow: 
+    0 4px 16px rgba(38, 87, 124, 0.3),
+    inset 0 1px 2px rgba(38, 87, 124, 0.5);
+}
+
+[data-theme="dark"] .navItem:hover::before {
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .navItem.active::before {
+  background: rgba(38, 87, 124, 0.5);
+  box-shadow: 
+    0 6px 20px rgba(38, 87, 124, 0.5),
+    0 2px 10px rgba(38, 87, 124, 0.2),
+    inset 0 1px 3px rgba(38, 87, 124, 0.7),
+    0 0 20px rgba(38, 87, 124, 0.4);
+}
+
+[data-theme="dark"] .navItem:hover {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .navItem.active {
+  color: var(--color-primary);
+}
