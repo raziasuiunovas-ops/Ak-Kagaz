@@ -6,13 +6,16 @@ import {
   Logger,
   Inject,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../common/services/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
-import { UserStatus } from '@prisma/client';
+import { OAuthProvider, UserStatus } from '@prisma/client';
+import { randomBytes } from 'node:crypto';
+import { Resend } from 'resend';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +25,7 @@ export class AuthService {
     @Inject(PrismaService) private readonly prisma: PrismaService,
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(NotificationsService) private readonly notificationsService: NotificationsService,
+    @Inject(ConfigService) private readonly config: ConfigService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -196,6 +200,7 @@ export class AuthService {
   async requestPasswordReset(email: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
+      include: { userRoles: { include: { role: true } } },
     });
 
     if (!user) {
@@ -203,8 +208,16 @@ export class AuthService {
       return { message: 'If email exists, reset link will be sent' };
     }
 
+    const isAdmin = user.userRoles.some(({ role }) =>
+      ['SUPER_ADMIN', 'ADMIN', 'MANAGER', 'WAREHOUSE'].includes(role.name),
+    );
+    const testMode = this.config.get<string>('PASSWORD_RESET_MODE', 'test') !== 'email';
+    if (testMode && !isAdmin) {
+      return { message: 'If email exists, reset link will be sent' };
+    }
+
     // Generate reset token
-    const token = this.generateRandomToken();
+    const token = randomBytes(32).toString('hex');
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 1); // 1 hour
 
@@ -216,10 +229,137 @@ export class AuthService {
       },
     });
 
-    // TODO: Send email with reset link
-    this.logger.log(`Password reset requested for: ${email}`);
+    const frontendUrl = this.config.get<string>('NEXTAUTH_URL', 'http://localhost:3000');
+    const resetUrl = `${frontendUrl}/forgot-password?token=${encodeURIComponent(token)}`;
+
+    if (testMode) {
+      this.logger.log('Test password reset link created for an administrator.');
+      return { message: 'Password reset link created in test mode', testResetUrl: resetUrl };
+    }
+
+    const apiKey = this.config.get<string>('RESEND_API_KEY');
+    const from = this.config.get<string>('RESEND_FROM_EMAIL');
+    if (!apiKey || !from) {
+      throw new BadRequestException('Password reset email is not configured');
+    }
+
+    const resend = new Resend(apiKey);
+    const { error } = await resend.emails.send({
+      from,
+      to: user.email,
+      subject: 'Сброс пароля AK KAGAZ',
+      html: `<p>Чтобы изменить пароль, перейдите по <a href="${resetUrl}">ссылке сброса пароля</a>.</p><p>Ссылка действительна один час.</p>`,
+    });
+    if (error) {
+      this.logger.error('Resend could not deliver a password reset email.', error.message);
+      throw new BadRequestException('Could not send password reset email');
+    }
 
     return { message: 'If email exists, reset link will be sent' };
+  }
+
+  async loginWithGoogle(profile: {
+    providerAccountId: string;
+    email: string;
+    emailVerified: boolean;
+    firstName: string;
+    lastName: string;
+    avatarUrl?: string;
+  }) {
+    if (!profile.emailVerified) {
+      throw new UnauthorizedException('Google email must be verified');
+    }
+
+    const linkedAccount = await this.prisma.oAuthAccount.findUnique({
+      where: {
+        provider_providerAccountId: {
+          provider: OAuthProvider.GOOGLE,
+          providerAccountId: profile.providerAccountId,
+        },
+      },
+      include: { user: { include: { profile: true, userRoles: { include: { role: true } } } } },
+    });
+
+    let user = linkedAccount?.user;
+    if (!user) {
+      const existingUser = await this.prisma.user.findUnique({
+        where: { email: profile.email },
+        include: { profile: true, userRoles: { include: { role: true } } },
+      });
+
+      if (existingUser?.status === UserStatus.BLOCKED) {
+        throw new UnauthorizedException('Account is blocked');
+      }
+
+      if (existingUser) {
+        user = existingUser;
+        if (!user.emailVerified) {
+          await this.prisma.user.update({
+            where: { id: user.id },
+            data: { emailVerified: true },
+          });
+        }
+        if (user.profile && (!user.profile.firstName || !user.profile.lastName) && (profile.firstName || profile.lastName)) {
+          await this.prisma.userProfile.update({
+            where: { userId: user.id },
+            data: {
+              firstName: user.profile.firstName || profile.firstName,
+              lastName: user.profile.lastName || profile.lastName,
+              avatarUrl: user.profile.avatarUrl || profile.avatarUrl,
+            },
+          });
+        }
+      } else {
+        user = await this.prisma.$transaction(async (tx) => {
+          const created = await tx.user.create({
+            data: {
+              email: profile.email,
+              emailVerified: true,
+              status: UserStatus.ACTIVE,
+              profile: {
+                create: {
+                  firstName: profile.firstName || null,
+                  lastName: profile.lastName || null,
+                  avatarUrl: profile.avatarUrl,
+                },
+              },
+            },
+            include: { profile: true, userRoles: { include: { role: true } } },
+          });
+          const customerRole = await tx.role.findUnique({ where: { name: 'CUSTOMER' } });
+          if (customerRole) {
+            await tx.userRole.create({ data: { userId: created.id, roleId: customerRole.id } });
+          }
+          return created;
+        });
+      }
+
+      await this.prisma.oAuthAccount.create({
+        data: {
+          userId: user.id,
+          provider: OAuthProvider.GOOGLE,
+          providerAccountId: profile.providerAccountId,
+        },
+      });
+    }
+
+    if (user.status === UserStatus.BLOCKED) {
+      throw new UnauthorizedException('Account is blocked');
+    }
+
+    const isAdmin = user.userRoles.some(({ role }) =>
+      ['SUPER_ADMIN', 'ADMIN', 'MANAGER', 'WAREHOUSE'].includes(role.name),
+    );
+    if (isAdmin) {
+      const result = await this.notificationsService.create2FACode(user.id);
+      if (!result.success) {
+        throw new UnauthorizedException('Could not send the admin verification code');
+      }
+      return { requires2FA: true as const, userId: user.id };
+    }
+
+    await this.prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+    return { user: this.sanitizeUser(user), token: this.generateToken(user.id, user.email) };
   }
 
   async resetPassword(token: string, newPassword: string) {
@@ -255,10 +395,6 @@ export class AuthService {
       sub: userId,
       email,
     });
-  }
-
-  private generateRandomToken(): string {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
   }
 
   private sanitizeUser(user: any) {

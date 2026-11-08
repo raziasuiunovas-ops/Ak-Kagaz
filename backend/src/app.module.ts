@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommonModule } from './common/common.module';
@@ -24,7 +25,9 @@ import { NotificationsModule } from './notifications/notifications.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      // The backend secrets are stored in backend/.env during local development.
+      // Support starting Nest from either the repository root or backend folder.
+      envFilePath: [resolve(process.cwd(), 'backend/.env'), resolve(process.cwd(), '.env')],
     }),
     CommonModule,
     AuthModule,

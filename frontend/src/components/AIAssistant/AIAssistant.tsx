@@ -101,6 +101,10 @@ export function AIAssistant() {
         },
       });
 
+      if (typeof response?.message !== 'string' || !response.message.trim()) {
+        throw new Error('The AI response did not contain a message');
+      }
+
       // Add assistant response
       setMessages((prev) => [...prev, { role: 'assistant', content: response.message }]);
     } catch (error) {
@@ -187,10 +191,10 @@ export function AIAssistant() {
                 }`}
               >
                 <div className={styles.messageContent}>
-                  {message.content.split('\n').map((line, i) => (
+                  {(typeof message.content === 'string' ? message.content : '').split('\n').map((line, i) => (
                     <span key={i}>
                       {line}
-                      {i < message.content.split('\n').length - 1 && <br />}
+                      {i < (typeof message.content === 'string' ? message.content : '').split('\n').length - 1 && <br />}
                     </span>
                   ))}
                 </div>

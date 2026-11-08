@@ -59,7 +59,7 @@ export function RegisterPage() {
           type="button" 
           onClick={handleGoBack} 
           className={styles.backButton}
-          aria-label="Назад"
+          aria-label={t('common.back')}
         >
           <svg 
             width="20" 
@@ -76,7 +76,7 @@ export function RegisterPage() {
               strokeLinejoin="round"
             />
           </svg>
-          <span>Назад</span>
+          <span>{t('common.back')}</span>
         </button>
 
         <div className={styles.formCard}>
@@ -176,7 +176,7 @@ export function RegisterPage() {
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                  aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
                   disabled={registerMutation.isPending}
                 >
                   {showPassword ? (
@@ -216,7 +216,7 @@ export function RegisterPage() {
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  aria-label={showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                  aria-label={showConfirmPassword ? t('auth.hidePassword') : t('auth.showPassword')}
                   disabled={registerMutation.isPending}
                 >
                   {showConfirmPassword ? (
@@ -252,8 +252,23 @@ export function RegisterPage() {
           <Link to="/login" className={styles.loginLink}>
             {t('auth.signIn')}
           </Link>
+          <a href={`${import.meta.env.VITE_API_URL || '/api'}/auth/google`} className={styles.googleButton}>
+            <GoogleMark />
+            {t('auth.continueWithGoogle')}
+          </a>
         </div>
       </Container>
     </div>
+  );
+}
+
+function GoogleMark() {
+  return (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48">
+      <path fill="#FFC107" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.7c3.9-3.6 6-8.8 6-15Z" />
+      <path fill="#4CAF50" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.7-5.1c-1.8 1.2-4 1.9-6.8 1.9-5.2 0-9.6-3.5-11.2-8.2H5.9v5.2A20 20 0 0 0 24 44Z" />
+      <path fill="#1976D2" d="M12.8 27.7a12 12 0 0 1 0-7.4v-5.2H5.9a20 20 0 0 0 0 17.8l6.9-5.2Z" />
+      <path fill="#EA4335" d="M24 12.1c3 0 5.7 1 7.8 3.1l5.9-5.9A19.7 19.7 0 0 0 24 4 20 20 0 0 0 5.9 15.1l6.9 5.2c1.6-4.7 6-8.2 11.2-8.2Z" />
+    </svg>
   );
 }

@@ -32,7 +32,12 @@ class ApiClient {
   }
 
   private buildURL(endpoint: string, params?: Record<string, string | number | boolean>): string {
-    const url = new URL(endpoint, this.baseURL);
+    const baseURL = /^[a-z][a-z\d+.-]*:/i.test(this.baseURL)
+      ? this.baseURL
+      : new URL(this.baseURL, window.location.origin).toString();
+    const normalizedBaseURL = baseURL.endsWith('/') ? baseURL : `${baseURL}/`;
+    const normalizedEndpoint = endpoint.replace(/^\/+/, '');
+    const url = new URL(normalizedEndpoint, normalizedBaseURL);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {

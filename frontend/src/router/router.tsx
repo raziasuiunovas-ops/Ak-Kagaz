@@ -13,6 +13,8 @@ import { FavoritesPage } from '@/pages/FavoritesPage';
 import { CheckoutPage } from '@/pages/CheckoutPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { RegisterPage } from '@/pages/RegisterPage';
+import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
+import { GoogleCallbackPage } from '@/pages/GoogleCallbackPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import { OrderHistoryPage } from '@/pages/OrderHistoryPage';
 import { AboutPage } from '@/pages/AboutPage';
@@ -135,6 +137,14 @@ export const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: '/auth/google/callback',
+    element: <GoogleCallbackPage />,
   },
   // Admin routes (outside RootLayout)
   {

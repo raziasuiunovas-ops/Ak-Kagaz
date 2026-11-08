@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Container } from '@/components/Container';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useLogin, useVerify2FA, useAdminLogin } from '@/hooks';
@@ -8,6 +8,7 @@ import styles from './LoginPage.module.css';
 export function LoginPage() {
   const { t } = useLocale();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const loginMutation = useLogin();
   const adminLoginMutation = useAdminLogin();
   const verify2FAMutation = useVerify2FA();
@@ -15,8 +16,8 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [requires2FA, setRequires2FA] = useState(false);
-  const [userId, setUserId] = useState('');
+  const [requires2FA, setRequires2FA] = useState(() => Boolean(searchParams.get('oauth2fa')));
+  const [userId, setUserId] = useState(() => searchParams.get('oauth2fa') || '');
   const [code2FA, setCode2FA] = useState('');
 
   // Автоматически определяем админа по домену email
@@ -74,7 +75,7 @@ export function LoginPage() {
           type="button" 
           onClick={handleGoBack} 
           className={styles.backButton}
-          aria-label="Назад"
+          aria-label={t('common.back')}
         >
           <svg 
             width="20" 
@@ -91,17 +92,17 @@ export function LoginPage() {
               strokeLinejoin="round"
             />
           </svg>
-          <span>Назад</span>
+          <span>{t('common.back')}</span>
         </button>
 
         <div className={styles.formCard}>
           <h1 className={styles.title}>
-            {requires2FA ? 'Введите код из Telegram' : t('auth.login')}
+            {requires2FA ? t('auth.enterTelegramCode') : t('auth.login')}
           </h1>
 
           {requires2FA && (
             <p className={styles.twoFactorHint}>
-              6-значный код был отправлен в Telegram-бот
+              {t('auth.telegramCodeSent')}
             </p>
           )}
 
@@ -153,7 +154,7 @@ export function LoginPage() {
                       type="button"
                       className={styles.passwordToggle}
                       onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                      aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
                       disabled={loginMutation.isPending || adminLoginMutation.isPending}
                     >
                       {showPassword ? (
@@ -180,7 +181,7 @@ export function LoginPage() {
             ) : (
               <div className={styles.formGroup}>
                 <label htmlFor="code2fa" className={styles.label}>
-                  Код подтверждения
+                  {t('auth.confirmationCode')}
                 </label>
                 <input
                   type="text"
@@ -206,7 +207,7 @@ export function LoginPage() {
               {loginMutation.isPending || adminLoginMutation.isPending || verify2FAMutation.isPending 
                 ? t('common.loading') 
                 : requires2FA 
-                ? 'Подтвердить' 
+                ? t('auth.confirm')
                 : t('auth.signIn')}
             </button>
           </form>
@@ -220,10 +221,25 @@ export function LoginPage() {
               <Link to="/register" className={styles.registerLink}>
                 {t('auth.signUp')}
               </Link>
+              <a href={`${import.meta.env.VITE_API_URL || '/api'}/auth/google`} className={styles.googleButton}>
+                <GoogleMark />
+                {t('auth.continueWithGoogle')}
+              </a>
             </>
           )}
         </div>
       </Container>
     </div>
+  );
+}
+
+function GoogleMark() {
+  return (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48">
+      <path fill="#FFC107" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.7c3.9-3.6 6-8.8 6-15Z" />
+      <path fill="#4CAF50" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.7-5.1c-1.8 1.2-4 1.9-6.8 1.9-5.2 0-9.6-3.5-11.2-8.2H5.9v5.2A20 20 0 0 0 24 44Z" />
+      <path fill="#1976D2" d="M12.8 27.7a12 12 0 0 1 0-7.4v-5.2H5.9a20 20 0 0 0 0 17.8l6.9-5.2Z" />
+      <path fill="#EA4335" d="M24 12.1c3 0 5.7 1 7.8 3.1l5.9-5.9A19.7 19.7 0 0 0 24 4 20 20 0 0 0 5.9 15.1l6.9 5.2c1.6-4.7 6-8.2 11.2-8.2Z" />
+    </svg>
   );
 }

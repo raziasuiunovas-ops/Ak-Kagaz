@@ -35,6 +35,8 @@
    ============================================ */
 
 .leftColumn {
+  position: relative;
+  top: -17px;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -77,6 +79,9 @@
 }
 
 .badgeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1rem;
   animation: sparkle 2s ease-in-out infinite;
 }

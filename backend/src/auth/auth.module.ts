@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { GoogleStrategy } from './strategies/google.strategy';
 import { PrismaService } from '../common/services/prisma.service';
 import { NotificationsModule } from '../notifications/notifications.module';
 
@@ -26,7 +27,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
     NotificationsModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy, PrismaService],
+  providers: [AuthService, JwtStrategy, LocalStrategy, GoogleStrategy, PrismaService],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

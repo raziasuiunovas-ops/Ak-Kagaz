@@ -4,8 +4,14 @@ import type { ChatRequest, ChatResponse, QuickQuestion } from '@/types';
 
 export function useChat() {
   return useMutation<ChatResponse, Error, ChatRequest>({
-    mutationFn: (data: ChatRequest) =>
-      apiClient.post<ChatResponse>('/ai/chat', data),
+    mutationFn: async (data: ChatRequest) => {
+      const response = await apiClient.post<
+        ChatResponse | { data: ChatResponse; success: boolean; timestamp: string }
+      >('/ai/chat', data);
+
+      // The Nest global TransformInterceptor wraps successful responses in { data, success, timestamp }.
+      return 'data' in response ? response.data : response;
+    },
   });
 }
 

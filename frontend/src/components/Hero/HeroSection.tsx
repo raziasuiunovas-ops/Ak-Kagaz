@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Play, Shield, Truck, Heart } from 'lucide-react';
+import { ArrowRight, Play, Shield, Truck, Heart, Sparkles } from 'lucide-react';
 import { useLocale } from '@/contexts/LocaleContext';
 import { HeroComposition } from './HeroComposition';
 import styles from './HeroSection.module.css';
@@ -40,7 +40,9 @@ export function HeroSection() {
           <div className={styles.leftColumn}>
             {/* Badge */}
             <div className={styles.badge}>
-              <span className={styles.badgeIcon}>✨</span>
+              <span className={styles.badgeIcon}>
+                <Sparkles size={16} aria-hidden="true" />
+              </span>
               <span className={styles.badgeText}>
                 {locale === 'ru' ? 'Канцелярия с заботой о вас' : 'Сиз үчүн кеңсе буюмдары'}
               </span>
@@ -62,8 +64,8 @@ export function HeroSection() {
             {/* Subtitle */}
             <p className={styles.subtitle}>
               {locale === 'ru'
-                ? 'Качественная канцелярия, стильные товары и вдохновение в каждой детали — всё необходимое для учёбы, работы и творчества в одном месте.'
-                : 'Сапаттуу кеңсе буюмдары, стилдүү товарлар жана ар бир деталда шыктануу — окуу, иш жана чыгармачылык үчүн керектүү баары бир жерде.'}
+                ? 'Всё необходимое для учёбы, работы и творчества: качественная канцелярия и стильные товары — в одном месте.'
+                : 'Окууга, ишке жана чыгармачылыкка керектүү сапаттуу кеңсе буюмдары менен стилдүү товарлар — баары бир жерде.'}
             </p>
 
             {/* CTA Buttons */}
