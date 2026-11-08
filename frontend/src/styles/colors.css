@@ -1,0 +1,121 @@
+/**
+ * AK KAGAZ - Фирменная цветовая палитра
+ * 
+ * УТВЕРЖДЁННЫЕ ЦВЕТА:
+ * - Atlantic Blue: #26577C (ОСНОВНОЙ)
+ * - Spice Orange: #E55604 (Второстепенный)
+ * - Vanilla Canvas: #EBE4D1 (Второстепенный)
+ * - Белый: #FFFFFF
+ * - Чёрный: #000000
+ */
+
+:root {
+  /* ============================================
+     ФИРМЕННЫЕ ЦВЕТА
+     ============================================ */
+  
+  /* ОСНОВНОЙ цвет - Atlantic Blue */
+  --color-primary: #26577C;
+  --color-primary-hover: #1e4460;
+  --color-primary-active: #163244;
+  --color-primary-light: rgba(38, 87, 124, 0.15);
+  --color-primary-lighter: rgba(38, 87, 124, 0.08);
+  
+  /* Второстепенный цвет 1 - Spice Orange */
+  --color-secondary: #E55604;
+  --color-secondary-hover: #cc4d04;
+  --color-secondary-active: #b34403;
+  --color-secondary-light: rgba(229, 86, 4, 0.15);
+  --color-secondary-lighter: rgba(229, 86, 4, 0.08);
+  
+  /* Второстепенный цвет 2 - Vanilla Canvas */
+  --color-tertiary: #EBE4D1;
+  --color-tertiary-hover: #e3dbc5;
+  --color-tertiary-active: #dbd2b9;
+  
+  /* Базовые цвета */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  
+  /* ============================================
+     ПРИМЕНЕНИЕ ЦВЕТОВ - LIGHT THEME
+     ============================================ */
+  
+  /* Фоны */
+  --color-background: #FFFFFF;
+  --color-background-alt: #EBE4D1;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-light: rgba(38, 87, 124, 0.05);
+  
+  /* Текст */
+  --color-text-primary: #26577C;
+  --color-text-secondary: rgba(38, 87, 124, 0.75);
+  --color-text-tertiary: rgba(38, 87, 124, 0.5);
+  --color-text-on-primary: #FFFFFF;
+  --color-text-on-secondary: #FFFFFF;
+  
+  /* Границы */
+  --color-border: rgba(38, 87, 124, 0.15);
+  --color-border-light: rgba(38, 87, 124, 0.08);
+  --color-border-dark: rgba(38, 87, 124, 0.25);
+  
+  /* Состояния */
+  --color-hover: rgba(38, 87, 124, 0.08);
+  --color-active: rgba(38, 87, 124, 0.15);
+  --color-disabled: rgba(38, 87, 124, 0.3);
+  
+  /* Тени */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+  
+  /* Overlay */
+  --color-overlay: rgba(0, 0, 0, 0.5);
+  --color-overlay-light: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   DARK THEME - Premium атмосфера
+   ============================================ */
+[data-theme="dark"] {
+  /* Фоны - темные с синим оттенком */
+  --color-background: #1a2332;
+  --color-background-alt: #1f2937;
+  --color-surface: #24303f;
+  --color-surface-elevated: #2d3b4e;
+  --color-surface-light: rgba(38, 87, 124, 0.15);
+  
+  /* Текст */
+  --color-text-primary: #f0f4f8;
+  --color-text-secondary: rgba(240, 244, 248, 0.75);
+  --color-text-tertiary: rgba(240, 244, 248, 0.5);
+  --color-text-on-primary: #FFFFFF;
+  --color-text-on-secondary: #FFFFFF;
+  
+  /* Границы с синим свечением */
+  --color-border: rgba(38, 87, 124, 0.3);
+  --color-border-light: rgba(38, 87, 124, 0.15);
+  --color-border-dark: rgba(38, 87, 124, 0.5);
+  
+  /* Состояния */
+  --color-hover: rgba(38, 87, 124, 0.2);
+  --color-active: rgba(38, 87, 124, 0.3);
+  --color-disabled: rgba(240, 244, 248, 0.3);
+  
+  /* Тени с легким синим свечением */
+  --shadow-sm: 0 1px 3px rgba(38, 87, 124, 0.15);
+  --shadow-md: 0 4px 12px rgba(38, 87, 124, 0.2);
+  --shadow-lg: 0 10px 24px rgba(38, 87, 124, 0.25);
+  --shadow-xl: 0 20px 40px rgba(38, 87, 124, 0.3);
+  
+  /* Overlay */
+  --color-overlay: rgba(0, 0, 0, 0.7);
+  --color-overlay-light: rgba(0, 0, 0, 0.5);
+  
+  /* Специальные эффекты для темной темы */
+  --color-glow: rgba(38, 87, 124, 0.4);
+  --color-glow-strong: rgba(38, 87, 124, 0.6);
+  --color-accent-glow: rgba(229, 86, 4, 0.3);
+}

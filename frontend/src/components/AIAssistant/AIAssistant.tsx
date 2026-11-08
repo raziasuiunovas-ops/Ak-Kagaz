@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, Send, Loader2, Sparkles, Trash2 } from 'lucide-react';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import { useChat } from '@/hooks';
 import styles from './AIAssistant.module.css';
 
@@ -13,26 +14,26 @@ interface Message {
 const QUICK_QUESTIONS = {
   ru: [
     'Как оформить заказ?',
-    'Какие способы оплаты?',
+    'Способы оплаты',
     'Условия доставки',
-    'Как отследить заказ?',
+    'Отследить заказ',
   ],
   ky: [
-    'Буюртма кантип берилет?',
-    'Төлөө ыкмалары кандай?',
+    'Заказ кантип берилет?',
+    'Төлөө ыкмалары',
     'Жеткирүү шарттары',
-    'Буюртманы кантип көзөмөлдөө?',
+    'Заказды көзөмөлдөө',
   ],
 };
 
 const WELCOME_MESSAGE = {
-  ru: 'Здравствуйте! 👋\n\nЯ помогу вам с выбором товаров, оформлением заказа и отвечу на ваши вопросы. 😊',
-  ky: 'Саламатсызбы! 👋\n\nМен товарларды тандоого, буюртма берүүгө жардам берем жана сиздин суроолоруңузга жооп берем. 😊',
+  ru: 'Здравствуйте! Я помогу вам с выбором товаров, оформлением заказа и отвечу на ваши вопросы.',
+  ky: 'Саламатсызбы! Мен сизге товар тандоого, заказ берүүгө жардам берем жана суроолоруңузга жооп берем.',
 };
 
 export function AIAssistant() {
   const { locale } = useLocale();
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, setIsOpen } = useAIAssistant();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [sessionId] = useState(() => `chat_${Date.now()}_${Math.random().toString(36).substring(7)}`);
@@ -59,7 +60,23 @@ export function AIAssistant() {
         },
       ]);
     }
-  }, [isOpen, locale]);
+  }, [isOpen, locale, messages.length]);
+
+  // Обновляем приветственное сообщение при смене языка
+  useEffect(() => {
+    if (messages.length === 1 && messages[0]?.role === 'assistant' && messages[0]?.content) {
+      // Проверяем, что это приветственное сообщение (не ответ от AI)
+      const isWelcome = Object.values(WELCOME_MESSAGE).some(msg => messages[0]?.content === msg);
+      if (isWelcome) {
+        setMessages([
+          {
+            role: 'assistant',
+            content: WELCOME_MESSAGE[locale as keyof typeof WELCOME_MESSAGE] || WELCOME_MESSAGE.ru,
+          },
+        ]);
+      }
+    }
+  }, [locale]);
 
   const handleSend = async (messageToSend?: string) => {
     const messageText = messageToSend || input.trim();
@@ -181,11 +198,11 @@ export function AIAssistant() {
             ))}
 
             {/* Быстрые вопросы после приветствия */}
-            {messages.length === 1 && messages[0].role === 'assistant' && (
+            {messages.length === 1 && messages[0]?.role === 'assistant' && (
               <div className={styles.quickQuestionsWrapper}>
                 <div className={styles.quickQuestions}>
                   <p className={styles.quickQuestionsTitle}>
-                    {locale === 'ru' ? '💬 Популярные вопросы:' : '💬 Популярдуу суроолор:'}
+                    {locale === 'ru' ? 'Популярные вопросы:' : 'Популярдуу суроолор:'}
                   </p>
                   {quickQuestions.map((question, index) => (
                     <button
@@ -227,7 +244,7 @@ export function AIAssistant() {
               disabled={chatMutation.isPending}
             />
             <button
-              onClick={handleSend}
+              onClick={() => handleSend()}
               disabled={!input.trim() || chatMutation.isPending}
               className={styles.sendBtn}
               aria-label="Send"

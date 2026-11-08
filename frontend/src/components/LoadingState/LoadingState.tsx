@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react';
+import { Icon } from '@/components/Icon';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './LoadingState.module.css';
 
@@ -12,7 +12,7 @@ export function LoadingState({ message, fullHeight = false }: LoadingStateProps)
 
   return (
     <div className={`${styles.loadingState} ${fullHeight ? styles.fullHeight : ''}`}>
-      <Loader2 className={styles.spinner} />
+      <Icon name="progress_activity" className={styles.spinner} />
       <p className={styles.message}>{message || t('common.loading')}</p>
     </div>
   );

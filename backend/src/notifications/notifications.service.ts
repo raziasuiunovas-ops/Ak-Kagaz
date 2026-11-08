@@ -105,7 +105,6 @@ export class NotificationsService {
     const twoFactorCode = await this.prisma.twoFactorCode.findFirst({
       where: {
         userId,
-        code,
         usedAt: null,
       },
       orderBy: {
@@ -146,21 +145,21 @@ export class NotificationsService {
       };
     }
 
-    // Увеличиваем счетчик попыток
-    await this.prisma.twoFactorCode.update({
-      where: { id: twoFactorCode.id },
-      data: { attempts: { increment: 1 } },
-    });
-
-    // Проверяем код
+    // Проверяем код ПЕРЕД увеличением счетчика
     if (twoFactorCode.code !== code) {
+      // Увеличиваем счетчик попыток только при неправильном коде
+      await this.prisma.twoFactorCode.update({
+        where: { id: twoFactorCode.id },
+        data: { attempts: { increment: 1 } },
+      });
+
       return {
         valid: false,
         message: 'Invalid code',
       };
     }
 
-    // Помечаем код как использованный
+    // Код правильный - помечаем как использованный
     await this.prisma.twoFactorCode.update({
       where: { id: twoFactorCode.id },
       data: { usedAt: new Date() },

@@ -1,17 +1,6 @@
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  X, 
-  Home, 
-  Grid3x3, 
-  Heart, 
-  ShoppingCart, 
-  User,
-  Info,
-  Phone,
-  Truck,
-  CreditCard,
-} from 'lucide-react';
+import { Icon } from '@/components/Icon';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './NavigationMenu.module.css';
 
@@ -51,7 +40,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
             onClick={onClose}
             aria-label={t('common.close')}
           >
-            <X className={styles.closeIcon} />
+            <Icon name="close" className={styles.closeIcon} />
           </button>
         </div>
 
@@ -63,7 +52,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <Home className={styles.navIcon} />
+                <Icon name="home" className={styles.navIcon} />
                 <span>{t('nav.home')}</span>
               </NavLink>
             </li>
@@ -74,7 +63,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <Grid3x3 className={styles.navIcon} />
+                <Icon name="grid_view" className={styles.navIcon} />
                 <span>{t('nav.catalog')}</span>
               </NavLink>
             </li>
@@ -87,7 +76,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <Heart className={styles.navIcon} />
+                <Icon name="favorite" className={styles.navIcon} />
                 <span>{t('nav.favorites')}</span>
               </NavLink>
             </li>
@@ -98,7 +87,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <ShoppingCart className={styles.navIcon} />
+                <Icon name="shopping_cart" className={styles.navIcon} />
                 <span>{t('nav.cart')}</span>
               </NavLink>
             </li>
@@ -109,7 +98,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <User className={styles.navIcon} />
+                <Icon name="person" className={styles.navIcon} />
                 <span>{t('nav.profile')}</span>
               </NavLink>
             </li>
@@ -122,7 +111,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <Info className={styles.navIcon} />
+                <Icon name="info" className={styles.navIcon} />
                 <span>{t('nav.about')}</span>
               </NavLink>
             </li>
@@ -133,7 +122,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <Phone className={styles.navIcon} />
+                <Icon name="phone" className={styles.navIcon} />
                 <span>{t('nav.contacts')}</span>
               </NavLink>
             </li>
@@ -144,7 +133,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <Truck className={styles.navIcon} />
+                <Icon name="local_shipping" className={styles.navIcon} />
                 <span>{t('nav.delivery')}</span>
               </NavLink>
             </li>
@@ -155,7 +144,7 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
                 className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
                 onClick={onClose}
               >
-                <CreditCard className={styles.navIcon} />
+                <Icon name="credit_card" className={styles.navIcon} />
                 <span>{t('nav.installment')}</span>
               </NavLink>
             </li>

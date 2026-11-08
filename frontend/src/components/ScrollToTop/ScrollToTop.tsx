@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ArrowUp } from 'lucide-react';
+import { Icon } from '@/components/Icon';
+import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import styles from './ScrollToTop.module.css';
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const { isOpen: isAIChatOpen } = useAIAssistant();
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -29,7 +31,8 @@ export function ScrollToTop() {
     });
   };
 
-  if (!isVisible) {
+  // Hide when AI chat is open or not scrolled enough
+  if (!isVisible || isAIChatOpen) {
     return null;
   }
 
@@ -39,7 +42,7 @@ export function ScrollToTop() {
       className={styles.scrollButton}
       aria-label="Scroll to top"
     >
-      <ArrowUp className={styles.icon} />
+      <Icon name="arrow_upward" className={styles.icon} />
     </button>
   );
 }

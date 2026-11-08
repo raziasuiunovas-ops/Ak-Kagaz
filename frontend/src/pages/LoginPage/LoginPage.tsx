@@ -2,13 +2,14 @@ import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Container } from '@/components/Container';
 import { useLocale } from '@/contexts/LocaleContext';
-import { useLogin, useVerify2FA } from '@/hooks';
+import { useLogin, useVerify2FA, useAdminLogin } from '@/hooks';
 import styles from './LoginPage.module.css';
 
 export function LoginPage() {
   const { t } = useLocale();
   const navigate = useNavigate();
   const loginMutation = useLogin();
+  const adminLoginMutation = useAdminLogin();
   const verify2FAMutation = useVerify2FA();
 
   const [email, setEmail] = useState('');
@@ -18,6 +19,11 @@ export function LoginPage() {
   const [userId, setUserId] = useState('');
   const [code2FA, setCode2FA] = useState('');
 
+  // Автоматически определяем админа по домену email
+  const isAdminEmail = (email: string): boolean => {
+    return email.toLowerCase().includes('@ak-kagaz.kg');
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     
@@ -26,17 +32,26 @@ export function LoginPage() {
       verify2FAMutation.mutate({ userId, code: code2FA });
     } else {
       // Этап 1: отправка email/password
-      loginMutation.mutate(
-        { email, password },
-        {
-          onSuccess: (data: any) => {
-            if (data.requires2FA) {
-              setRequires2FA(true);
-              setUserId(data.userId);
-            }
-          },
-        }
-      );
+      const isAdmin = isAdminEmail(email);
+      
+      if (isAdmin) {
+        // Для админов используем adminLoginMutation БЕЗ переопределения onSuccess
+        // Хук сам сделает redirect на /admin/verify-2fa
+        adminLoginMutation.mutate({ email, password });
+      } else {
+        // Для обычных пользователей используем loginMutation
+        loginMutation.mutate(
+          { email, password },
+          {
+            onSuccess: (data: any) => {
+              if (data.requires2FA) {
+                setRequires2FA(true);
+                setUserId(data.userId);
+              }
+            },
+          }
+        );
+      }
     }
   };
 
@@ -91,10 +106,12 @@ export function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className={styles.form}>
-            {(loginMutation.isError || verify2FAMutation.isError) && (
+            {(loginMutation.isError || adminLoginMutation.isError || verify2FAMutation.isError) && (
               <div className={styles.errorMessage}>
                 {loginMutation.error instanceof Error
                   ? loginMutation.error.message
+                  : adminLoginMutation.error instanceof Error
+                  ? adminLoginMutation.error.message
                   : verify2FAMutation.error instanceof Error
                   ? verify2FAMutation.error.message
                   : 'Login failed'}
@@ -114,7 +131,7 @@ export function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    disabled={loginMutation.isPending}
+                    disabled={loginMutation.isPending || adminLoginMutation.isPending}
                   />
                 </div>
 
@@ -130,14 +147,14 @@ export function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      disabled={loginMutation.isPending}
+                      disabled={loginMutation.isPending || adminLoginMutation.isPending}
                     />
                     <button
                       type="button"
                       className={styles.passwordToggle}
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
-                      disabled={loginMutation.isPending}
+                      disabled={loginMutation.isPending || adminLoginMutation.isPending}
                     >
                       {showPassword ? (
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -184,9 +201,9 @@ export function LoginPage() {
             <button
               type="submit"
               className={styles.submitBtn}
-              disabled={loginMutation.isPending || verify2FAMutation.isPending}
+              disabled={loginMutation.isPending || adminLoginMutation.isPending || verify2FAMutation.isPending}
             >
-              {loginMutation.isPending || verify2FAMutation.isPending 
+              {loginMutation.isPending || adminLoginMutation.isPending || verify2FAMutation.isPending 
                 ? t('common.loading') 
                 : requires2FA 
                 ? 'Подтвердить' 

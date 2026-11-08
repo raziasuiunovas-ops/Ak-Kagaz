@@ -20,7 +20,6 @@ import { ContactsPage } from '@/pages/ContactsPage';
 import { DeliveryPage } from '@/pages/DeliveryPage';
 import { InstallmentPage } from '@/pages/InstallmentPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
-import { AdminLoginPage } from '@/pages/AdminLoginPage';
 import { AdminVerify2FAPage } from '@/pages/AdminVerify2FAPage';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { AdminRoute } from '@/components/AdminRoute';
@@ -138,10 +137,6 @@ export const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   // Admin routes (outside RootLayout)
-  {
-    path: '/admin/login',
-    element: <AdminLoginPage />,
-  },
   {
     path: '/admin/verify-2fa',
     element: <AdminVerify2FAPage />,

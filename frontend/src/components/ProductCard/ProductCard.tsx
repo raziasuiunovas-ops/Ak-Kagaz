@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Heart } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 import type { Product } from '@/types';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './ProductCard.module.css';
@@ -59,7 +59,10 @@ export function ProductCard({
             className={`${styles.favoriteBtn} ${isFavorite ? styles.favoriteActive : ''}`}
             aria-label="Add to favorites"
           >
-            <Heart className={styles.favoriteIcon} />
+            <Heart 
+              className={styles.favoriteIcon} 
+              fill={isFavorite ? 'currentColor' : 'none'}
+            />
           </button>
         )}
       </div>

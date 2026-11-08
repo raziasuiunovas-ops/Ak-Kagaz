@@ -1,17 +1,17 @@
-/* Floating Button - Premium Design */
+/* Floating Button - Unified Design with ScrollToTop */
 .floatingBtn {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-primary);
   border: none;
-  border-radius: 50%;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 0 0 rgba(102, 126, 234, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(38, 87, 124, 0.25);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
@@ -20,36 +20,41 @@
 
 @keyframes pulse {
   0%, 100% {
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 0 0 rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(38, 87, 124, 0.25);
   }
   50% {
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 0 8px rgba(102, 126, 234, 0);
+    box-shadow: 0 4px 12px rgba(38, 87, 124, 0.25), 0 0 0 8px rgba(38, 87, 124, 0.1);
   }
 }
 
 .floatingBtn:hover {
-  transform: translateY(-6px) scale(1.08);
-  box-shadow: 0 16px 40px rgba(102, 126, 234, 0.6);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(38, 87, 124, 0.35);
   animation: none;
 }
 
 .floatingBtn:active {
-  transform: translateY(-3px) scale(1.05);
+  transform: translateY(-2px);
 }
 
 .floatingBtnActive {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: var(--color-primary-hover);
   animation: none;
 }
 
 .icon {
-  width: 30px;
-  height: 30px;
-  color: white;
+  width: 28px;
+  height: 28px;
+  color: var(--color-white);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Chat Panel - Premium Design */
+.floatingBtn:hover .icon {
+  transform: rotate(10deg) scale(1.1);
+}
+
+/* Chat Panel - New Design */
 .chatPanel {
   position: fixed;
   bottom: 100px;
@@ -60,12 +65,12 @@
   max-height: calc(100vh - 140px);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
+  background: var(--color-white);
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 0 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
   z-index: 999;
   overflow: hidden;
-  border: 1px solid rgba(102, 126, 234, 0.1);
+  border: 1px solid var(--color-black);
   animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -85,8 +90,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-white);
   position: relative;
   overflow: hidden;
 }
@@ -137,10 +142,10 @@
   content: '';
   width: 8px;
   height: 8px;
-  background: #4ade80;
+  background: var(--color-secondary);
   border-radius: 50%;
   display: inline-block;
-  box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+  box-shadow: 0 0 8px rgba(229, 86, 4, 0.8);
   animation: blink 2s ease-in-out infinite;
 }
 
@@ -169,7 +174,7 @@
 .closeIcon {
   width: 18px;
   height: 18px;
-  color: white;
+  color: var(--color-white);
 }
 
 .clearBtn {
@@ -199,11 +204,11 @@
 .clearIcon {
   width: 19px;
   height: 19px;
-  color: white;
+  color: var(--color-white);
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
-/* Messages - Premium Design */
+/* Messages - New Design */
 .messages {
   flex: 1;
   overflow-y: auto;
@@ -211,7 +216,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  background: linear-gradient(180deg, #fafbff 0%, #f3f4f8 100%);
+  background: var(--color-white);
 }
 
 /* Custom scrollbar */
@@ -220,18 +225,18 @@
 }
 
 .messages::-webkit-scrollbar-track {
-  background: rgba(102, 126, 234, 0.05);
+  background: rgba(38, 87, 124, 0.05);
   border-radius: 10px;
 }
 
 .messages::-webkit-scrollbar-thumb {
-  background: rgba(102, 126, 234, 0.3);
+  background: rgba(38, 87, 124, 0.3);
   border-radius: 10px;
   transition: background 0.2s;
 }
 
 .messages::-webkit-scrollbar-thumb:hover {
-  background: rgba(102, 126, 234, 0.5);
+  background: rgba(38, 87, 124, 0.5);
 }
 
 .welcome {
@@ -245,29 +250,30 @@
 .welcomeIcon {
   width: 48px;
   height: 48px;
-  color: #667eea;
+  color: var(--color-primary);
   margin-bottom: 16px;
 }
 
 .welcomeTitle {
   font-size: 20px;
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--color-black);
   margin: 0 0 8px;
 }
 
 .welcomeText {
   font-size: 14px;
   line-height: 1.6;
-  color: var(--color-text-secondary);
+  color: var(--color-black);
+  opacity: 0.7;
   margin: 0 0 20px;
 }
 
 .quickQuestions {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
 .quickQuestionsWrapper {
@@ -287,54 +293,46 @@
 }
 
 .quickQuestionsTitle {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #6b7280;
-  margin: 0 0 12px;
+  color: #64748b;
+  margin: 0 0 10px;
   text-align: left;
   letter-spacing: 0.2px;
+  grid-column: 1 / -1;
 }
 
 .quickQuestionBtn {
-  padding: 12px 16px;
+  padding: 8px 12px;
   background: white;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 12px;
   font-weight: 500;
-  color: #1f2937;
-  text-align: left;
+  color: #1e293b;
+  text-align: center;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  overflow: hidden;
-}
-
-.quickQuestionBtn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  transform: scaleY(0);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .quickQuestionBtn:hover {
-  border-color: #667eea;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-  transform: translateX(6px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-}
-
-.quickQuestionBtn:hover::before {
-  transform: scaleY(1);
+  border-color: #2563eb;
+  background: #eff6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .quickQuestionBtn:active {
-  transform: translateX(4px) scale(0.98);
+  transform: translateY(0) scale(0.98);
 }
 
 .quickQuestionBtn:disabled {
@@ -365,9 +363,9 @@
 }
 
 .messageUser .messageContent {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   color: white;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
   border-bottom-right-radius: 4px;
 }
 
@@ -377,9 +375,9 @@
 
 .messageAssistant .messageContent {
   background: white;
-  color: #1f2937;
+  color: #1e293b;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(102, 126, 234, 0.1);
+  border: 1px solid #e2e8f0;
   border-bottom-left-radius: 4px;
 }
 
@@ -398,7 +396,7 @@
   align-items: center;
   gap: 2px;
   font-style: italic;
-  color: #6b7280;
+  color: #64748b;
 }
 
 .typingText::after {
@@ -427,7 +425,7 @@
   display: inline-block;
   vertical-align: middle;
   margin-right: 8px;
-  color: #667eea;
+  color: #2563eb;
 }
 
 @keyframes spin {
@@ -439,14 +437,14 @@
   }
 }
 
-/* Input - Premium Design */
+/* Input - New Design */
 .inputContainer {
   display: flex;
   align-items: flex-end;
   gap: 10px;
   padding: 18px 24px 20px;
   background: white;
-  border-top: 1px solid rgba(102, 126, 234, 0.15);
+  border-top: 1px solid #e2e8f0;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
 }
 
@@ -455,27 +453,27 @@
   min-height: 44px;
   max-height: 120px;
   padding: 12px 14px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-family: inherit;
   font-size: 14px;
   line-height: 1.5;
   resize: none;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #fafbff;
+  background: #f8fafc;
 }
 
 .input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #2563eb;
   background: white;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
 .input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background: #f3f4f6;
+  background: #f1f5f9;
 }
 
 .sendBtn {
@@ -484,45 +482,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-primary);
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 14px rgba(38, 87, 124, 0.4);
 }
 
 .sendBtn:hover:not(:disabled) {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 20px rgba(38, 87, 124, 0.5);
+  background: var(--color-primary-hover);
 }
 
 .sendBtn:active:not(:disabled) {
   transform: translateY(-1px) scale(1.02);
+  background: var(--color-primary-active);
 }
 
 .sendBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 2px 8px rgba(38, 87, 124, 0.2);
 }
 
 .sendIcon {
   width: 20px;
   height: 20px;
-  color: white;
+  color: var(--color-white);
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
-/* Mobile Responsive - Premium Optimized */
+/* Mobile Responsive - Unified with ScrollToTop */
 @media (max-width: 768px) {
   .floatingBtn {
-    bottom: 84px; /* Above mobile bottom nav */
+    bottom: 96px;
     right: 16px;
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
   }
 
   .icon {
@@ -536,7 +536,7 @@
     left: 0;
     width: 100%;
     max-width: 100%;
-    height: calc(100vh - 70px); /* Leave space for mobile nav */
+    height: calc(100vh - 70px);
     max-height: calc(100vh - 70px);
     border-radius: 20px 20px 0 0;
   }
@@ -569,8 +569,8 @@
 
 @media (max-width: 480px) {
   .floatingBtn {
-    width: 54px;
-    height: 54px;
+    width: 52px;
+    height: 52px;
   }
 
   .icon {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import { Icon } from '@/components/Icon';
 import styles from './Breadcrumbs.module.css';
 
 export interface BreadcrumbItem {
@@ -30,7 +30,7 @@ export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
               ) : (
                 <span className={styles.current}>{item.label}</span>
               )}
-              {!isLast && <ChevronRight className={styles.separator} />}
+              {!isLast && <Icon name="chevron_right" className={styles.separator} size={16} />}
             </li>
           );
         })}

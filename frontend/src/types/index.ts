@@ -450,6 +450,7 @@ export interface ChatRequest {
     categoryId?: string;
     orderId?: string;
     page?: string;
+    locale?: string;
   };
 }
 

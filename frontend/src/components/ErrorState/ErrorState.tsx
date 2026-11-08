@@ -1,4 +1,4 @@
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { Icon } from '@/components/Icon';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './ErrorState.module.css';
 
@@ -14,13 +14,13 @@ export function ErrorState({ title, message, onRetry }: ErrorStateProps) {
   return (
     <div className={styles.errorState}>
       <div className={styles.iconWrapper}>
-        <AlertCircle className={styles.icon} />
+        <Icon name="error" className={styles.icon} size={48} />
       </div>
       <h3 className={styles.title}>{title || t('common.error')}</h3>
       <p className={styles.message}>{message || t('error.unknown')}</p>
       {onRetry && (
         <button onClick={onRetry} className={styles.retryButton}>
-          <RefreshCw className={styles.retryIcon} />
+          <Icon name="refresh" className={styles.retryIcon} size={20} />
           <span>{t('common.tryAgain')}</span>
         </button>
       )}

@@ -20,7 +20,7 @@ export function AdminVerify2FAPage() {
 
     if (!storedUserId || !storedEmail) {
       // Если данных нет, возвращаем на страницу входа
-      navigate('/admin/login');
+      navigate('/login');
       return;
     }
 
@@ -83,6 +83,11 @@ export function AdminVerify2FAPage() {
     if (codeToSubmit.length !== 6) {
       return;
     }
+
+    console.log('=== ADMIN VERIFY 2FA DEBUG ===');
+    console.log('userId:', userId);
+    console.log('code:', codeToSubmit);
+    console.log('code length:', codeToSubmit.length);
 
     verify2FAMutation.mutate({
       userId,
@@ -174,7 +179,7 @@ export function AdminVerify2FAPage() {
             <button
               type="button"
               className={styles.backButton}
-              onClick={() => navigate('/admin/login')}
+              onClick={() => navigate('/login')}
               disabled={verify2FAMutation.isPending}
             >
               ← Вернуться к входу

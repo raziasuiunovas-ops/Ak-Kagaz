@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { Icon } from '@/components/Icon';
 import { Container } from '@/components/Container';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './Footer.module.css';
@@ -17,7 +17,7 @@ export function Footer() {
             <div className={styles.brandSection}>
               <div className={styles.logoWrapper}>
                 <img 
-                  src="/icons/icon-192x192.png" 
+                  src="/icons/ak-kagaz-icon-192-transparent.png" 
                   alt="AK KAGAZ" 
                   className={styles.logoPlaceholder}
                 />
@@ -110,7 +110,7 @@ export function Footer() {
               <h3 className={styles.sectionTitle}>{t('footer.contacts')}</h3>
 
               <div className={styles.contactItem}>
-                <Phone className={styles.contactIcon} />
+                <Icon name="phone" size={20} className={styles.contactIcon} />
                 <div className={styles.contactText}>
                   <a href="tel:+996505555828" className={styles.phoneLink}>
                     +996 505-55-58-28
@@ -122,14 +122,14 @@ export function Footer() {
               </div>
 
               <div className={styles.contactItem}>
-                <MapPin className={styles.contactIcon} />
+                <Icon name="location_on" size={20} className={styles.contactIcon} />
                 <p className={styles.contactText}>
                   Ош, Кыргызстан
                 </p>
               </div>
 
               <div className={styles.contactItem}>
-                <Mail className={styles.contactIcon} />
+                <Icon name="email" size={20} className={styles.contactIcon} />
                 <p className={styles.contactText}>
                   info@ak-kagaz.kg
                 </p>

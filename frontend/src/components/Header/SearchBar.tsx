@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X } from 'lucide-react';
+import { Icon } from '@/components/Icon';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './SearchBar.module.css';
 
@@ -45,7 +45,7 @@ export function SearchBar({ onClose }: SearchBarProps) {
       {/* Search Modal */}
       <div className={styles.modal}>
         <form className={styles.searchForm} onSubmit={handleSubmit}>
-          <Search className={styles.searchIcon} />
+          <Icon name="search" className={styles.searchIcon} />
           <input
             ref={inputRef}
             type="text"
@@ -61,7 +61,7 @@ export function SearchBar({ onClose }: SearchBarProps) {
             onClick={onClose}
             aria-label={t('common.close')}
           >
-            <X className={styles.closeIcon} />
+            <Icon name="close" className={styles.closeIcon} />
           </button>
         </form>
 

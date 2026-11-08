@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Grid3x3, Heart, ShoppingCart, User } from 'lucide-react';
+import { Icon } from '@/components/Icon';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './MobileBottomNav.module.css';
 
@@ -20,7 +20,7 @@ export function MobileBottomNav() {
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
           end
         >
-          <Home className={styles.icon} />
+          <Icon name="home" className={styles.icon} />
           <span className={styles.label}>{t('nav.home')}</span>
         </NavLink>
 
@@ -28,7 +28,7 @@ export function MobileBottomNav() {
           to="/catalog"
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
-          <Grid3x3 className={styles.icon} />
+          <Icon name="grid_view" className={styles.icon} />
           <span className={styles.label}>{t('nav.catalog')}</span>
         </NavLink>
 
@@ -36,7 +36,7 @@ export function MobileBottomNav() {
           to="/favorites"
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
-          <Heart className={styles.icon} />
+          <Icon name="favorite" className={styles.icon} />
           <span className={styles.label}>{t('nav.favorites')}</span>
         </NavLink>
 
@@ -44,7 +44,7 @@ export function MobileBottomNav() {
           to="/cart"
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
-          <ShoppingCart className={styles.icon} />
+          <Icon name="shopping_cart" className={styles.icon} />
           <span className={styles.label}>{t('nav.cart')}</span>
         </NavLink>
 
@@ -52,7 +52,7 @@ export function MobileBottomNav() {
           to="/profile"
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
-          <User className={styles.icon} />
+          <Icon name="person" className={styles.icon} />
           <span className={styles.label}>{t('nav.profile')}</span>
         </NavLink>
       </div>

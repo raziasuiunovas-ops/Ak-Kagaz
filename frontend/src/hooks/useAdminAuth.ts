@@ -86,12 +86,32 @@ export function useAdminLogin() {
   return useMutation({
     mutationFn: adminLoginAPI,
     onSuccess: (data) => {
+      console.log('=== ADMIN LOGIN SUCCESS ===');
+      console.log('Full response:', data);
+      console.log('userId:', data.userId);
+      console.log('email:', data.email);
+      console.log('requires2FA:', data.requires2FA);
+      
+      if (!data.userId) {
+        console.error('ERROR: userId is missing!');
+        return;
+      }
+      
       // Сохраняем userId для следующего этапа (2FA)
       sessionStorage.setItem('admin_2fa_userId', data.userId);
       sessionStorage.setItem('admin_2fa_email', data.email);
       
+      console.log('Saved to sessionStorage:');
+      console.log('  userId:', sessionStorage.getItem('admin_2fa_userId'));
+      console.log('  email:', sessionStorage.getItem('admin_2fa_email'));
+      
       // Переходим на страницу верификации 2FA
+      console.log('Navigating to /admin/verify-2fa');
       navigate('/admin/verify-2fa');
+    },
+    onError: (error) => {
+      console.error('=== ADMIN LOGIN ERROR ===');
+      console.error(error);
     },
   });
 }

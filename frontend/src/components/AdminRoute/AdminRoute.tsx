@@ -10,7 +10,7 @@ export function AdminRoute({ children }: AdminRouteProps) {
 
   // Проверяем наличие токена
   if (!isAuthenticated()) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   // Ждем загрузки данных пользователя

@@ -1,27 +1,27 @@
 .scrollButton {
   position: fixed;
-  bottom: 100px;
+  bottom: 104px;
   right: 24px;
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid var(--color-gray-300);
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: all 0.3s ease;
-  z-index: 998;
+  z-index: 999;
   animation: fadeIn 0.3s ease;
 }
 
 .scrollButton:hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  background: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
 }
 
 .scrollButton:hover .icon {
@@ -33,9 +33,9 @@
 }
 
 .icon {
-  width: 22px;
-  height: 22px;
-  color: var(--color-text-primary);
+  width: 24px;
+  height: 24px;
+  color: #2563eb;
   transition: color 0.2s ease;
 }
 
@@ -53,14 +53,14 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .scrollButton {
-    bottom: 156px; /* Above AI button and mobile nav */
+    bottom: 160px;
     right: 16px;
-    width: 44px;
-    height: 44px;
+    width: 52px;
+    height: 52px;
   }
 
   .icon {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 }
