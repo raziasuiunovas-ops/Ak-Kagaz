@@ -68,13 +68,13 @@
 .tableWrap { overflow-x: auto; border: 1px solid #e5e7eb; border-radius: .75rem; background: #fff; }
 .table { width: 100%; border-collapse: collapse; min-width: 740px; }
 .table th, .table td { padding: .8rem 1rem; border-bottom: 1px solid #e5e7eb; text-align: left; }
-.table th { background: #f9fafb; color: #4b5563; font-size: .85rem; }
+.table th { background: #f5f0e3; color: #4b5563; font-size: .85rem; }
 .table tr:last-child td { border-bottom: 0; }
 .thumbnail { width: 48px; height: 48px; object-fit: contain; background: #f9fafb; border-radius: .35rem; }
 .active, .inactive { display: inline-block; padding: .25rem .5rem; border-radius: 1rem; font-size: .78rem; white-space: nowrap; font-weight: 500; }
 .active { background: #d1fae5; color: #065f46; }
 .inactive { background: #f3f4f6; color: #4b5563; }
-.error { color: #f97316; }
+.error { color: #E55604; }
 .dialogBackdrop { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 1rem; background: #11182780; }
 .dialog { width: min(850px, 100%); max-height: 92vh; overflow: auto; background: white; border-radius: .8rem; padding: 1.25rem; box-shadow: 0 20px 60px #0003; }
 .dialogHeader, .actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
@@ -84,6 +84,6 @@
 .formGrid input, .formGrid select, .formGrid textarea { width: 100%; box-sizing: border-box; padding: .65rem .7rem; border: 1px solid #d1d5db; border-radius: .4rem; font: inherit; color: #111827; background: white; }
 .formGrid textarea { min-height: 5rem; resize: vertical; }
 .fullWidth { grid-column: 1 / -1; }
-.note { background: #fff7ed; color: #9a3412; border-radius: .45rem; padding: .75rem; font-size: .875rem; line-height: 1.45; border-left: 3px solid #f97316; }
+.note { background: #fef3ed; color: #9a3412; border-radius: .45rem; padding: .75rem; font-size: .875rem; line-height: 1.45; border-left: 3px solid #E55604; }
 .actions { justify-content: flex-end; }
 @media (max-width: 640px) { .heading { flex-direction: column; } .formGrid { grid-template-columns: 1fr; } .fullWidth { grid-column: auto; } .dialog { padding: 1rem; } }

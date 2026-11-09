@@ -13,21 +13,21 @@
 
 .primaryButton, .secondaryButton { border: 0; border-radius: .5rem; padding: .7rem 1rem; font: inherit; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
 .primaryButton { 
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
+  background: linear-gradient(135deg, #26577C 0%, #1d4160 100%); 
   color: white;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 8px rgba(38, 87, 124, 0.3);
 }
 .primaryButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 4px 12px rgba(38, 87, 124, 0.4);
 }
 .primaryButton:disabled { opacity: .65; cursor: wait; transform: none; }
-.secondaryButton { background: #f3f4f6; color: #374151; }
-.secondaryButton:hover { background: #e5e7eb; }
-.textButton { background: none; border: 0; color: #2563eb; cursor: pointer; font: inherit; font-weight: 600; white-space: nowrap; }
-.textButton:hover { color: #1d4ed8; }
-.deleteButton { background: none; border: 0; color: #f97316; cursor: pointer; font: inherit; font-weight: 600; white-space: nowrap; }
-.deleteButton:hover { color: #ea580c; }
+.secondaryButton { background: #EBE4D1; color: #374151; }
+.secondaryButton:hover { background: #d9d0bb; }
+.textButton { background: none; border: 0; color: #26577C; cursor: pointer; font: inherit; font-weight: 600; white-space: nowrap; }
+.textButton:hover { color: #1d4160; }
+.deleteButton { background: none; border: 0; color: #E55604; cursor: pointer; font: inherit; font-weight: 600; white-space: nowrap; }
+.deleteButton:hover { color: #c44803; }
 
 /* Icon Buttons */
 .actionButtons {
@@ -53,17 +53,17 @@
 }
 
 .iconButton:hover {
-  background: #eff6ff;
-  color: #2563eb;
+  background: #e8eef3;
+  color: #26577C;
 }
 
 .iconButtonDelete {
-  color: #f97316;
+  color: #E55604;
 }
 
 .iconButtonDelete:hover {
-  background: #fff7ed;
-  color: #ea580c;
+  background: #fef3ed;
+  color: #c44803;
 }
 
 .list { display: grid; gap: .75rem; }
@@ -73,7 +73,7 @@
 .details h2 { margin: 0 0 .2rem; font-size: 1rem; }
 .details p { margin: 0 0 .3rem; color: #4b5563; }
 .details small { color: #6b7280; }
-.error { color: #f97316; }
+.error { color: #E55604; }
 .dialogBackdrop { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 1rem; background: #11182780; }
 .dialog { width: min(760px, 100%); max-height: 92vh; overflow: auto; background: white; border-radius: .8rem; padding: 1.25rem; box-shadow: 0 20px 60px #0003; }
 .dialogHeader, .actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }

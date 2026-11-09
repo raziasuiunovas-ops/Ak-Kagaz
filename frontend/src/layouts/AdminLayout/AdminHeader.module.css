@@ -52,8 +52,8 @@
 }
 
 .toggleBtn:hover {
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: #e8eef3;
+  color: #26577C;
 }
 
 .title {
@@ -99,7 +99,7 @@
 }
 
 .iconBtn:hover {
-  color: #374151;
+  color: #26577C;
   transform: translateY(-2px);
 }
 
