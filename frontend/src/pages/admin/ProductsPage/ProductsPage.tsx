@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/services/api';
 import type { Category, Product, ProductAttribute, ProductStatus } from '@/types';
@@ -41,14 +42,16 @@ const wordCount = (text: string) => text.trim().split(/\s+/).filter(Boolean).len
 
 export function ProductsPage() {
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const categoryFilter = searchParams.get('categoryId') || undefined;
   const { data: currentUser } = useCurrentUser();
   const isSuperAdmin = currentUser?.userRoles?.some((entry: { role: { name: string } }) => entry.role.name === 'SUPER_ADMIN') ?? false;
   const [draft, setDraft] = useState<ProductDraft | null>(null);
   const [priceDraft, setPriceDraft] = useState<{ productId: string; tierId: string; sellingPrice: string; purchasePrice: string; estimateBasis: string; mode: 'estimate' | 'confirmed' } | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const products = useQuery({
-    queryKey: ['admin', 'products'],
-    queryFn: () => apiClient.get<{ data: Product[]; meta: { total: number } }>('/products/admin/list', { params: { page: 1, limit: 100 } }),
+    queryKey: ['admin', 'products', categoryFilter],
+    queryFn: () => apiClient.get<{ data: Product[]; meta: { total: number } }>('/products/admin/list', { params: { page: 1, limit: 100, ...(categoryFilter && { categoryId: categoryFilter }) } }),
   });
   const categories = useQuery({
     queryKey: ['admin', 'categories'],
@@ -168,6 +171,8 @@ export function ProductsPage() {
         <div><h1 className={styles.title}>Товары</h1><p className={styles.muted}>Каталог из API. Новые карточки сохраняются неопубликованными, пока вы не укажете актуальную цену и остаток.</p></div>
         <button className={styles.primaryButton} onClick={() => setDraft({ ...emptyDraft })}>Добавить товар</button>
       </div>
+
+      {categoryFilter && <p className={styles.muted}>Фильтр по категории: {categories.data?.data.find((category) => category.id === categoryFilter)?.translations.find((translation) => translation.locale === 'ru')?.name ?? categoryFilter}. <Link className={styles.textButton} to="/admin/products">Показать все товары</Link></p>}
 
       {/* Statistics Cards */}
       <div className={styles.statsGrid}>

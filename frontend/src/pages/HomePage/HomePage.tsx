@@ -9,6 +9,7 @@ import { CampaignBanner } from '@/components/CampaignBanner';
 import { RepeatPurchases } from '@/components/RepeatPurchases';
 import { HeroSection } from '@/components/Hero';
 import { useLocale } from '@/contexts/LocaleContext';
+import { usePageMetadata } from '@/hooks/usePageMetadata';
 import {
   usePersonalRecommendations,
   useGuestRecommendations,
@@ -23,6 +24,13 @@ import styles from './HomePage.module.css';
 
 export function HomePage() {
   const { t, locale } = useLocale();
+  
+  // Set page metadata with Open Graph support
+  usePageMetadata({
+    title: 'meta.home.title',
+    description: 'meta.home.description',
+    path: '/',
+  });
   const authenticated = isAuthenticated();
   const sessionId = getSessionId();
 

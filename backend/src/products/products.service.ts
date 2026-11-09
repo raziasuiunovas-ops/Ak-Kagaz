@@ -172,7 +172,9 @@ export class ProductsService {
     includeInactive = false,
   ) {
     const skip = (page - 1) * limit;
-    const where: any = includeInactive ? {} : { status: 'ACTIVE' };
+    const where: any = includeInactive
+      ? {}
+      : { status: 'ACTIVE', category: { isActive: true } };
 
     if (categoryId) where.categoryId = categoryId;
     if (brandId) where.brandId = brandId;
@@ -222,7 +224,7 @@ export class ProductsService {
 
   async findOne(id: string, locale?: string) {
     const product = await this.prisma.product.findUnique({
-      where: { id, status: 'ACTIVE' },
+      where: { id, status: 'ACTIVE', category: { isActive: true } },
       include: {
         translations: locale ? { where: { locale } } : true,
         variants: { orderBy: { sortOrder: 'asc' } },
@@ -249,7 +251,7 @@ export class ProductsService {
 
   async findBySlug(slug: string, locale?: string) {
     const product = await this.prisma.product.findUnique({
-      where: { slug, status: 'ACTIVE' },
+      where: { slug, status: 'ACTIVE', category: { isActive: true } },
       include: {
         translations: locale ? { where: { locale } } : true,
         variants: { orderBy: { sortOrder: 'asc' } },
@@ -455,7 +457,7 @@ export class ProductsService {
 
   async getBySku(sku: string) {
     const product = await this.prisma.product.findUnique({
-      where: { sku },
+      where: { sku, status: 'ACTIVE', category: { isActive: true } },
       include: {
         translations: true,
         variants: true,

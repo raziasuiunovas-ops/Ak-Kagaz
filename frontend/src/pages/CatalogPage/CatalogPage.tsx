@@ -6,10 +6,19 @@ import { LoadingState } from '@/components/LoadingState';
 import { ErrorState } from '@/components/ErrorState';
 import { useCategories } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
+import { usePageMetadata } from '@/hooks/usePageMetadata';
 import styles from './CatalogPage.module.css';
 
 export function CatalogPage() {
   const { t, locale } = useLocale();
+  
+  // Set page metadata
+  usePageMetadata({
+    title: 'meta.catalog.title',
+    description: 'meta.catalog.description',
+    path: '/catalog',
+  });
+  
   const categories = useCategories({ locale, isActive: true, limit: 100 });
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('nav.home'), path: '/' },

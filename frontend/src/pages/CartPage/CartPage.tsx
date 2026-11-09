@@ -8,10 +8,18 @@ import { LoadingState } from '@/components/LoadingState';
 import { ErrorState } from '@/components/ErrorState';
 import { useCart, useRemoveCartItem, useUpdateCartItem } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
+import { usePageMetadata } from '@/hooks/usePageMetadata';
 import styles from './CartPage.module.css';
 
 export function CartPage() {
   const { t, locale } = useLocale();
+  
+  // Set page metadata
+  usePageMetadata({
+    title: 'meta.cart.title',
+    description: 'meta.cart.description',
+    path: '/cart',
+  });
   const cart = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();

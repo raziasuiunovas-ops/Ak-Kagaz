@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/services/api';
 import { useCurrentUser } from '@/hooks';
@@ -8,7 +9,7 @@ import { Icon } from '@/components/Icon';
 import styles from './CategoriesPage.module.css';
 
 type CategoryDraft = { id?: string; slug: string; ruName: string; kyName: string; ruDescription: string; kyDescription: string; imageUrl: string; sortOrder: string; isActive: boolean };
-const blank: CategoryDraft = { slug: '', ruName: '', kyName: '', ruDescription: '', kyDescription: '', imageUrl: '', sortOrder: '0', isActive: true };
+const blank: CategoryDraft = { slug: '', ruName: '', kyName: '', ruDescription: '', kyDescription: '', imageUrl: '', sortOrder: '0', isActive: false };
 
 export function CategoriesPage() {
   const queryClient = useQueryClient();
@@ -71,6 +72,7 @@ export function CategoriesPage() {
       {category.imageUrl ? <img className={styles.image} src={category.imageUrl} alt="" /> : <div className={styles.imagePlaceholder} />}
       <div className={styles.details}><h2>{category.translations.find((item) => item.locale === 'ru')?.name ?? category.slug}</h2><p>{category.translations.find((item) => item.locale === 'ky')?.name ?? 'Котормосу жок'}</p><small>{category.slug} · {category._count?.products ?? 0} товаров · порядок {category.sortOrder} · {category.isActive ? 'Активна' : 'Неактивна'}</small></div>
       <div className={styles.actionButtons}>
+        <Link className={styles.iconButton} to={`/admin/products?categoryId=${encodeURIComponent(category.id)}`} title="Товары категории" aria-label={`Товары категории ${category.translations.find((item) => item.locale === 'ru')?.name ?? category.slug}`}><Icon name="inventory_2" size={20} /></Link>
         <button className={styles.iconButton} onClick={() => beginEdit(category)} title="Редактировать"><Icon name="edit" size={20} /></button>
         {isSuperAdmin && <button className={styles.iconButtonDelete} onClick={async () => { if (!window.confirm(`Удалить категорию «${category.translations.find((item) => item.locale === 'ru')?.name ?? category.slug}»?`)) return; try { await apiClient.delete(`/categories/${category.id}`); await queryClient.invalidateQueries({ queryKey: ['admin', 'categories'] }); await queryClient.invalidateQueries({ queryKey: ['categories'] }); } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Не удалось удалить категорию'); } }} title="Удалить"><Icon name="delete" size={20} /></button>}
       </div>

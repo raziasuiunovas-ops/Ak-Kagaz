@@ -2,10 +2,14 @@ import { Package, Truck, CreditCard, HeadphonesIcon } from 'lucide-react';
 import { Container } from '@/components/Container';
 import { BackButton } from '@/components/BackButton';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useInfoPageMetadata } from '@/hooks/usePageMetadata';
 import styles from './AboutPage.module.css';
 
 export function AboutPage() {
   const { t } = useLocale();
+  
+  // Set page metadata
+  useInfoPageMetadata('meta.about.title', 'meta.about.description', '/about');
 
   return (
     <div className={styles.aboutPage}>

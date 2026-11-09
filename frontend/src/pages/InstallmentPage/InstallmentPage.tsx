@@ -2,10 +2,14 @@ import { CreditCard, CheckCircle, AlertCircle } from 'lucide-react';
 import { Container } from '@/components/Container';
 import { BackButton } from '@/components/BackButton';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useInfoPageMetadata } from '@/hooks/usePageMetadata';
 import styles from './InstallmentPage.module.css';
 
 export function InstallmentPage() {
   const { t } = useLocale();
+  
+  // Set page metadata
+  useInfoPageMetadata('meta.installment.title', 'meta.installment.description', '/installment');
 
   return (
     <div className={styles.installmentPage}>

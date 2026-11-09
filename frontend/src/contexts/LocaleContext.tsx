@@ -54,6 +54,24 @@ export function useLocale() {
 
 // Translations
 const translationsRu: Record<string, string> = {
+  // Meta tags
+  'meta.home.title': 'AK KAGAZ - Канцтовары в Оше',
+  'meta.home.description': 'AK KAGAZ - Интернет-магазин канцтоваров в Оше, Кыргызстан. Качественная канцелярия для работы, учебы и творчества.',
+  'meta.catalog.title': 'Каталог канцтоваров',
+  'meta.catalog.description': 'Широкий выбор канцелярских товаров: ручки, тетради, блокноты, папки и многое другое. Доставка по Ошу.',
+  'meta.cart.title': 'Корзина покупок',
+  'meta.cart.description': 'Оформите заказ в AK KAGAZ. Удобная корзина, быстрая доставка.',
+  'meta.bundles.title': 'Готовые наборы канцтоваров',
+  'meta.bundles.description': 'Готовые комплекты канцелярии для школы, офиса и творчества. Выгодные цены на наборы.',
+  'meta.about.title': 'О магазине AK KAGAZ',
+  'meta.about.description': 'AK KAGAZ - ваш надежный магазин канцтоваров в Оше. Узнайте больше о нас, нашей миссии и ценностях.',
+  'meta.contacts.title': 'Контакты AK KAGAZ',
+  'meta.contacts.description': 'Свяжитесь с нами: адрес магазина, телефон, время работы. Мы всегда рады помочь!',
+  'meta.delivery.title': 'Доставка и оплата',
+  'meta.delivery.description': 'Удобная доставка канцтоваров по Ошу. Условия доставки, способы оплаты.',
+  'meta.installment.title': 'Рассрочка на канцтовары',
+  'meta.installment.description': 'Покупайте канцтовары в рассрочку без переплат. Удобные условия оплаты.',
+  
   // Common
   'common.save': 'Сохранить',
   'common.cancel': 'Отмена',
@@ -301,6 +319,24 @@ const translationsRu: Record<string, string> = {
 };
 
 const translationsKy: Record<string, string> = {
+  // Meta tags
+  'meta.home.title': 'AK KAGAZ - Ош шаарындагы кеңсе буюмдары',
+  'meta.home.description': 'AK KAGAZ - Ош шаарындагы кеңсе буюмдарынын онлайн дүкөнү, Кыргызстан. Иш, окуу жана чыгармачылык үчүн сапаттуу кеңсе буюмдары.',
+  'meta.catalog.title': 'Кеңсе буюмдарынын каталогу',
+  'meta.catalog.description': 'Кеңсе товарларынын кеңири тандоосу: калемдер, дептерлер, блокноттор, папкалар жана башкалар. Ош боюнча жеткирүү.',
+  'meta.cart.title': 'Сатып алуулар себети',
+  'meta.cart.description': 'AK KAGAZ дүкөнүнөн буюртма бериңиз. Ыңгайлуу себет, тез жеткирүү.',
+  'meta.bundles.title': 'Кеңсе буюмдарынын даяр топтомдору',
+  'meta.bundles.description': 'Мектеп, офис жана чыгармачылык үчүн даяр кеңсе топтомдору. Топтомдорго пайдалуу баалар.',
+  'meta.about.title': 'AK KAGAZ дүкөнү жөнүндө',
+  'meta.about.description': 'AK KAGAZ - Ош шаарындагы сиздин ишенимдүү кеңсе буюмдары дүкөнүңүз. Биз жөнүндө, биздин миссия жана баалуулуктар жөнүндө көбүрөөк билиңиз.',
+  'meta.contacts.title': 'AK KAGAZ байланыштары',
+  'meta.contacts.description': 'Биз менен байланышыңыз: дүкөндүн дареги, телефон, иш убактысы. Биз дайыма жардам берүүгө даярбыз!',
+  'meta.delivery.title': 'Жеткирүү жана төлөм',
+  'meta.delivery.description': 'Ош боюнча кеңсе буюмдарын ыңгайлуу жеткирүү. Жеткирүү шарттары, төлөө жолдору.',
+  'meta.installment.title': 'Кеңсе буюмдарын бөлүп төлөө',
+  'meta.installment.description': 'Кеңсе буюмдарын бөлүп төлөңүз, кошумча төлөмсүз. Ыңгайлуу төлөө шарттары.',
+  
   // Common
   'common.save': 'Сактоо',
   'common.cancel': 'Жокко чыгаруу',

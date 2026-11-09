@@ -51,7 +51,8 @@ export class CategoriesService {
           slug,
           parentId,
           imageUrl,
-          isActive: isActive ?? true,
+          // Empty categories stay hidden until an administrator activates them.
+          isActive: isActive ?? false,
           sortOrder: sortOrder ?? 0,
         },
       });
@@ -180,7 +181,7 @@ export class CategoriesService {
                   : true,
                 _count: {
                   select: {
-                    products: true,
+                    products: isActive === true ? { where: { status: 'ACTIVE' } } : true,
                   },
                 },
               },
@@ -188,7 +189,7 @@ export class CategoriesService {
             },
             _count: {
               select: {
-                products: true,
+                products: isActive === true ? { where: { status: 'ACTIVE' } } : true,
               },
             },
           },
@@ -196,7 +197,7 @@ export class CategoriesService {
         },
         _count: {
           select: {
-            products: true,
+            products: isActive === true ? { where: { status: 'ACTIVE' } } : true,
           },
         },
       },
@@ -211,7 +212,7 @@ export class CategoriesService {
    */
   async findOne(id: string, locale?: string) {
     const category = await this.prisma.category.findUnique({
-      where: { id },
+      where: { id, isActive: true },
       include: {
         translations: locale
           ? {
@@ -262,7 +263,7 @@ export class CategoriesService {
    */
   async findBySlug(slug: string, locale?: string) {
     const category = await this.prisma.category.findUnique({
-      where: { slug },
+      where: { slug, isActive: true },
       include: {
         translations: locale
           ? {

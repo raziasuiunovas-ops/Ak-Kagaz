@@ -67,6 +67,7 @@ export class CartService {
           orderBy: { effectiveFrom: 'desc' }, // Get most recent price first
           take: 1,
         },
+        variants: dto.variantId ? { where: { id: dto.variantId } } : undefined,
       },
     });
 
@@ -74,15 +75,40 @@ export class CartService {
     if (product.status !== 'ACTIVE') {
       throw new BadRequestException('Product is not available for purchase');
     }
-    const selectedPrice = product.prices.find((candidate) => candidate.isActive && !candidate.isEstimate)
-      ?? product.prices.find((candidate) => candidate.isEstimate);
-    if (!selectedPrice) {
-      throw new BadRequestException('Product has no current price or estimate available');
+
+    // If variantId is provided, check if it exists and get its price
+    let price: number;
+    if (dto.variantId) {
+      const variant = product.variants?.find(v => v.id === dto.variantId);
+      if (!variant) throw new NotFoundException('Variant not found');
+      if (!variant.isActive) throw new BadRequestException('Variant is not available');
+      
+      // Use variant price if set, otherwise use product price
+      if (variant.price) {
+        price = Number(variant.price);
+      } else {
+        const selectedPrice = product.prices.find((candidate) => candidate.isActive && !candidate.isEstimate)
+          ?? product.prices.find((candidate) => candidate.isEstimate);
+        if (!selectedPrice) {
+          throw new BadRequestException('Product has no current price or estimate available');
+        }
+        price = Number(selectedPrice.sellingPrice);
+      }
+    } else {
+      const selectedPrice = product.prices.find((candidate) => candidate.isActive && !candidate.isEstimate)
+        ?? product.prices.find((candidate) => candidate.isEstimate);
+      if (!selectedPrice) {
+        throw new BadRequestException('Product has no current price or estimate available');
+      }
+      price = Number(selectedPrice.sellingPrice);
     }
 
-    const price = Number(selectedPrice.sellingPrice);
+    // Check if item with same product and variant already exists
+    const existingWhere = dto.variantId
+      ? { cartId_productId_variantId: { cartId: cart.id, productId: dto.productId, variantId: dto.variantId } }
+      : { cartId_productId_variantId: { cartId: cart.id, productId: dto.productId, variantId: null } };
 
-    const existing = await this.prisma.cartItem.findUnique({ where: { cartId_productId: { cartId: cart.id, productId: dto.productId } } });
+    const existing = await this.prisma.cartItem.findUnique({ where: existingWhere });
 
     return this.prisma.$transaction(async (tx: any) => {
       if (existing) {
@@ -95,7 +121,16 @@ export class CartService {
           },
         });
       } else {
-        await tx.cartItem.create({ data: { cartId: cart.id, productId: dto.productId, quantity: dto.quantity, price, subtotal: price * dto.quantity } });
+        await tx.cartItem.create({ 
+          data: { 
+            cartId: cart.id, 
+            productId: dto.productId, 
+            variantId: dto.variantId,
+            quantity: dto.quantity, 
+            price, 
+            subtotal: price * dto.quantity 
+          } 
+        });
       }
 
       const updated = await tx.cart.findUnique({
@@ -158,6 +193,7 @@ export class CartService {
           product: {
             include: {
               translations: true,
+              variants: true,
               prices: {
                 where: {
                   AND: [
@@ -170,6 +206,7 @@ export class CartService {
               },
             },
           },
+          variant: true,
         },
       },
     };

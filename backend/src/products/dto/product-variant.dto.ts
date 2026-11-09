@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { IsString, IsNotEmpty, IsOptional, IsBoolean, IsInt, Min, MaxLength, Matches } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean, IsInt, IsNumber, IsPositive, Min, MaxLength, Matches } from 'class-validator';
 
 export class ProductVariantDto {
   @IsString()
@@ -12,6 +12,21 @@ export class ProductVariantDto {
   @IsNotEmpty({ message: 'Variant name is required' })
   @MaxLength(100, { message: 'Variant name must not exceed 100 characters' })
   name: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(100, { message: 'Russian name must not exceed 100 characters' })
+  nameRu?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(100, { message: 'Kyrgyz name must not exceed 100 characters' })
+  nameKy?: string;
+
+  @IsNumber()
+  @IsPositive({ message: 'Price must be a positive number' })
+  @IsOptional()
+  price?: number;
 
   @IsInt()
   @Min(0)

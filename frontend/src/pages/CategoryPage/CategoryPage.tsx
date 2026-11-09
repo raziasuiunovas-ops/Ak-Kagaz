@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/ErrorState';
 import { ProductCard } from '@/components/ProductCard';
 import { useCategoryBySlug, useProducts } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useCategoryMetadata } from '@/hooks/usePageMetadata';
 import styles from './CategoryPage.module.css';
 
 export function CategoryPage() {
@@ -15,6 +16,13 @@ export function CategoryPage() {
   const category = useCategoryBySlug(slug, locale);
   const products = useProducts({ categoryId: category.data?.id, locale, status: 'ACTIVE', limit: 100 });
   const translation = category.data?.translations.find((item) => item.locale === locale) ?? category.data?.translations[0];
+  
+  // Set page metadata for category
+  useCategoryMetadata({
+    name: translation?.name ?? slug,
+    description: translation?.description,
+    slug,
+  });
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('nav.home'), path: '/' },
     { label: t('nav.catalog'), path: '/catalog' },

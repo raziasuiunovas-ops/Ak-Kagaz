@@ -7,11 +7,20 @@ import { EmptyState } from '@/components/EmptyState';
 import { ErrorState } from '@/components/ErrorState';
 import { useBundles } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
+import { usePageMetadata } from '@/hooks/usePageMetadata';
 import type { BundleType } from '@/types';
 import styles from './BundlesPage.module.css';
 
 export function BundlesPage() {
   const { t, locale } = useLocale();
+  
+  // Set page metadata
+  usePageMetadata({
+    title: 'meta.bundles.title',
+    description: 'meta.bundles.description',
+    path: '/bundles',
+  });
+  
   const [selectedType, setSelectedType] = useState<BundleType | 'ALL'>('ALL');
 
   const { data: bundles, isLoading, error } = useBundles({

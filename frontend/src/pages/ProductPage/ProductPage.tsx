@@ -10,9 +10,11 @@ import { LoadingState } from '@/components/LoadingState';
 import { ErrorState } from '@/components/ErrorState';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAddProductToCart, useFavorites, useProductBySlug, useSimilarProducts, useTrackView, useProductCampaigns } from '@/hooks';
+import { useProductMetadata } from '@/hooks/usePageMetadata';
 import { getSessionId } from '@/utils/session';
 import { CartToast } from '@/components/CartToast/CartToast';
 import { getCurrentDisplayPrice } from '@/utils/productPrice';
+import { getAbsoluteImageUrl } from '@/utils/metadata';
 import styles from './ProductPage.module.css';
 
 export function ProductPage() {
@@ -23,6 +25,17 @@ export function ProductPage() {
   const [selectedTab, setSelectedTab] = useState<'description' | 'specifications' | 'reviews'>('description');
 
   const { data: product, isLoading, error } = useProductBySlug(slug || '', locale);
+  
+  // Set page metadata for product
+  const productTranslation = product?.translations.find((item) => item.locale === locale) ?? product?.translations[0];
+  const productImage = product?.images?.[0]?.url ? getAbsoluteImageUrl(product.images[0].url) : undefined;
+  
+  useProductMetadata({
+    name: productTranslation?.name ?? '',
+    description: productTranslation?.description ?? productTranslation?.name ?? '',
+    image: productImage,
+    slug: slug || '',
+  });
   const favorites = useFavorites();
   const addToCart = useAddProductToCart();
   const [cartNotice, setCartNotice] = useState<'added' | 'error' | null>(null);

@@ -122,6 +122,7 @@ export class RecommendationsService {
       where: {
         id: { notIn: Array.from(purchasedProductIds) },
         status: 'ACTIVE',
+        category: { isActive: true },
         OR: [
           // From favorite categories
           {
@@ -182,6 +183,7 @@ export class RecommendationsService {
             categoryId: { in: categoryIds },
             id: { notIn: productIds },
             status: 'ACTIVE',
+            category: { isActive: true },
           },
           include: {
             translations: true,
@@ -215,7 +217,7 @@ export class RecommendationsService {
   async getFrequentlyBought(productId: string, limit = 4) {
     // First check manual recommendations
     const manual = await this.prisma.frequentlyBoughtTogether.findMany({
-      where: { productId, isManual: true },
+      where: { productId, isManual: true, relatedProduct: { status: 'ACTIVE', category: { isActive: true } } },
       orderBy: { frequency: 'desc' },
       take: limit,
       include: {
@@ -238,7 +240,7 @@ export class RecommendationsService {
 
     // Get automatic recommendations
     const automatic = await this.prisma.frequentlyBoughtTogether.findMany({
-      where: { productId, isManual: false },
+      where: { productId, isManual: false, relatedProduct: { status: 'ACTIVE', category: { isActive: true } } },
       orderBy: { frequency: 'desc' },
       take: limit - manual.length,
       include: {
@@ -281,6 +283,7 @@ export class RecommendationsService {
         categoryId: product.categoryId,
         id: { not: productId },
         status: 'ACTIVE',
+        category: { isActive: true },
       },
       include: {
         translations: true,
@@ -303,7 +306,7 @@ export class RecommendationsService {
    */
   async getRecentlyViewed(userId: string, limit = 10) {
     const views = await this.prisma.productView.findMany({
-      where: { userId },
+      where: { userId, product: { status: 'ACTIVE', category: { isActive: true } } },
       orderBy: { lastViewedAt: 'desc' },
       take: limit,
       include: {
@@ -335,6 +338,7 @@ export class RecommendationsService {
       },
       include: {
         items: {
+          where: { product: { status: 'ACTIVE', category: { isActive: true } } },
           include: {
             product: {
               include: {
@@ -418,7 +422,7 @@ export class RecommendationsService {
     if (productIds.length === 0) {
       // With no order history, show the admin-curated featured selection.
       return this.prisma.product.findMany({
-        where: { status: 'ACTIVE', isFeatured: true },
+        where: { status: 'ACTIVE', isFeatured: true, category: { isActive: true } },
         include: {
           translations: true,
           images: { orderBy: { sortOrder: 'asc' } },
@@ -435,7 +439,7 @@ export class RecommendationsService {
     }
 
     return this.prisma.product.findMany({
-      where: { id: { in: productIds }, status: 'ACTIVE' },
+      where: { id: { in: productIds }, status: 'ACTIVE', category: { isActive: true } },
       include: {
         translations: true,
         images: { orderBy: { sortOrder: 'asc' } },
@@ -477,7 +481,7 @@ export class RecommendationsService {
     }
 
     return this.prisma.product.findMany({
-      where: { id: { in: productIds }, status: 'ACTIVE' },
+      where: { id: { in: productIds }, status: 'ACTIVE', category: { isActive: true } },
       include: {
         translations: true,
         images: { orderBy: { sortOrder: 'asc' } },

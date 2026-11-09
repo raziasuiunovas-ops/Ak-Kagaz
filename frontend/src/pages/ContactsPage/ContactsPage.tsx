@@ -2,10 +2,14 @@ import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { Container } from '@/components/Container';
 import { BackButton } from '@/components/BackButton';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useInfoPageMetadata } from '@/hooks/usePageMetadata';
 import styles from './ContactsPage.module.css';
 
 export function ContactsPage() {
   const { t } = useLocale();
+  
+  // Set page metadata
+  useInfoPageMetadata('meta.contacts.title', 'meta.contacts.description', '/contacts');
 
   return (
     <div className={styles.contactsPage}>
