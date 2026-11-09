@@ -1,17 +1,31 @@
-﻿.page {
-  max-width: 1400px;
-}
-
-.title {
-  margin: 0 0 1.5rem 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.content {
-  padding: 1.5rem;
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+.page { max-width: 1200px; color: #111827; }
+.heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+.title { margin: 0 0 .4rem; font-size: 1.75rem; }
+.muted { margin: 0; color: #6b7280; }
+.primaryButton, .secondaryButton { border: 0; border-radius: .5rem; padding: .7rem 1rem; font: inherit; font-weight: 600; cursor: pointer; }
+.primaryButton { background: #2563eb; color: white; }
+.primaryButton:disabled { opacity: .65; cursor: wait; }
+.secondaryButton { background: #f3f4f6; color: #374151; }
+.textButton { background: none; border: 0; color: #2563eb; cursor: pointer; font: inherit; font-weight: 600; white-space: nowrap; }
+.deleteButton { background: none; border: 0; color: #b91c1c; cursor: pointer; font: inherit; font-weight: 600; white-space: nowrap; }
+.list { display: grid; gap: .75rem; }
+.card { display: flex; align-items: center; gap: 1rem; padding: .85rem 1rem; background: white; border: 1px solid #e5e7eb; border-radius: .65rem; }
+.image, .imagePlaceholder { flex: 0 0 64px; width: 64px; height: 64px; object-fit: contain; background: #f9fafb; border-radius: .45rem; }
+.details { flex: 1; min-width: 0; }
+.details h2 { margin: 0 0 .2rem; font-size: 1rem; }
+.details p { margin: 0 0 .3rem; color: #4b5563; }
+.details small { color: #6b7280; }
+.error { color: #b91c1c; }
+.dialogBackdrop { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 1rem; background: #11182780; }
+.dialog { width: min(760px, 100%); max-height: 92vh; overflow: auto; background: white; border-radius: .8rem; padding: 1.25rem; box-shadow: 0 20px 60px #0003; }
+.dialogHeader, .actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.dialogHeader h2 { margin: 0 0 1rem; }
+.formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+.formGrid label { display: grid; gap: .35rem; color: #374151; font-size: .9rem; }
+.formGrid input, .formGrid textarea { width: 100%; box-sizing: border-box; padding: .65rem .7rem; border: 1px solid #d1d5db; border-radius: .4rem; font: inherit; color: #111827; background: white; }
+.formGrid textarea { min-height: 5rem; resize: vertical; }
+.fullWidth { grid-column: 1 / -1; }
+.formGrid .check { display: flex; align-items: center; gap: .55rem; }
+.check input { width: auto; }
+.actions { justify-content: flex-end; margin-top: 1rem; }
+@media (max-width: 640px) { .heading { flex-direction: column; } .card { align-items: flex-start; flex-wrap: wrap; } .formGrid { grid-template-columns: 1fr; } .fullWidth { grid-column: auto; } .dialog { padding: 1rem; } }

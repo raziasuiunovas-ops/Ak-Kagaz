@@ -77,45 +77,82 @@
 }
 
 /* ============================================
+   СОСТОЯНИЯ (общие для всех тем)
+   ============================================ */
+:root {
+  /* Success - зелёный */
+  --color-success: #10b981;
+  --color-success-hover: #059669;
+  --color-success-light: rgba(16, 185, 129, 0.15);
+  
+  /* Error - красный */
+  --color-error: #ef4444;
+  --color-error-hover: #dc2626;
+  --color-error-light: rgba(239, 68, 68, 0.15);
+  
+  /* Warning - жёлтый */
+  --color-warning: #f59e0b;
+  --color-warning-hover: #d97706;
+  --color-warning-light: rgba(245, 158, 11, 0.15);
+  
+  /* Info - синий */
+  --color-info: #3b82f6;
+  --color-info-hover: #2563eb;
+  --color-info-light: rgba(59, 130, 246, 0.15);
+  
+  /* Gray scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+}
+
+/* ============================================
    DARK THEME - Premium атмосфера
    ============================================ */
 [data-theme="dark"] {
   /* Фоны - темные с синим оттенком */
-  --color-background: #1a2332;
-  --color-background-alt: #1f2937;
-  --color-surface: #24303f;
-  --color-surface-elevated: #2d3b4e;
+  --color-background: #0f1419;
+  --color-background-alt: #1a1f2e;
+  --color-surface: #1e2433;
+  --color-surface-elevated: #252d3d;
   --color-surface-light: rgba(38, 87, 124, 0.15);
   
   /* Текст */
-  --color-text-primary: #f0f4f8;
-  --color-text-secondary: rgba(240, 244, 248, 0.75);
-  --color-text-tertiary: rgba(240, 244, 248, 0.5);
+  --color-text-primary: #e8eef5;
+  --color-text-secondary: rgba(232, 238, 245, 0.75);
+  --color-text-tertiary: rgba(232, 238, 245, 0.5);
   --color-text-on-primary: #FFFFFF;
   --color-text-on-secondary: #FFFFFF;
   
   /* Границы с синим свечением */
-  --color-border: rgba(38, 87, 124, 0.3);
-  --color-border-light: rgba(38, 87, 124, 0.15);
-  --color-border-dark: rgba(38, 87, 124, 0.5);
+  --color-border: rgba(38, 87, 124, 0.35);
+  --color-border-light: rgba(38, 87, 124, 0.2);
+  --color-border-dark: rgba(38, 87, 124, 0.55);
   
   /* Состояния */
-  --color-hover: rgba(38, 87, 124, 0.2);
-  --color-active: rgba(38, 87, 124, 0.3);
-  --color-disabled: rgba(240, 244, 248, 0.3);
+  --color-hover: rgba(38, 87, 124, 0.25);
+  --color-active: rgba(38, 87, 124, 0.35);
+  --color-disabled: rgba(232, 238, 245, 0.3);
   
   /* Тени с легким синим свечением */
-  --shadow-sm: 0 1px 3px rgba(38, 87, 124, 0.15);
-  --shadow-md: 0 4px 12px rgba(38, 87, 124, 0.2);
-  --shadow-lg: 0 10px 24px rgba(38, 87, 124, 0.25);
-  --shadow-xl: 0 20px 40px rgba(38, 87, 124, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 8px rgba(38, 87, 124, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 16px rgba(38, 87, 124, 0.15);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.5), 0 0 24px rgba(38, 87, 124, 0.2);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 32px rgba(38, 87, 124, 0.25);
   
   /* Overlay */
-  --color-overlay: rgba(0, 0, 0, 0.7);
-  --color-overlay-light: rgba(0, 0, 0, 0.5);
+  --color-overlay: rgba(0, 0, 0, 0.75);
+  --color-overlay-light: rgba(0, 0, 0, 0.55);
   
   /* Специальные эффекты для темной темы */
-  --color-glow: rgba(38, 87, 124, 0.4);
-  --color-glow-strong: rgba(38, 87, 124, 0.6);
-  --color-accent-glow: rgba(229, 86, 4, 0.3);
+  --color-glow: rgba(38, 87, 124, 0.5);
+  --color-glow-strong: rgba(38, 87, 124, 0.7);
+  --color-accent-glow: rgba(229, 86, 4, 0.4);
 }

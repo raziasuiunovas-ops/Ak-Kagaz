@@ -71,7 +71,21 @@ class ApiClient {
       throw new Error(error.message || `HTTP error ${response.status}`);
     }
 
-    return response.json() as Promise<T>;
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
+    const payload: unknown = await response.json();
+    if (
+      payload !== null &&
+      typeof payload === 'object' &&
+      'success' in payload &&
+      'data' in payload
+    ) {
+      return (payload as { data: T }).data;
+    }
+
+    return payload as T;
   }
 
   async get<T>(endpoint: string, options?: FetchOptions): Promise<T> {

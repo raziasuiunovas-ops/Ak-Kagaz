@@ -45,6 +45,9 @@ export class UpdateProductDto {
   @IsEnum(['ACTIVE', 'INACTIVE', 'OUT_OF_STOCK', 'DISCONTINUED'])
   @IsOptional()
   status?: 'ACTIVE' | 'INACTIVE' | 'OUT_OF_STOCK' | 'DISCONTINUED';
+  @IsBoolean()
+  @IsOptional()
+  isFeatured?: boolean;
 
   @IsBoolean()
   @IsOptional()

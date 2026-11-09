@@ -89,32 +89,44 @@ export class PricingService {
       where: { productId_tierId: { productId: dto.productId, tierId: dto.tierId } },
     });
     if (existing) throw new ConflictException(`Price already exists for this product and tier`);
-    if (dto.sellingPrice < dto.purchasePrice) throw new BadRequestException('Selling price must be >= purchase price');
+    if (dto.isEstimate && dto.isActive) {
+      throw new BadRequestException('Estimated prices must remain inactive until approved');
+    }
+    if (!dto.isEstimate && dto.purchasePrice === undefined) {
+      throw new BadRequestException('Purchase price is required for an approved price');
+    }
+    if (dto.purchasePrice !== undefined && dto.sellingPrice < dto.purchasePrice) {
+      throw new BadRequestException('Selling price must be >= purchase price');
+    }
 
     return this.prisma.$transaction(async (tx: any) => {
       const price = await tx.productPrice.create({
         data: {
           productId: dto.productId,
           tierId: dto.tierId,
-          purchasePrice: dto.purchasePrice,
+          purchasePrice: dto.isEstimate ? null : dto.purchasePrice,
           sellingPrice: dto.sellingPrice,
           currency: dto.currency || 'KGS',
-          isActive: dto.isActive ?? true,
+          isActive: dto.isEstimate ? false : (dto.isActive ?? true),
+          isEstimate: dto.isEstimate ?? false,
+          estimateBasis: dto.isEstimate ? dto.estimateBasis : null,
           effectiveFrom: dto.effectiveFrom ? new Date(dto.effectiveFrom) : new Date(),
           effectiveUntil: dto.effectiveUntil ? new Date(dto.effectiveUntil) : null,
         },
         include: { product: { include: { translations: true } }, tier: true },
       });
-      await tx.priceHistory.create({
-        data: {
-          productId: dto.productId,
-          oldPrice: 0,
-          newPrice: dto.sellingPrice,
-          currency: dto.currency || 'KGS',
-          changedBy: userId,
-          reason: 'Initial price',
-        },
-      });
+      if (!dto.isEstimate) {
+        await tx.priceHistory.create({
+          data: {
+            productId: dto.productId,
+            oldPrice: 0,
+            newPrice: dto.sellingPrice,
+            currency: dto.currency || 'KGS',
+            changedBy: userId,
+            reason: 'Initial price',
+          },
+        });
+      }
       return price;
     });
   }
@@ -152,9 +164,18 @@ export class PricingService {
     const existing = await this.prisma.productPrice.findUnique({ where: { id } });
     if (!existing) throw new NotFoundException(`Price "${id}" not found`);
 
+    const approvingEstimate = existing.isEstimate && dto.isEstimate === false;
+    if (approvingEstimate && dto.purchasePrice === undefined) {
+      throw new BadRequestException('Set the confirmed purchase price before approving this estimate');
+    }
     const newPurchase = dto.purchasePrice ?? existing.purchasePrice;
     const newSelling = dto.sellingPrice ?? existing.sellingPrice;
-    if (Number(newSelling) < Number(newPurchase)) throw new BadRequestException('Selling >= purchase required');
+    if (newPurchase !== null && Number(newSelling) < Number(newPurchase)) {
+      throw new BadRequestException('Selling price must be >= purchase price');
+    }
+    if (dto.isEstimate && dto.isActive) {
+      throw new BadRequestException('Estimated prices must remain inactive until approved');
+    }
 
     return this.prisma.$transaction(async (tx: any) => {
       const updated = await tx.productPrice.update({
@@ -164,6 +185,9 @@ export class PricingService {
           ...(dto.sellingPrice !== undefined && { sellingPrice: dto.sellingPrice }),
           ...(dto.currency && { currency: dto.currency }),
           ...(dto.isActive !== undefined && { isActive: dto.isActive }),
+          ...(dto.isEstimate !== undefined && { isEstimate: dto.isEstimate }),
+          ...(dto.estimateBasis !== undefined && { estimateBasis: dto.estimateBasis }),
+          ...(dto.isEstimate === true && { isActive: false }),
           ...(dto.effectiveFrom && { effectiveFrom: new Date(dto.effectiveFrom) }),
           ...(dto.effectiveUntil !== undefined && { effectiveUntil: dto.effectiveUntil ? new Date(dto.effectiveUntil) : null }),
         },

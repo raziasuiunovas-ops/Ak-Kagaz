@@ -110,22 +110,31 @@ export function AdminVerify2FAPage() {
     <div className={styles.verify2FAPage}>
       <Container size="narrow">
         <div className={styles.formCard}>
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={() => navigate('/login')}
+            disabled={verify2FAMutation.isPending}
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 20 20" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M12.5 5L7.5 10L12.5 15" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span>Вернуться к входу</span>
+          </button>
+
           <div className={styles.header}>
-            <div className={styles.iconWrapper}>
-              <svg
-                className={styles.icon}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                />
-              </svg>
-            </div>
             <h1 className={styles.title}>Введите код подтверждения</h1>
             <p className={styles.subtitle}>
               Мы отправили 6-значный код в Telegram на аккаунт, связанный с{' '}
@@ -169,17 +178,6 @@ export function AdminVerify2FAPage() {
               {verify2FAMutation.isPending ? 'Проверка...' : 'Подтвердить'}
             </button>
           </form>
-
-          <div className={styles.footer}>
-            <button
-              type="button"
-              className={styles.backButton}
-              onClick={() => navigate('/login')}
-              disabled={verify2FAMutation.isPending}
-            >
-              ← Вернуться к входу
-            </button>
-          </div>
 
           <div className={styles.info}>
             <svg className={styles.infoIcon} fill="currentColor" viewBox="0 0 20 20">

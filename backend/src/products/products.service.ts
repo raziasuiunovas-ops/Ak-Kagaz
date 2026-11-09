@@ -11,6 +11,10 @@ import { CreateProductDto, UpdateProductDto } from './dto';
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async findAttributes() {
+    return this.prisma.productAttribute.findMany({ orderBy: { sortOrder: 'asc' } });
+  }
+
   async create(createProductDto: CreateProductDto) {
     const {
       sku,
@@ -18,6 +22,7 @@ export class ProductsService {
       categoryId,
       brandId,
       status,
+      isFeatured,
       hasVariants,
       thumbnailUrl,
       weight,
@@ -82,6 +87,7 @@ export class ProductsService {
           categoryId,
           brandId,
           status: status || 'ACTIVE',
+          isFeatured: isFeatured ?? false,
           hasVariants: hasVariants || false,
           thumbnailUrl,
           weight,
@@ -163,9 +169,10 @@ export class ProductsService {
     brandId?: string,
     status?: string,
     search?: string,
+    includeInactive = false,
   ) {
     const skip = (page - 1) * limit;
-    const where: any = {};
+    const where: any = includeInactive ? {} : { status: 'ACTIVE' };
 
     if (categoryId) where.categoryId = categoryId;
     if (brandId) where.brandId = brandId;
@@ -189,6 +196,8 @@ export class ProductsService {
           images: { orderBy: { sortOrder: 'asc' }, take: 1 },
           category: { include: { translations: locale ? { where: { locale } } : true } },
           brand: true,
+          attributes: { include: { attribute: true } },
+          prices: { where: includeInactive ? {} : { isActive: true } },
           _count: { select: { reviews: true } },
         },
         orderBy: { createdAt: 'desc' },
@@ -204,11 +213,12 @@ export class ProductsService {
 
   async findOne(id: string, locale?: string) {
     const product = await this.prisma.product.findUnique({
-      where: { id },
+      where: { id, status: 'ACTIVE' },
       include: {
         translations: locale ? { where: { locale } } : true,
         variants: { orderBy: { sortOrder: 'asc' } },
         images: { orderBy: { sortOrder: 'asc' } },
+        prices: { where: { isActive: true } },
         attributes: { include: { attribute: true } },
         category: { include: { translations: locale ? { where: { locale } } : true } },
         brand: true,
@@ -230,11 +240,12 @@ export class ProductsService {
 
   async findBySlug(slug: string, locale?: string) {
     const product = await this.prisma.product.findUnique({
-      where: { slug },
+      where: { slug, status: 'ACTIVE' },
       include: {
         translations: locale ? { where: { locale } } : true,
         variants: { orderBy: { sortOrder: 'asc' } },
         images: { orderBy: { sortOrder: 'asc' } },
+        prices: { where: { isActive: true } },
         attributes: { include: { attribute: true } },
         category: { include: { translations: locale ? { where: { locale } } : true } },
         brand: true,
@@ -261,6 +272,7 @@ export class ProductsService {
       categoryId,
       brandId,
       status,
+      isFeatured,
       hasVariants,
       thumbnailUrl,
       weight,
@@ -321,6 +333,7 @@ export class ProductsService {
           ...(categoryId && { categoryId }),
           ...(brandId !== undefined && { brandId }),
           ...(status && { status }),
+          ...(isFeatured !== undefined && { isFeatured }),
           ...(hasVariants !== undefined && { hasVariants }),
           ...(thumbnailUrl !== undefined && { thumbnailUrl }),
           ...(weight !== undefined && { weight }),

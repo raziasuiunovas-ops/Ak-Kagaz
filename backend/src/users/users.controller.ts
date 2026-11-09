@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Patch,
+  Put,
   Param,
   Delete,
   Query,
@@ -22,6 +23,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserStatus } from '@prisma/client';
+
+type UpdateFavoritesBody = { productIds: string[] };
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -68,6 +71,16 @@ export class UsersController {
   @Post('me/addresses')
   createMyAddress(@Request() req: any, @Body() createAddressDto: CreateAddressDto) {
     return this.usersService.createAddress(req.user.userId, createAddressDto);
+  }
+
+  @Get('me/favorites')
+  getMyFavorites(@Request() req: any) {
+    return this.usersService.getFavoriteProductIds(req.user.userId);
+  }
+
+  @Put('me/favorites')
+  updateMyFavorites(@Request() req: any, @Body() body: UpdateFavoritesBody) {
+    return this.usersService.setFavoriteProductIds(req.user.userId, body.productIds);
   }
 
   @Patch('me/addresses/:addressId')

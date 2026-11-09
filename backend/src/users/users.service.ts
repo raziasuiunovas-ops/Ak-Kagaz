@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
   Logger,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../common/services/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -90,6 +91,57 @@ export class UsersService {
     this.logger.log(`User created: ${user.email}`);
 
     return this.sanitizeUser(user);
+  }
+
+  async getFavoriteProductIds(userId: string): Promise<string[]> {
+    const list = await this.prisma.userFavoriteList.findFirst({
+      where: { userId, isDefault: true },
+      orderBy: { createdAt: 'asc' },
+      select: { productIds: true },
+    });
+    return list?.productIds ?? [];
+  }
+
+  async setFavoriteProductIds(userId: string, productIds: string[]): Promise<string[]> {
+    if (!Array.isArray(productIds) || productIds.length > 100 || productIds.some((id) => typeof id !== 'string' || id.length > 100)) {
+      throw new BadRequestException('Favorite product IDs must be a list of at most 100 valid IDs');
+    }
+    const uniqueIds = [...new Set(productIds)];
+    if (uniqueIds.length !== productIds.length) {
+      throw new BadRequestException('Favorite product IDs must be unique');
+    }
+
+    const activeProducts = uniqueIds.length
+      ? await this.prisma.product.findMany({
+          where: { id: { in: uniqueIds }, status: 'ACTIVE' },
+          select: { id: true },
+        })
+      : [];
+    if (activeProducts.length !== uniqueIds.length) {
+      throw new BadRequestException('Favorites can only contain published products');
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const current = await tx.userFavoriteList.findFirst({
+        where: { userId, isDefault: true },
+        orderBy: { createdAt: 'asc' },
+      });
+
+      if (current) {
+        const updated = await tx.userFavoriteList.update({
+          where: { id: current.id },
+          data: { productIds: uniqueIds },
+          select: { productIds: true },
+        });
+        return updated.productIds;
+      }
+
+      const created = await tx.userFavoriteList.create({
+        data: { userId, name: 'Избранное', isDefault: true, productIds: uniqueIds },
+        select: { productIds: true },
+      });
+      return created.productIds;
+    });
   }
 
   async findAll(params: {

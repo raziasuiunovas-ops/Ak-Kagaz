@@ -6,6 +6,26 @@ import { AddToCartDto, UpdateCartItemDto } from './dto';
 export class CartService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getSessionCart(sessionId: string) {
+    this.validateSessionId(sessionId);
+    return this.getOrCreateCart(undefined, sessionId);
+  }
+
+  async addSessionItem(sessionId: string, dto: AddToCartDto) {
+    this.validateSessionId(sessionId);
+    return this.addItem(dto, undefined, sessionId);
+  }
+
+  async updateSessionItem(sessionId: string, itemId: string, dto: UpdateCartItemDto) {
+    const cartId = await this.getSessionCartId(sessionId);
+    return this.updateItem(cartId, itemId, dto);
+  }
+
+  async removeSessionItem(sessionId: string, itemId: string) {
+    const cartId = await this.getSessionCartId(sessionId);
+    return this.removeItem(cartId, itemId);
+  }
+
   async getOrCreateCart(userId?: string, sessionId?: string) {
     if (!userId && !sessionId) throw new BadRequestException('User ID or session ID required');
     
@@ -37,6 +57,7 @@ export class CartService {
         prices: {
           where: {
             isActive: true,
+          isEstimate: false,
             effectiveFrom: { lte: now }, // Price must have started
             OR: [
               { effectiveUntil: null }, // No end date (permanent)
@@ -50,6 +71,9 @@ export class CartService {
     });
 
     if (!product) throw new NotFoundException('Product not found');
+    if (product.status !== 'ACTIVE') {
+      throw new BadRequestException('Product is not available for purchase');
+    }
     if (product.prices.length === 0) {
       throw new BadRequestException('Product has no active price available at this time');
     }
@@ -111,5 +135,21 @@ export class CartService {
     const totalItems = cart.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
     const subtotal = cart.items.reduce((sum: number, item: any) => sum + Number(item.subtotal), 0);
     return { ...cart, totalItems, subtotal };
+  }
+
+  private async getSessionCartId(sessionId: string): Promise<string> {
+    this.validateSessionId(sessionId);
+    const cart = await this.prisma.cart.findFirst({
+      where: { sessionId, status: 'ACTIVE' },
+      select: { id: true },
+    });
+    if (!cart) throw new NotFoundException('Cart not found');
+    return cart.id;
+  }
+
+  private validateSessionId(sessionId: string) {
+    if (!/^session_[a-zA-Z0-9_-]{10,64}$/.test(sessionId)) {
+      throw new BadRequestException('Invalid cart session');
+    }
   }
 }

@@ -100,6 +100,9 @@ export class CategoriesService {
     if (isActive !== undefined) {
       where.isActive = isActive;
     }
+    if (isActive === true) {
+      where.products = { some: { status: 'ACTIVE' } };
+    }
 
     const [categories, total] = await Promise.all([
       this.prisma.category.findMany({
@@ -126,7 +129,7 @@ export class CategoriesService {
           _count: {
             select: {
               children: true,
-              products: true,
+              products: isActive === true ? { where: { status: 'ACTIVE' } } : true,
             },
           },
         },

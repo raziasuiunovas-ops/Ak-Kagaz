@@ -9,17 +9,22 @@ import { RecommendationsBlock } from '@/components/RecommendationsBlock';
 import { LoadingState } from '@/components/LoadingState';
 import { ErrorState } from '@/components/ErrorState';
 import { useLocale } from '@/contexts/LocaleContext';
-import { useProductBySlug, useSimilarProducts, useTrackView, useProductCampaigns } from '@/hooks';
+import { useAddProductToCart, useFavorites, useProductBySlug, useSimilarProducts, useTrackView, useProductCampaigns } from '@/hooks';
 import { getSessionId } from '@/utils/session';
+import { getCurrentConfirmedPrice } from '@/utils/productPrice';
 import styles from './ProductPage.module.css';
 
 export function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t, locale } = useLocale();
   const [quantity, setQuantity] = useState(1);
+  const [selectedVariantId, setSelectedVariantId] = useState<string | undefined>();
   const [selectedTab, setSelectedTab] = useState<'description' | 'specifications' | 'reviews'>('description');
 
   const { data: product, isLoading, error } = useProductBySlug(slug || '', locale);
+  const favorites = useFavorites();
+  const addToCart = useAddProductToCart();
+  const [cartNotice, setCartNotice] = useState<'added' | 'error' | null>(null);
   const trackView = useTrackView();
 
   const similarProducts = useSimilarProducts(product?.id || '', {
@@ -63,13 +68,17 @@ export function ProductPage() {
   }
 
   const translation = product.translations.find((tr) => tr.locale === locale) || product.translations[0];
-  const price = product.prices.find((p) => p.isActive)?.sellingPrice || 0;
+  const price = getCurrentConfirmedPrice(product.prices)?.sellingPrice;
+  const selectedVariant = product.variants?.find((variant) => variant.id === selectedVariantId && variant.isActive);
+  const localizedVariantName = (name: string) => locale === 'ky'
+    ? ({ 'Зелёный': 'Жашыл', 'Красный': 'Кызыл', 'Синий': 'Көк', 'Чёрный': 'Кара', 'Розовый': 'Кызгылт', 'Голубой': 'Көгүлтүр', 'Светло-голубой': 'Ачык көк' }[name] ?? name)
+    : name;
 
   // Check if product is in active campaign
   const activeCampaign = productCampaigns.data?.[0];
   const campaignProduct = activeCampaign?.products.find((cp) => cp.productId === product.id);
-  const campaignPrice = campaignProduct?.specialPrice || (price * (100 - (campaignProduct?.discountPercentage || 0)) / 100);
-  const hasDiscount = !!campaignProduct && (campaignPrice < price);
+  const campaignPrice = price === undefined ? undefined : campaignProduct?.specialPrice || (price * (100 - (campaignProduct?.discountPercentage || 0)) / 100);
+  const hasDiscount = price !== undefined && !!campaignProduct && campaignPrice !== undefined && (campaignPrice < price);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('nav.home'), path: '/' },
@@ -82,6 +91,17 @@ export function ProductPage() {
     setQuantity(Math.max(1, quantity + delta));
   };
 
+  const handleAddToCart = async () => {
+    if (product.status !== 'ACTIVE' || price === undefined) return;
+    setCartNotice(null);
+    try {
+      await addToCart.mutateAsync({ productId: product.id, quantity });
+      setCartNotice('added');
+    } catch {
+      setCartNotice('error');
+    }
+  };
+
   return (
     <div className={styles.productPage}>
       <Container>
@@ -92,8 +112,8 @@ export function ProductPage() {
           {/* Product Images Gallery */}
           <div className={styles.gallery}>
             <div className={styles.mainImage}>
-              {product.thumbnailUrl ? (
-                <img src={product.thumbnailUrl} alt={translation?.name} />
+              {selectedVariant?.imageUrl || product.thumbnailUrl ? (
+                <img src={selectedVariant?.imageUrl || product.thumbnailUrl} alt={translation?.name} />
               ) : (
                 <div className={styles.imagePlaceholder} />
               )}
@@ -112,6 +132,19 @@ export function ProductPage() {
           {/* Product Info */}
           <div className={styles.productInfo}>
             <h1 className={styles.productName}>{translation?.name}</h1>
+
+            {!!product.variants?.filter((variant) => variant.isActive).length && (
+              <div className={styles.variantSelector}>
+                <p className={styles.variantLabel}>{locale === 'ru' ? 'Вариант' : 'Түрү'}</p>
+                <div className={styles.variantOptions}>
+                  {product.variants.filter((variant) => variant.isActive).map((variant) => (
+                    <button key={variant.id} type="button" className={`${styles.variantOption} ${selectedVariantId === variant.id ? styles.variantSelected : ''}`} onClick={() => setSelectedVariantId(variant.id)} aria-pressed={selectedVariantId === variant.id}>
+                      {variant.imageUrl && <img src={variant.imageUrl} alt="" />}{localizedVariantName(variant.name)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {activeCampaign && (
               <Link to={`/campaigns/${activeCampaign.slug}`} className={styles.campaignTag}>
@@ -137,10 +170,10 @@ export function ProductPage() {
             </div>
 
             <div className={styles.priceSection}>
-              {hasDiscount && (
-                <p className={styles.oldPrice}>{price.toLocaleString()} сом</p>
+              {hasDiscount && price !== undefined && (
+                <p className={styles.oldPrice}>{Number(price).toLocaleString()} сом</p>
               )}
-              <p className={styles.price}>{(hasDiscount ? campaignPrice : price).toLocaleString()} сом</p>
+              <p className={styles.price}>{price === undefined ? t('product.priceToConfirm') : `${Number(hasDiscount ? campaignPrice : price).toLocaleString()} сом`}</p>
               {hasDiscount && campaignProduct && (
                 <p className={styles.discount}>
                   {locale === 'ru' ? 'Скидка' : 'Арзандатуу'}: {campaignProduct.discountPercentage}%
@@ -179,14 +212,15 @@ export function ProductPage() {
             </div>
 
             <div className={styles.actions}>
-              <button className={styles.addToCartBtn} disabled={product.status !== 'ACTIVE'}>
+              <button className={styles.addToCartBtn} onClick={() => void handleAddToCart()} disabled={product.status !== 'ACTIVE' || price === undefined || addToCart.isPending}>
                 <ShoppingCart className={styles.btnIcon} />
-                <span>{t('product.addToCart')}</span>
+                <span>{addToCart.isPending ? t('common.loading') : t('product.addToCart')}</span>
               </button>
-              <button className={styles.favoriteBtn}>
-                <Heart className={styles.btnIcon} />
+              <button className={`${styles.favoriteBtn} ${favorites.isFavorite(product.id) ? styles.favoriteActive : ''}`} onClick={() => favorites.toggleFavorite(product.id)} aria-label={favorites.isFavorite(product.id) ? t('product.removeFromFavorites') : t('product.addToFavorites')} aria-pressed={favorites.isFavorite(product.id)}>
+                <Heart className={styles.btnIcon} fill={favorites.isFavorite(product.id) ? 'currentColor' : 'none'} />
               </button>
             </div>
+            {cartNotice && <p role="status" aria-live="polite">{cartNotice === 'added' ? t('product.addedToCart') : t('product.addToCartError')}</p>}
           </div>
         </div>
 

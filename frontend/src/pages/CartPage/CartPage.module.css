@@ -60,7 +60,8 @@
 .itemImage {
   width: 5rem;
   height: 5rem;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: #ffffff;
+  object-fit: contain;
   border-radius: 0.5rem;
   flex-shrink: 0;
 }

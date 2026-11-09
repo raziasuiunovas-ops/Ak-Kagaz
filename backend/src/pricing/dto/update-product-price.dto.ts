@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { IsNumber, IsString, IsBoolean, IsOptional, IsDateString, Min } from 'class-validator';
+import { IsNumber, IsString, IsBoolean, IsOptional, IsDateString, Min, MaxLength } from 'class-validator';
 
 export class UpdateProductPriceDto {
   @IsNumber()
@@ -19,6 +19,15 @@ export class UpdateProductPriceDto {
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  isEstimate?: boolean;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(1000)
+  estimateBasis?: string | null;
 
   @IsDateString()
   @IsOptional()

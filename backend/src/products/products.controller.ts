@@ -44,7 +44,6 @@ export class ProductsController {
     @Query('locale') locale?: string,
     @Query('categoryId') categoryId?: string,
     @Query('brandId') brandId?: string,
-    @Query('status') status?: string,
     @Query('search') search?: string,
   ) {
     const pageNum = page ? parseInt(page, 10) : 1;
@@ -56,7 +55,7 @@ export class ProductsController {
       locale,
       categoryId,
       brandId,
-      status,
+      'ACTIVE',
       search,
     );
   }
@@ -65,6 +64,34 @@ export class ProductsController {
    * Get a single product by ID
    * Public endpoint
    */
+  @Get('attributes')
+  async findAttributes() {
+    return this.productsService.findAttributes();
+  }
+
+  @Get('admin/list')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  async findAllForAdmin(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('locale') locale?: string,
+    @Query('categoryId') categoryId?: string,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+  ) {
+    return this.productsService.findAll(
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 100,
+      locale,
+      categoryId,
+      undefined,
+      status,
+      search,
+      true,
+    );
+  }
+
   @Get('id/:id')
   async findOne(
     @Param('id') id: string,

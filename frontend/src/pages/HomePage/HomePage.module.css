@@ -112,7 +112,7 @@
 /* Categories Grid */
 .categoriesGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
@@ -138,6 +138,9 @@
   height: 5rem;
   background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
   border-radius: 0.5rem;
+  object-fit: contain;
+  padding: 0.5rem;
+  box-sizing: border-box;
 }
 
 .categoryName {
@@ -325,7 +328,7 @@
   }
 
   .categoriesGrid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .productsGrid {
@@ -343,6 +346,10 @@
 
 /* Desktop */
 @media (min-width: 1024px) {
+  .categoriesGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .heroTitle {
     font-size: 3rem;
   }
@@ -350,6 +357,10 @@
   .productsGrid {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+@media (min-width: 1280px) {
+  .categoriesGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 /* Campaigns Grid */

@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom';
 import { Container } from '@/components/Container';
+import { CategoryCard } from '@/components/CategoryCard/CategoryCard';
 import { Breadcrumbs, type BreadcrumbItem } from '@/components/Breadcrumbs';
 import { BackButton } from '@/components/BackButton';
+import { LoadingState } from '@/components/LoadingState';
+import { ErrorState } from '@/components/ErrorState';
+import { useCategories } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './CatalogPage.module.css';
 
 export function CatalogPage() {
-  const { t } = useLocale();
-
+  const { t, locale } = useLocale();
+  const categories = useCategories({ locale, isActive: true, limit: 100 });
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('nav.home'), path: '/' },
     { label: t('nav.catalog') },
@@ -18,25 +21,18 @@ export function CatalogPage() {
       <Container>
         <BackButton />
         <Breadcrumbs items={breadcrumbs} />
-        
         <h1 className={styles.title}>{t('catalog.title')}</h1>
-
-        <div className={styles.categoriesGrid}>
-          {/* Future: Dynamic categories from API */}
-          {Array.from({ length: 8 }).map((_, index) => (
-            <Link 
-              key={index} 
-              to={`/catalog/category-${index + 1}`} 
-              className={styles.categoryCard}
-            >
-              <div className={styles.categoryImage} />
-              <div className={styles.categoryInfo}>
-                <h2 className={styles.categoryName}>Категория {index + 1}</h2>
-                <p className={styles.categoryCount}>000 товаров</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {categories.isLoading ? (
+          <LoadingState message={t('common.loading')} />
+        ) : categories.error ? (
+          <ErrorState message={categories.error.message} onRetry={() => void categories.refetch()} />
+        ) : categories.data?.data.length ? (
+          <div className={styles.categoriesGrid}>
+            {categories.data.data.map((category) => <CategoryCard key={category.id} category={category} locale={locale} count={category._count?.products ?? 0} />)}
+          </div>
+        ) : (
+          <p>{locale === 'ru' ? 'Категории пока не добавлены.' : 'Азырынча бөлүмдөр кошула элек.'}</p>
+        )}
       </Container>
     </div>
   );

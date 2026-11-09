@@ -416,9 +416,9 @@ export class RecommendationsService {
     const productIds = popularProductIds.map((p) => p.productId);
 
     if (productIds.length === 0) {
-      // Fallback to newest products
+      // With no order history, show the admin-curated featured selection.
       return this.prisma.product.findMany({
-        where: { status: 'ACTIVE' },
+        where: { status: 'ACTIVE', isFeatured: true },
         include: {
           translations: true,
           images: { orderBy: { sortOrder: 'asc' }, take: 1 },
@@ -427,7 +427,7 @@ export class RecommendationsService {
             include: { tier: true },
           },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { updatedAt: 'desc' },
         take: limit,
       });
     }

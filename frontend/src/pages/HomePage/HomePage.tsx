@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import { Container } from '@/components/Container';
+import { CategoryCard } from '@/components/CategoryCard/CategoryCard';
 import { RecommendationsBlock } from '@/components/RecommendationsBlock';
+import { LoadingState } from '@/components/LoadingState';
+import { ErrorState } from '@/components/ErrorState';
 import { CampaignBanner } from '@/components/CampaignBanner';
 import { RepeatPurchases } from '@/components/RepeatPurchases';
 import { useLocale } from '@/contexts/LocaleContext';
@@ -11,6 +14,8 @@ import {
   usePopularProducts,
   useTrendingProducts,
   useActiveCampaigns,
+  useCategories,
+  useProducts,
 } from '@/hooks';
 import { isAuthenticated, getSessionId } from '@/utils/session';
 import styles from './HomePage.module.css';
@@ -36,6 +41,7 @@ export function HomePage() {
     limit: 8,
     locale,
   });
+  const publishedProducts = useProducts({ locale, status: 'ACTIVE', limit: 8 });
 
   const trendingProducts = useTrendingProducts({
     limit: 8,
@@ -43,9 +49,17 @@ export function HomePage() {
   });
 
   const activeCampaigns = useActiveCampaigns(locale);
+  const categories = useCategories({ locale, isActive: true, limit: 100 });
 
   // Choose which recommendations to show
   const recommendations = authenticated ? personalRecommendations : guestRecommendations;
+  const popularList = popularProducts.data?.length
+    ? popularProducts.data
+    : publishedProducts.data?.data ?? [];
+  const popularLoading = popularProducts.isLoading || (!popularProducts.data?.length && publishedProducts.isLoading);
+  const popularError = !popularList.length && popularProducts.error && publishedProducts.error
+    ? publishedProducts.error
+    : null;
 
   return (
     <div className={styles.homePage}>
@@ -74,23 +88,15 @@ export function HomePage() {
             <h2 className={styles.sectionTitle}>{t('home.categories.title')}</h2>
           </div>
           <div className={styles.categoriesGrid}>
-            {/* Future: Dynamic categories from API */}
-            <div className={styles.categoryCardPlaceholder}>
-              <div className={styles.categoryImage} />
-              <h3 className={styles.categoryName}>Категория 1</h3>
-            </div>
-            <div className={styles.categoryCardPlaceholder}>
-              <div className={styles.categoryImage} />
-              <h3 className={styles.categoryName}>Категория 2</h3>
-            </div>
-            <div className={styles.categoryCardPlaceholder}>
-              <div className={styles.categoryImage} />
-              <h3 className={styles.categoryName}>Категория 3</h3>
-            </div>
-            <div className={styles.categoryCardPlaceholder}>
-              <div className={styles.categoryImage} />
-              <h3 className={styles.categoryName}>Категория 4</h3>
-            </div>
+            {categories.isLoading ? (
+              <LoadingState message={t('common.loading')} />
+            ) : categories.error ? (
+              <ErrorState message={t('home.categories.error')} onRetry={() => void categories.refetch()} />
+            ) : categories.data?.data.length ? (
+              categories.data.data.map((category) => <CategoryCard key={category.id} category={category} locale={locale} />)
+            ) : (
+              <p>{t('home.categories.empty')}</p>
+            )}
           </div>
         </Container>
       </section>
@@ -118,11 +124,13 @@ export function HomePage() {
         <Container>
           <RecommendationsBlock
             title={t('home.popular.title')}
-            products={popularProducts.data}
-            isLoading={popularProducts.isLoading}
-            error={popularProducts.error}
+            products={popularList}
+            isLoading={popularLoading}
+            error={popularError}
             linkTo="/catalog?sort=popular"
             linkText={t('common.showMore')}
+            emptyMessage={t('recommendations.empty')}
+            onRetry={() => { void popularProducts.refetch(); void publishedProducts.refetch(); }}
           />
         </Container>
       </section>

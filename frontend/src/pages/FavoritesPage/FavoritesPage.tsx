@@ -1,21 +1,43 @@
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { Container } from '@/components/Container';
 import { BackButton } from '@/components/BackButton';
 import { EmptyState } from '@/components/EmptyState';
+import { LoadingState } from '@/components/LoadingState';
+import { ErrorState } from '@/components/ErrorState';
+import { ProductCard } from '@/components/ProductCard';
+import { useFavorites, useProducts } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './FavoritesPage.module.css';
 
 export function FavoritesPage() {
-  const { t } = useLocale();
-  const favorites: any[] = []; // Future: Real favorites data
+  const { t, locale } = useLocale();
+  const favorites = useFavorites();
+  const products = useProducts({ locale, status: 'ACTIVE', limit: 100 });
+  const favoriteProducts = products.data?.data.filter((product) => favorites.productIds.includes(product.id)) ?? [];
+  const error = favorites.error ?? products.error;
 
-  if (favorites.length === 0) {
-    return (
-      <div className={styles.favoritesPage}>
-        <Container>
-          <BackButton />
-          <h1 className={styles.title}>{t('favorites.title')}</h1>
+  return (
+    <div className={styles.favoritesPage}>
+      <Container>
+        <BackButton />
+        <h1 className={styles.title}>{t('favorites.title')}</h1>
+        {favorites.isLoading || products.isLoading ? (
+          <LoadingState message={t('common.loading')} />
+        ) : error ? (
+          <ErrorState message={error.message} onRetry={() => { void favorites.refetch(); void products.refetch(); }} />
+        ) : favoriteProducts.length ? (
+          <div className={styles.productsGrid}>
+            {favoriteProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isFavorite
+                onToggleFavorite={favorites.toggleFavorite}
+              />
+            ))}
+          </div>
+        ) : (
           <EmptyState
             icon={<Heart className={styles.emptyIcon} />}
             title={t('favorites.empty')}
@@ -25,40 +47,7 @@ export function FavoritesPage() {
               </Link>
             }
           />
-        </Container>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.favoritesPage}>
-      <Container>
-        <BackButton />
-        <h1 className={styles.title}>{t('favorites.title')}</h1>
-
-        <div className={styles.productsGrid}>
-          {/* Future: Dynamic favorites */}
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className={styles.productCard}>
-              <Link to={`/product/product-${index + 1}`} className={styles.productLink}>
-                <div className={styles.productImage} />
-                <div className={styles.productInfo}>
-                  <h3 className={styles.productName}>Товар {index + 1}</h3>
-                  <p className={styles.productPrice}>000 сом</p>
-                </div>
-              </Link>
-              <div className={styles.productActions}>
-                <button className={styles.addToCartBtn}>
-                  <ShoppingCart className={styles.btnIcon} />
-                  <span>{t('product.addToCart')}</span>
-                </button>
-                <button className={styles.removeBtn}>
-                  <Heart className={styles.btnIcon} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        )}
       </Container>
     </div>
   );

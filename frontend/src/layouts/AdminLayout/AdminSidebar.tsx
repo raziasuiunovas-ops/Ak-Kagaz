@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { Icon } from '@/components/Icon';
+import { Menu } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
 interface AdminSidebarProps {
@@ -11,7 +12,7 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ isOpen, isCollapsed, onClose, onToggleCollapse }: AdminSidebarProps) {
   const menuItems = [
-    { path: '/admin', label: 'Dashboard', icon: 'dashboard' },
+    { path: '/admin', label: 'Панель управления', icon: 'dashboard' },
     { path: '/admin/products', label: 'Товары', icon: 'inventory_2' },
     { path: '/admin/categories', label: 'Категории', icon: 'folder_open' },
     { path: '/admin/orders', label: 'Заказы', icon: 'shopping_cart' },
@@ -31,15 +32,19 @@ export function AdminSidebar({ isOpen, isCollapsed, onClose, onToggleCollapse }:
     <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''} ${isCollapsed ? styles.collapsed : ''}`}>
       <div className={styles.sidebarHeader}>
         <div className={styles.logo}>
+          <img 
+            src="/icons/ak-kagaz-icon-192-transparent.png" 
+            alt="AK KAGAZ" 
+            className={styles.logoImage}
+          />
           {!isCollapsed && <span className={styles.logoText}>АК КАГАЗ</span>}
-          {isCollapsed && <span className={styles.logoIcon}>АК</span>}
         </div>
         <button
           className={styles.collapseBtn}
           onClick={onToggleCollapse}
           aria-label="Toggle sidebar"
         >
-          {isCollapsed ? '→' : '←'}
+          <Menu size={20} />
         </button>
       </div>
 

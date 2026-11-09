@@ -118,11 +118,18 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
-.submitBtn:hover {
+.submitBtn:hover:not(:disabled) {
   background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .divider {
@@ -205,11 +212,26 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   text-align: center;
+  line-height: 1.5;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hint {
   font-size: 0.8125rem;
   color: #6b7280;
+  line-height: 1.4;
+  margin-top: 0.25rem;
 }
 
 .passwordWrapper {

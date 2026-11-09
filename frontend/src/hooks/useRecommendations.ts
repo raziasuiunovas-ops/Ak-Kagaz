@@ -96,6 +96,9 @@ export function usePopularProducts(params: RecommendationParams = {}) {
 
   return useQuery<Product[]>({
     queryKey: ['recommendations', 'popular', { limit, locale }],
+    staleTime: 30 * 1000,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
     queryFn: () =>
       apiClient.get<Product[]>('/recommendations/popular', {
         params: { limit, locale },

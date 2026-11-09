@@ -116,6 +116,19 @@
   margin-top: 1.5rem;
 }
 
+.emptyState {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  color: #6b7280;
+}
+
+.emptyState a {
+  color: #2563eb;
+  font-weight: 600;
+}
+
 .productCard {
   display: flex;
   flex-direction: column;

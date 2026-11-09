@@ -60,6 +60,7 @@ const translationsRu: Record<string, string> = {
   'common.delete': 'Удалить',
   'common.edit': 'Редактировать',
   'common.back': 'Назад',
+  'common.optional': 'необязательно',
   'common.close': 'Закрыть',
   'common.search': 'Поиск',
   'common.loading': 'Загрузка...',
@@ -91,6 +92,8 @@ const translationsRu: Record<string, string> = {
   // Footer
   'footer.shopName': 'АК КАГАЗ',
   'footer.description': 'Интернет-магазин канцелярских товаров в Оше',
+  'footer.developer.tagline': 'Цифровые решения для бизнеса',
+  'footer.developer.by': 'Разработано',
   'footer.categories': 'Категории',
   'footer.information': 'Информация',
   'footer.contacts': 'Контакты',
@@ -114,6 +117,8 @@ const translationsRu: Record<string, string> = {
   'home.hero.benefit.delivery': 'Удобная доставка',
   'home.hero.benefit.care': 'Забота о клиентах',
   'home.categories.title': 'Категории товаров',
+  'home.categories.empty': 'Категории пока не добавлены.',
+  'home.categories.error': 'Не удалось загрузить категории. Попробуйте ещё раз.',
   'home.popular.title': 'Популярные товары',
   'home.new.title': 'Новинки',
   'home.about.title': 'О магазине АК КАГАЗ',
@@ -131,6 +136,9 @@ const translationsRu: Record<string, string> = {
   
   // Product
   'product.addToCart': 'Добавить в корзину',
+  'product.addedToCart': 'Добавлено в корзину',
+  'product.addToCartError': 'Не удалось добавить товар в корзину',
+  'product.priceToConfirm': 'Уточнить цену',
   'product.addToFavorites': 'В избранное',
   'product.removeFromFavorites': 'Удалить из избранного',
   'product.inStock': 'В наличии',
@@ -149,6 +157,9 @@ const translationsRu: Record<string, string> = {
   'cart.delivery': 'Доставка',
   'cart.total': 'Итого',
   'cart.minOrder': 'Минимальная сумма заказа — 400 сом',
+  'cart.updateError': 'Не удалось обновить корзину. Попробуйте ещё раз.',
+  'cart.decreaseQuantity': 'Уменьшить количество',
+  'cart.increaseQuantity': 'Увеличить количество',
   'cart.remove': 'Удалить',
   
   // Checkout
@@ -207,6 +218,15 @@ const translationsRu: Record<string, string> = {
   
   // Profile
   'profile.title': 'Профиль',
+  'profile.guest.title': 'Личный кабинет',
+  'profile.guest.subtitle': 'Войдите или зарегистрируйтесь, чтобы получить доступ к личному кабинету',
+  'profile.guest.benefits': 'Преимущества регистрации',
+  'profile.guest.feature1Title': 'История заказов',
+  'profile.guest.feature1Desc': 'Отслеживайте статус ваших заказов и просматривайте историю покупок',
+  'profile.guest.feature2Title': 'Избранное',
+  'profile.guest.feature2Desc': 'Сохраняйте понравившиеся товары в избранное',
+  'profile.guest.feature3Title': 'Персональные данные',
+  'profile.guest.feature3Desc': 'Управляйте своими данными и настройками аккаунта',
   'profile.orders': 'Мои заказы',
   'profile.ordersSubtitle': 'История ваших заказов',
   'profile.personalInfo': 'Личные данные',
@@ -278,6 +298,7 @@ const translationsKy: Record<string, string> = {
   'common.delete': 'Өчүрүү',
   'common.edit': 'Түзөтүү',
   'common.back': 'Артка',
+  'common.optional': 'милдеттүү эмес',
   'common.close': 'Жабуу',
   'common.search': 'Издөө',
   'common.loading': 'Жүктөлүүдө...',
@@ -309,6 +330,8 @@ const translationsKy: Record<string, string> = {
   // Footer
   'footer.shopName': 'АК КАГАЗ',
   'footer.description': 'Ош шаарындагы кеңсе буюмдарынын онлайн дүкөнү',
+  'footer.developer.tagline': 'Бизнес үчүн санариптик чечимдер',
+  'footer.developer.by': 'Иштеп чыккан',
   'footer.categories': 'Категориялар',
   'footer.information': 'Маалымат',
   'footer.contacts': 'Байланыштар',
@@ -332,6 +355,8 @@ const translationsKy: Record<string, string> = {
   'home.hero.benefit.delivery': 'Ыңгайлуу жеткирүү',
   'home.hero.benefit.care': 'Кардарларга камкордук',
   'home.categories.title': 'Товар категориялары',
+  'home.categories.empty': 'Азырынча категориялар жок.',
+  'home.categories.error': 'Категорияларды жүктөө мүмкүн болгон жок. Кайра аракет кылыңыз.',
   'home.popular.title': 'Популярдуу товарлар',
   'home.new.title': 'Жаңылыктар',
   'home.about.title': 'АК КАГАЗ дүкөнү жөнүндө',
@@ -349,6 +374,9 @@ const translationsKy: Record<string, string> = {
   
   // Product
   'product.addToCart': 'Себетке кошуу',
+  'product.addedToCart': 'Себетке кошулду',
+  'product.addToCartError': 'Товарды себетке кошуу мүмкүн болгон жок',
+  'product.priceToConfirm': 'Баасын тактоо',
   'product.addToFavorites': 'Тандалмаларга',
   'product.removeFromFavorites': 'Тандалмалардан өчүрүү',
   'product.inStock': 'Бар',
@@ -367,6 +395,9 @@ const translationsKy: Record<string, string> = {
   'cart.delivery': 'Жеткирүү',
   'cart.total': 'Жалпы',
   'cart.minOrder': 'Минималдуу буюртма суммасы — 400 сом',
+  'cart.updateError': 'Себетти жаңыртуу мүмкүн болгон жок. Кайра аракет кылыңыз.',
+  'cart.decreaseQuantity': 'Санын азайтуу',
+  'cart.increaseQuantity': 'Санын көбөйтүү',
   'cart.remove': 'Өчүрүү',
   
   // Checkout
@@ -425,6 +456,15 @@ const translationsKy: Record<string, string> = {
   
   // Profile
   'profile.title': 'Профиль',
+  'profile.guest.title': 'Жеке кабинет',
+  'profile.guest.subtitle': 'Жеке кабинетке кирүү үчүн кириңиз же катталыңыз',
+  'profile.guest.benefits': 'Каттоонун артыкчылыктары',
+  'profile.guest.feature1Title': 'Буюртмалар тарыхы',
+  'profile.guest.feature1Desc': 'Буюртмаларыңыздын статусун көзөмөлдөп, сатып алуулар тарыхын кара',
+  'profile.guest.feature2Title': 'Тандалмалар',
+  'profile.guest.feature2Desc': 'Жаккан товарларыңызды тандалмаларга сактаңыз',
+  'profile.guest.feature3Title': 'Жеке маалыматтар',
+  'profile.guest.feature3Desc': 'Жеке маалыматтарыңызды жана аккаунт параметрлерин башкарыңыз',
   'profile.orders': 'Менин буюртмаларым',
   'profile.ordersSubtitle': 'Буюртмалар тарыхы',
   'profile.personalInfo': 'Жеке маалыматтар',

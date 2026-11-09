@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { IsString, IsNotEmpty, IsNumber, IsBoolean, IsOptional, IsDateString, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsBoolean, IsOptional, IsDateString, Min, ValidateIf, MaxLength } from 'class-validator';
 
 export class CreateProductPriceDto {
   @IsString()
@@ -10,9 +10,10 @@ export class CreateProductPriceDto {
   @IsNotEmpty({ message: 'Tier ID is required' })
   tierId: string;
 
+  @ValidateIf((dto: CreateProductPriceDto) => !dto.isEstimate)
   @IsNumber()
   @Min(0, { message: 'Purchase price must be at least 0' })
-  purchasePrice: number;
+  purchasePrice?: number;
 
   @IsNumber()
   @Min(0, { message: 'Selling price must be at least 0' })
@@ -25,6 +26,15 @@ export class CreateProductPriceDto {
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  isEstimate?: boolean;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(1000)
+  estimateBasis?: string;
 
   @IsDateString()
   @IsOptional()

@@ -17,17 +17,7 @@
   animation: fadeIn 0.3s ease;
 }
 
-.scrollButton:hover {
-  background: #26577C;
-  border-color: #26577C;
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(38, 87, 124, 0.25);
-}
-
-.scrollButton:hover .icon {
-  color: white;
-}
-
+/* Убираем hover в светлой теме */
 .scrollButton:active {
   transform: translateY(-2px);
 }
@@ -37,6 +27,17 @@
   height: 24px;
   color: #26577C;
   transition: color 0.2s ease;
+}
+
+/* Темная тема - стиль без hover эффекта */
+[data-theme='dark'] .scrollButton {
+  background: #2d3b4e;
+  border-color: #334155;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .icon {
+  color: #e2e8f0;
 }
 
 @keyframes fadeIn {

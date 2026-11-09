@@ -13,10 +13,20 @@ export class CartController {
     return this.cartService.getOrCreateCart(req.user.userId);
   }
 
+  @Get('session/:sessionId')
+  async getSessionCart(@Param('sessionId') sessionId: string) {
+    return this.cartService.getSessionCart(sessionId);
+  }
+
   @Post('items')
   @UseGuards(JwtAuthGuard)
   async addItem(@Body() dto: AddToCartDto, @Request() req: any) {
     return this.cartService.addItem(dto, req.user.userId);
+  }
+
+  @Post('session/:sessionId/items')
+  async addSessionItem(@Param('sessionId') sessionId: string, @Body() dto: AddToCartDto) {
+    return this.cartService.addSessionItem(sessionId, dto);
   }
 
   @Put(':cartId/items/:itemId')
@@ -25,11 +35,22 @@ export class CartController {
     return this.cartService.updateItem(cartId, itemId, dto);
   }
 
+  @Put('session/:sessionId/items/:itemId')
+  async updateSessionItem(@Param('sessionId') sessionId: string, @Param('itemId') itemId: string, @Body() dto: UpdateCartItemDto) {
+    return this.cartService.updateSessionItem(sessionId, itemId, dto);
+  }
+
   @Delete(':cartId/items/:itemId')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeItem(@Param('cartId') cartId: string, @Param('itemId') itemId: string) {
     await this.cartService.removeItem(cartId, itemId);
+  }
+
+  @Delete('session/:sessionId/items/:itemId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeSessionItem(@Param('sessionId') sessionId: string, @Param('itemId') itemId: string) {
+    await this.cartService.removeSessionItem(sessionId, itemId);
   }
 
   @Delete(':cartId')

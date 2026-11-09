@@ -48,7 +48,11 @@ Thumbs.db
 **/dev-dist
 
 # Prisma
-prisma/migrations
+# Keep migration history in source control so schema changes can be reproduced.
+!prisma/migrations/
+!prisma/migrations/**/
+!prisma/migrations/**/*.sql
+!prisma/migrations/migration_lock.toml
 
 # NestJS
 dist

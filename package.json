@@ -19,6 +19,8 @@
     "build:frontend": "npm run build --workspace=@ak-kagaz/frontend",
     "build:backend": "npm run build --workspace=@ak-kagaz/backend",
     "prisma:seed": "tsx prisma/seed.ts",
+    "catalog:import": "tsx scripts/import-catalog.ts",
+    "catalog:verify": "tsx scripts/check-catalog-import.ts",
     "prebuild": "node -p \"'Build Node.js ' + process.version\""
   },
   "keywords": [

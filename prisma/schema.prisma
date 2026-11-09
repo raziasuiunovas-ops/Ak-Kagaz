@@ -461,6 +461,7 @@ model Product {
   categoryId   String
   brandId      String?
   status       ProductStatus @default(ACTIVE)
+  isFeatured   Boolean       @default(false)
   hasVariants  Boolean       @default(false)
   thumbnailUrl String?
   weight       Float?
@@ -608,10 +609,12 @@ model ProductPrice {
   id             String    @id @default(cuid())
   productId      String
   tierId         String
-  purchasePrice  Decimal   @db.Decimal(10, 2)
+  purchasePrice  Decimal?  @db.Decimal(10, 2)
   sellingPrice   Decimal   @db.Decimal(10, 2)
   currency       String    @default("KGS")
   isActive       Boolean   @default(true)
+  isEstimate     Boolean   @default(false)
+  estimateBasis  String?
   effectiveFrom  DateTime  @default(now())
   effectiveUntil DateTime?
   createdAt      DateTime  @default(now())

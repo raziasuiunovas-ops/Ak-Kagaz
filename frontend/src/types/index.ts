@@ -21,10 +21,7 @@ export interface PaginationParams {
 
 export interface PaginatedResponse<T> {
   data: T[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  meta: { total: number; page: number; limit: number; totalPages: number };
 }
 
 // Error response
@@ -57,6 +54,7 @@ export interface Category {
   updatedAt: string;
   translations: CategoryTranslation[];
   children?: Category[];
+  _count?: { products: number; children?: number };
 }
 
 // ============================================================
@@ -84,6 +82,22 @@ export interface ProductImage {
   sortOrder: number;
 }
 
+export interface ProductAttribute {
+  id: string;
+  name: string;
+  displayNameRu: string;
+  displayNameKy: string;
+  type: 'TEXT' | 'NUMBER' | 'COLOR' | 'SIZE';
+}
+
+export interface ProductAttributeValue {
+  id: string;
+  productId: string;
+  attributeId: string;
+  value: string;
+  attribute: ProductAttribute;
+}
+
 export interface ProductVariant {
   id: string;
   productId: string;
@@ -98,10 +112,12 @@ export interface ProductPrice {
   id: string;
   productId: string;
   tierId: string;
-  purchasePrice: number;
+  purchasePrice: number | null;
   sellingPrice: number;
   currency: string;
   isActive: boolean;
+  isEstimate: boolean;
+  estimateBasis?: string;
   effectiveFrom: string;
   effectiveUntil?: string;
 }
@@ -113,6 +129,7 @@ export interface Product {
   categoryId: string;
   brandId?: string;
   status: ProductStatus;
+  isFeatured: boolean;
   hasVariants: boolean;
   thumbnailUrl?: string;
   weight?: number;
@@ -124,6 +141,7 @@ export interface Product {
   translations: ProductTranslation[];
   images: ProductImage[];
   variants?: ProductVariant[];
+  attributes?: ProductAttributeValue[];
   prices: ProductPrice[];
   category?: Category;
 }

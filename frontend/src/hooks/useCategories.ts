@@ -15,6 +15,9 @@ export function useCategories(params: UseCategoriesParams = {}) {
 
   return useQuery<PaginatedResponse<Category>>({
     queryKey: ['categories', { page, limit, locale, parentId, isActive }],
+    staleTime: 30 * 1000,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
     queryFn: () =>
       apiClient.get<PaginatedResponse<Category>>('/categories', {
         params: {

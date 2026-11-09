@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ProductCard } from '@/components/ProductCard';
 import { LoadingState } from '@/components/LoadingState';
 import { EmptyState } from '@/components/EmptyState';
+import { ErrorState } from '@/components/ErrorState';
 import type { Product } from '@/types';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './RecommendationsBlock.module.css';
@@ -18,6 +19,7 @@ interface RecommendationsBlockProps {
   onToggleFavorite?: (productId: string) => void;
   getFavoriteStatus?: (productId: string) => boolean;
   emptyMessage?: string;
+  onRetry?: () => void;
   className?: string;
 }
 
@@ -32,6 +34,7 @@ export function RecommendationsBlock({
   onToggleFavorite,
   getFavoriteStatus,
   emptyMessage,
+  onRetry,
   className,
 }: RecommendationsBlockProps) {
   const { t } = useLocale();
@@ -48,7 +51,12 @@ export function RecommendationsBlock({
   }
 
   if (error) {
-    return null; // Quietly fail - recommendations are not critical
+    return (
+      <section className={`${styles.block} ${className || ''}`}>
+        <div className={styles.header}><h2 className={styles.title}>{title}</h2></div>
+        <ErrorState message={error.message} onRetry={onRetry} />
+      </section>
+    );
   }
 
   if (!products || products.length === 0) {
