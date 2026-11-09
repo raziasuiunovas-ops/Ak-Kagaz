@@ -72,6 +72,11 @@ class ApiClient {
         statusCode: response.status,
       }));
 
+      // НЕ перенаправляем при 401 в админке - пусть пользователь сам решает
+      // if (response.status === 401) {
+      //   window.location.href = '/';
+      // }
+
       throw new Error(error.message || `HTTP error ${response.status}`);
     }
 
