@@ -7,6 +7,7 @@ import { LoadingState } from '@/components/LoadingState';
 import { ErrorState } from '@/components/ErrorState';
 import { CampaignBanner } from '@/components/CampaignBanner';
 import { RepeatPurchases } from '@/components/RepeatPurchases';
+import { HeroSection } from '@/components/Hero';
 import { useLocale } from '@/contexts/LocaleContext';
 import {
   usePersonalRecommendations,
@@ -53,10 +54,13 @@ export function HomePage() {
 
   // Choose which recommendations to show
   const recommendations = authenticated ? personalRecommendations : guestRecommendations;
-  const popularList = popularProducts.data?.length
-    ? popularProducts.data
-    : publishedProducts.data?.data ?? [];
-  const popularLoading = popularProducts.isLoading || (!popularProducts.data?.length && publishedProducts.isLoading);
+  const popularCandidates = popularProducts.data ?? [];
+  const popularIds = new Set(popularCandidates.map((product) => product.id));
+  const popularList = [
+    ...popularCandidates,
+    ...(publishedProducts.data?.data ?? []).filter((product) => !popularIds.has(product.id)),
+  ].slice(0, 8);
+  const popularLoading = popularProducts.isLoading || (popularList.length < 8 && publishedProducts.isLoading);
   const popularError = !popularList.length && popularProducts.error && publishedProducts.error
     ? publishedProducts.error
     : null;
@@ -64,22 +68,7 @@ export function HomePage() {
   return (
     <div className={styles.homePage}>
       {/* Hero Section */}
-      <section className={styles.hero}>
-        <Container>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>{t('home.hero.title')}</h1>
-            <p className={styles.heroSubtitle}>{t('home.hero.subtitle')}</p>
-            <Link to="/catalog" className={styles.heroCta}>
-              <span>{t('home.hero.cta')}</span>
-              <ArrowRight className={styles.heroCtaIcon} />
-            </Link>
-          </div>
-          <div className={styles.heroVisual}>
-            {/* Placeholder for future hero image/illustration */}
-            <div className={styles.heroVisualPlaceholder} />
-          </div>
-        </Container>
-      </section>
+      <HeroSection />
 
       {/* Categories Section */}
       <section className={styles.section}>

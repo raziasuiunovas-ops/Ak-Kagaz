@@ -93,8 +93,8 @@ export function ProductsPage() {
         queryClient.invalidateQueries({ queryKey: ['products'] }),
         queryClient.invalidateQueries({ queryKey: ['product'] }),
         queryClient.invalidateQueries({ queryKey: ['categories'] }),
-        queryClient.invalidateQueries({ queryKey: ['popular-products'] }),
-        queryClient.invalidateQueries({ queryKey: ['trending-products'] }),
+        queryClient.invalidateQueries({ queryKey: ['recommendations', 'popular'] }),
+        queryClient.invalidateQueries({ queryKey: ['recommendations', 'trending'] }),
       ]);
       setDraft(null);
       setErrorMessage('');
@@ -115,6 +115,7 @@ export function ProductsPage() {
       await queryClient.invalidateQueries({ queryKey: ['admin', 'prices'] });
       await queryClient.invalidateQueries({ queryKey: ['products'] });
       await queryClient.invalidateQueries({ queryKey: ['product'] });
+      await queryClient.invalidateQueries({ queryKey: ['recommendations', 'popular'] });
       setPriceDraft(null); setErrorMessage('');
     },
     onError: (error: Error) => setErrorMessage(error.message),
@@ -170,7 +171,7 @@ export function ProductsPage() {
             const category = categories.data?.data.find((item) => item.id === product.categoryId);
             const categoryName = category?.translations.find((item) => item.locale === 'ru')?.name ?? '—';
             const price = prices.data?.data.find((item) => item.productId === product.id);
-            return <tr key={product.id}><td>{product.thumbnailUrl && <img className={styles.thumbnail} src={product.thumbnailUrl} alt="" />}</td><td>{translation?.name ?? product.slug}</td><td>{product.sku}</td><td>{categoryName}</td><td><span className={product.status === 'ACTIVE' ? styles.active : styles.inactive}>{product.status === 'ACTIVE' ? 'Опубликован' : product.status}</span></td><td>{price?.isEstimate ? <span className={styles.inactive}>Оценка: {Number(price.sellingPrice).toLocaleString()} KGS</span> : price?.isActive ? `${Number(price.sellingPrice).toLocaleString()} KGS` : 'Не задана'}</td><td><button className={styles.textButton} onClick={() => beginEdit(product)}>Редактировать</button>{defaultTier && <button className={styles.textButton} onClick={() => { const current = prices.data?.data.find((item) => item.productId === product.id); setPriceDraft({ productId: product.id, tierId: current?.tierId ?? defaultTier.id, sellingPrice: current ? String(current.sellingPrice) : '', purchasePrice: current?.purchasePrice === null || current?.purchasePrice === undefined ? '' : String(current.purchasePrice), estimateBasis: current?.estimateBasis ?? '', mode: current?.isEstimate === false ? 'confirmed' : 'estimate' }); }}>Цена</button>}{isSuperAdmin && <button className={styles.deleteButton} onClick={async () => { if (!window.confirm(`Удалить «${translation?.name ?? product.sku}»?`)) return; try { await apiClient.delete(`/products/${product.id}`); await queryClient.invalidateQueries({ queryKey: ['admin', 'products'] }); } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Не удалось удалить товар'); } }}>Удалить</button>}</td></tr>;
+            return <tr key={product.id}><td>{product.thumbnailUrl && <img className={styles.thumbnail} src={product.thumbnailUrl} alt="" />}</td><td>{translation?.name ?? product.slug}</td><td>{product.sku}</td><td>{categoryName}</td><td><span className={product.status === 'ACTIVE' ? styles.active : styles.inactive}>{product.status === 'ACTIVE' ? 'Опубликован' : product.status}</span></td><td>{price?.isEstimate ? <span className={styles.inactive}>Оценка: {Number(price.sellingPrice).toLocaleString()} KGS</span> : price?.isActive ? `${Number(price.sellingPrice).toLocaleString()} KGS` : 'Не задана'}</td><td><button className={styles.textButton} onClick={() => beginEdit(product)}>Редактировать</button>{defaultTier && <button className={styles.textButton} onClick={() => { const current = prices.data?.data.find((item) => item.productId === product.id); setPriceDraft({ productId: product.id, tierId: current?.tierId ?? defaultTier.id, sellingPrice: current ? String(current.sellingPrice) : '', purchasePrice: current?.purchasePrice === null || current?.purchasePrice === undefined ? '' : String(current.purchasePrice), estimateBasis: current?.estimateBasis ?? '', mode: current?.isEstimate === false ? 'confirmed' : 'estimate' }); }}>Цена</button>}{isSuperAdmin && <button className={styles.deleteButton} onClick={async () => { if (!window.confirm(`Удалить «${translation?.name ?? product.sku}»?`)) return; try { await apiClient.delete(`/products/${product.id}`); await Promise.all([queryClient.invalidateQueries({ queryKey: ['admin', 'products'] }), queryClient.invalidateQueries({ queryKey: ['products'] }), queryClient.invalidateQueries({ queryKey: ['categories'] }), queryClient.invalidateQueries({ queryKey: ['recommendations', 'popular'] })]); } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Не удалось удалить товар'); } }}>Удалить</button>}</td></tr>;
           })}
         </tbody></table></div>
       ) : <p className={styles.muted}>Товаров пока нет.</p>)}

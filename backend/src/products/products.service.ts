@@ -193,7 +193,8 @@ export class ProductsService {
         include: {
           translations: locale ? { where: { locale } } : true,
           variants: true,
-          images: { orderBy: { sortOrder: 'asc' }, take: 1 },
+          // Public cards need the product's full gallery, not only its thumbnail.
+          images: { orderBy: { sortOrder: 'asc' } },
           category: { include: { translations: locale ? { where: { locale } } : true } },
           brand: true,
           attributes: { include: { attribute: true } },

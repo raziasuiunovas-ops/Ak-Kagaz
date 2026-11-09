@@ -8,7 +8,7 @@
 /* Hero Section */
 .hero {
   padding: 3rem 0;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: #ADD8E6;
 }
 
 .heroContent {
@@ -20,14 +20,14 @@
   margin: 0 0 1rem 0;
   font-size: 2rem;
   font-weight: 700;
-  color: #111827;
+  color: #000000;
   line-height: 1.2;
 }
 
 .heroSubtitle {
   margin: 0 0 2rem 0;
   font-size: 1.125rem;
-  color: #374151;
+  color: #000000;
   line-height: 1.6;
 }
 
@@ -36,7 +36,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem 1.75rem;
-  background-color: #2563eb;
+  background-color: #CC5500;
   color: white;
   text-decoration: none;
   font-size: 1rem;
@@ -46,7 +46,7 @@
 }
 
 .heroCta:hover {
-  background-color: #1d4ed8;
+  background-color: #CC5500;
   transform: translateY(-1px);
 }
 
@@ -65,7 +65,7 @@
   width: 100%;
   max-width: 32rem;
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: #ADD8E6;
   border-radius: 1rem;
   opacity: 0.2;
 }
@@ -86,14 +86,14 @@
   margin: 0;
   font-size: 1.75rem;
   font-weight: 700;
-  color: #111827;
+  color: #000000;
 }
 
 .sectionLink {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  color: #2563eb;
+  color: #CC5500;
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 600;
@@ -101,7 +101,7 @@
 }
 
 .sectionLink:hover {
-  color: #1d4ed8;
+  color: #CC5500;
 }
 
 .sectionLinkIcon {
@@ -122,21 +122,21 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1.5rem;
-  background-color: #f9fafb;
+  background-color: #FFFFFF;
   border-radius: 0.75rem;
   transition: background-color 0.15s ease, transform 0.15s ease;
   cursor: pointer;
 }
 
 .categoryCardPlaceholder:hover {
-  background-color: #f3f4f6;
+  background-color: #ADD8E6;
   transform: translateY(-2px);
 }
 
 .categoryImage {
   width: 5rem;
   height: 5rem;
-  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  background: #ADD8E6;
   border-radius: 0.5rem;
   object-fit: contain;
   padding: 0.5rem;
@@ -147,7 +147,7 @@
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #111827;
+  color: #000000;
   text-align: center;
 }
 
@@ -162,7 +162,7 @@
   display: flex;
   flex-direction: column;
   background-color: white;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ADD8E6;
   border-radius: 0.75rem;
   overflow: hidden;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
@@ -177,7 +177,7 @@
 .productImage {
   width: 100%;
   aspect-ratio: 1;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: #FFFFFF;
 }
 
 .productInfo {
@@ -188,7 +188,7 @@
   margin: 0 0 0.5rem 0;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #111827;
+  color: #000000;
   line-height: 1.4;
 }
 
@@ -196,13 +196,13 @@
   margin: 0;
   font-size: 1.125rem;
   font-weight: 700;
-  color: #2563eb;
+  color: #CC5500;
 }
 
 /* About Section */
 .aboutSection {
   padding: 3rem 0;
-  background-color: #f9fafb;
+  background-color: #FFFFFF;
 }
 
 .aboutGrid {
@@ -222,14 +222,14 @@
   margin: 0;
   font-size: 1rem;
   line-height: 1.75;
-  color: #374151;
+  color: #000000;
 }
 
 .aboutLink {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #2563eb;
+  color: #CC5500;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 600;
@@ -238,7 +238,7 @@
 }
 
 .aboutLink:hover {
-  color: #1d4ed8;
+  color: #CC5500;
 }
 
 .aboutVisual {
@@ -250,7 +250,7 @@
   width: 100%;
   max-width: 24rem;
   aspect-ratio: 4 / 3;
-  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  background: #ADD8E6;
   border-radius: 1rem;
 }
 
@@ -264,7 +264,7 @@
 .reviewCardPlaceholder {
   padding: 1.5rem;
   background-color: white;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ADD8E6;
   border-radius: 0.75rem;
 }
 
@@ -277,15 +277,15 @@
 .reviewStar {
   width: 1.125rem;
   height: 1.125rem;
-  fill: #fbbf24;
-  color: #fbbf24;
+  fill: #CC5500;
+  color: #CC5500;
 }
 
 .reviewText {
   margin: 0 0 1.5rem 0;
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: #374151;
+  color: #000000;
 }
 
 .reviewAuthor {
@@ -297,7 +297,7 @@
 .reviewAvatar {
   width: 2.5rem;
   height: 2.5rem;
-  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  background: #ADD8E6;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -312,13 +312,13 @@
   margin: 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #111827;
+  color: #000000;
 }
 
 .reviewDate {
   margin: 0;
   font-size: 0.8125rem;
-  color: #6b7280;
+  color: #000000;
 }
 
 /* Tablet */
@@ -385,9 +385,7 @@
   background: var(--color-background);
 }
 
-[data-theme="dark"] .hero {
-  background: linear-gradient(135deg, rgba(38, 87, 124, 0.2) 0%, rgba(38, 87, 124, 0.1) 100%);
-}
+[data-theme="dark"] .hero { background: #000000; }
 
 [data-theme="dark"] .heroTitle {
   color: var(--color-text-primary);
@@ -407,10 +405,7 @@
   box-shadow: 0 0 30px rgba(38, 87, 124, 0.6);
 }
 
-[data-theme="dark"] .heroVisualPlaceholder {
-  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
-  opacity: 0.5;
-}
+[data-theme="dark"] .heroVisualPlaceholder { background: #ADD8E6; opacity: 0.5; }
 
 [data-theme="dark"] .sectionTitle {
   color: var(--color-text-primary);
@@ -434,9 +429,7 @@
   box-shadow: 0 0 20px rgba(38, 87, 124, 0.2);
 }
 
-[data-theme="dark"] .categoryImage {
-  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
-}
+[data-theme="dark"] .categoryImage { background: #ADD8E6; }
 
 [data-theme="dark"] .categoryName {
   color: var(--color-text-primary);
@@ -451,9 +444,7 @@
   box-shadow: 0 4px 20px rgba(38, 87, 124, 0.3);
 }
 
-[data-theme="dark"] .productImage {
-  background: linear-gradient(135deg, rgba(38, 87, 124, 0.2) 0%, rgba(38, 87, 124, 0.1) 100%);
-}
+[data-theme="dark"] .productImage { background: #ADD8E6; }
 
 [data-theme="dark"] .productName {
   color: var(--color-text-primary);
@@ -479,9 +470,7 @@
   color: var(--color-primary-hover);
 }
 
-[data-theme="dark"] .aboutImagePlaceholder {
-  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
-}
+[data-theme="dark"] .aboutImagePlaceholder { background: #ADD8E6; }
 
 [data-theme="dark"] .reviewCardPlaceholder {
   background-color: var(--color-surface);
@@ -501,6 +490,4 @@
   opacity: 0.7;
 }
 
-[data-theme="dark"] .reviewAvatar {
-  background: linear-gradient(135deg, rgba(38, 87, 124, 0.3) 0%, rgba(38, 87, 124, 0.2) 100%);
-}
+[data-theme="dark"] .reviewAvatar { background: #ADD8E6; }

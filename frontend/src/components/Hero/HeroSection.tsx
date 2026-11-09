@@ -7,8 +7,8 @@ import styles from './HeroSection.module.css';
 
 // Rotating phrases for animated heading
 const HERO_PHRASES = {
-  ru: ['Учебы', 'Творчества', 'Работы', 'Вдохновения'],
-  ky: ['Окуу', 'Чыгармачылык', 'Иш', 'Шыктануу'],
+  ru: ['Учебы', 'Творчества', 'Работы', 'Вдохновения', 'Дома', 'Детей'],
+  ky: ['Окуу', 'Чыгармачылык', 'Иш', 'Шыктануу', 'Үй', 'Балдар'],
 };
 
 export function HeroSection() {
