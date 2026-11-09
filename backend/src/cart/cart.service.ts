@@ -104,11 +104,13 @@ export class CartService {
     }
 
     // Check if item with same product and variant already exists
-    const existingWhere = dto.variantId
-      ? { cartId_productId_variantId: { cartId: cart.id, productId: dto.productId, variantId: dto.variantId } }
-      : { cartId_productId_variantId: { cartId: cart.id, productId: dto.productId, variantId: null } };
-
-    const existing = await this.prisma.cartItem.findUnique({ where: existingWhere });
+    const existing = await this.prisma.cartItem.findFirst({
+      where: {
+        cartId: cart.id,
+        productId: dto.productId,
+        variantId: dto.variantId ?? null,
+      },
+    });
 
     return this.prisma.$transaction(async (tx: any) => {
       if (existing) {
