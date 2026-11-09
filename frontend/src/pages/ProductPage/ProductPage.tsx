@@ -11,7 +11,8 @@ import { ErrorState } from '@/components/ErrorState';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAddProductToCart, useFavorites, useProductBySlug, useSimilarProducts, useTrackView, useProductCampaigns } from '@/hooks';
 import { getSessionId } from '@/utils/session';
-import { getCurrentConfirmedPrice } from '@/utils/productPrice';
+import { CartToast } from '@/components/CartToast/CartToast';
+import { getCurrentDisplayPrice } from '@/utils/productPrice';
 import styles from './ProductPage.module.css';
 
 export function ProductPage() {
@@ -68,7 +69,8 @@ export function ProductPage() {
   }
 
   const translation = product.translations.find((tr) => tr.locale === locale) || product.translations[0];
-  const price = getCurrentConfirmedPrice(product.prices)?.sellingPrice;
+  const priceValue = getCurrentDisplayPrice(product.prices)?.price.sellingPrice;
+  const price = priceValue === undefined ? undefined : Number(priceValue);
   const selectedVariant = product.variants?.find((variant) => variant.id === selectedVariantId && variant.isActive);
   const localizedVariantName = (name: string) => locale === 'ky'
     ? ({ 'Зелёный': 'Жашыл', 'Красный': 'Кызыл', 'Синий': 'Көк', 'Чёрный': 'Кара', 'Розовый': 'Кызгылт', 'Голубой': 'Көгүлтүр', 'Светло-голубой': 'Ачык көк' }[name] ?? name)
@@ -97,8 +99,10 @@ export function ProductPage() {
     try {
       await addToCart.mutateAsync({ productId: product.id, quantity });
       setCartNotice('added');
+      window.setTimeout(() => setCartNotice(null), 2500);
     } catch {
       setCartNotice('error');
+      window.setTimeout(() => setCartNotice(null), 3500);
     }
   };
 
@@ -220,7 +224,7 @@ export function ProductPage() {
                 <Heart className={styles.btnIcon} fill={favorites.isFavorite(product.id) ? 'currentColor' : 'none'} />
               </button>
             </div>
-            {cartNotice && <p role="status" aria-live="polite">{cartNotice === 'added' ? t('product.addedToCart') : t('product.addToCartError')}</p>}
+            {cartNotice && <CartToast type={cartNotice} message={cartNotice === 'added' ? t('product.addedToCart') : t('product.addToCartError')} />}
           </div>
         </div>
 

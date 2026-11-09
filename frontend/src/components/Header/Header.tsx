@@ -7,6 +7,7 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { SearchBar } from './SearchBar';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useCart } from '@/hooks';
 import styles from './Header.module.css';
 
 export function Header() {
@@ -15,6 +16,8 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { t, locale } = useLocale();
+  const cart = useCart();
+  const cartCount = cart.data?.totalItems ?? 0;
 
   const handleProfileClick = () => {
     navigate(isAuthenticated() ? '/profile' : '/login');
@@ -145,8 +148,9 @@ export function Header() {
                 <Heart size={20} />
               </Link>
 
-              <Link to="/cart" className={styles.iconButton} aria-label={t('nav.cart')}>
+              <Link to="/cart" className={`${styles.iconButton} ${styles.cartIconButton}`} aria-label={cartCount ? `${t('nav.cart')}, ${cartCount}` : t('nav.cart')}>
                 <ShoppingCart size={20} />
+                {cartCount > 0 && <span className={styles.cartCountBadge} aria-hidden="true">{cartCount > 99 ? '99+' : cartCount}</span>}
               </Link>
 
               <button 

@@ -36,6 +36,26 @@
   background-color: #f3f4f6;
 }
 
+/* Desktop Toggle Button - всегда видна */
+.toggleBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleBtn:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
 .title {
   margin: 0;
   font-size: 1.25rem;
@@ -107,7 +127,7 @@
 
 .logoutBtn {
   padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: linear-gradient(135deg, #E55604 0%, #c44803 100%);
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -115,12 +135,12 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 2px 8px rgba(229, 86, 4, 0.3);
 }
 
 .logoutBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 4px 12px rgba(229, 86, 4, 0.4);
 }
 
 .logoutBtn:active {
@@ -128,9 +148,19 @@
 }
 
 /* Tablet & Mobile */
+@media (min-width: 1025px) {
+  .toggleBtn {
+    display: flex;
+  }
+}
+
 @media (max-width: 1024px) {
   .menuBtn {
     display: flex;
+  }
+
+  .toggleBtn {
+    display: none;
   }
 
   .title {

@@ -13,6 +13,9 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
   const logout = useLogout();
   const { data: user } = useCurrentUser();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    return localStorage.getItem('adminSidebarCollapsed') === 'true';
+  });
 
   const handleLogout = () => {
     logout();
@@ -21,6 +24,14 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
 
   const goToSite = () => {
     navigate('/');
+  };
+
+  const toggleCollapse = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+    // Сохраняем состояние в localStorage
+    localStorage.setItem('adminSidebarCollapsed', (!sidebarCollapsed).toString());
+    // Отправляем событие для синхронизации
+    window.dispatchEvent(new CustomEvent('toggleSidebar', { detail: { collapsed: !sidebarCollapsed } }));
   };
 
   return (
@@ -32,6 +43,14 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
+          
+          {/* Desktop Toggle Button */}
+          <button className={styles.toggleBtn} onClick={toggleCollapse} aria-label="Toggle sidebar" title="Свернуть/Развернуть меню">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          
           <h1 className={styles.title}>Административная панель</h1>
         </div>
 

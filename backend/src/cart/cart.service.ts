@@ -31,13 +31,13 @@ export class CartService {
     
     let cart = await this.prisma.cart.findFirst({
       where: userId ? { userId, status: 'ACTIVE' } : { sessionId, status: 'ACTIVE' },
-      include: { items: { include: { product: { include: { translations: true } } } } },
+      include: this.cartItemsInclude(),
     });
 
     if (!cart) {
       cart = await this.prisma.cart.create({
         data: { userId, sessionId, status: 'ACTIVE', expiresAt: sessionId ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) : null },
-        include: { items: { include: { product: { include: { translations: true } } } } },
+        include: this.cartItemsInclude(),
       });
     }
 
@@ -50,18 +50,18 @@ export class CartService {
     // Get current date for price validation
     const now = new Date();
     
-    // Find product with active price that is effective at current time
+    // Prefer a confirmed current price, but use a saved estimate when no confirmed price exists.
     const product = await this.prisma.product.findUnique({
       where: { id: dto.productId },
       include: {
         prices: {
           where: {
-            isActive: true,
-          isEstimate: false,
             effectiveFrom: { lte: now }, // Price must have started
             OR: [
-              { effectiveUntil: null }, // No end date (permanent)
-              { effectiveUntil: { gte: now } }, // Or not expired yet
+              { isActive: true, isEstimate: false, effectiveUntil: null },
+              { isActive: true, isEstimate: false, effectiveUntil: { gte: now } },
+              { isEstimate: true, effectiveUntil: null },
+              { isEstimate: true, effectiveUntil: { gte: now } },
             ],
           },
           orderBy: { effectiveFrom: 'desc' }, // Get most recent price first
@@ -74,12 +74,13 @@ export class CartService {
     if (product.status !== 'ACTIVE') {
       throw new BadRequestException('Product is not available for purchase');
     }
-    if (product.prices.length === 0) {
-      throw new BadRequestException('Product has no active price available at this time');
+    const selectedPrice = product.prices.find((candidate) => candidate.isActive && !candidate.isEstimate)
+      ?? product.prices.find((candidate) => candidate.isEstimate);
+    if (!selectedPrice) {
+      throw new BadRequestException('Product has no current price or estimate available');
     }
 
-    const price = Number(product.prices[0].sellingPrice);
-    const subtotal = price * dto.quantity;
+    const price = Number(selectedPrice.sellingPrice);
 
     const existing = await this.prisma.cartItem.findUnique({ where: { cartId_productId: { cartId: cart.id, productId: dto.productId } } });
 
@@ -87,15 +88,19 @@ export class CartService {
       if (existing) {
         await tx.cartItem.update({
           where: { id: existing.id },
-          data: { quantity: existing.quantity + dto.quantity, subtotal: Number(existing.subtotal) + subtotal },
+          data: {
+            quantity: existing.quantity + dto.quantity,
+            price,
+            subtotal: price * (existing.quantity + dto.quantity),
+          },
         });
       } else {
-        await tx.cartItem.create({ data: { cartId: cart.id, productId: dto.productId, quantity: dto.quantity, price, subtotal } });
+        await tx.cartItem.create({ data: { cartId: cart.id, productId: dto.productId, quantity: dto.quantity, price, subtotal: price * dto.quantity } });
       }
 
       const updated = await tx.cart.findUnique({
         where: { id: cart.id },
-        include: { items: { include: { product: { include: { translations: true } } } } },
+        include: this.cartItemsInclude(),
       });
       return this.calculateCartTotals(updated);
     });
@@ -109,7 +114,7 @@ export class CartService {
 
     return this.prisma.$transaction(async (tx: any) => {
       await tx.cartItem.update({ where: { id: itemId }, data: { quantity: dto.quantity, subtotal } });
-      const cart = await tx.cart.findUnique({ where: { id: cartId }, include: { items: { include: { product: { include: { translations: true } } } } } });
+      const cart = await tx.cart.findUnique({ where: { id: cartId }, include: this.cartItemsInclude() });
       return this.calculateCartTotals(cart);
     });
   }
@@ -120,7 +125,7 @@ export class CartService {
 
     return this.prisma.$transaction(async (tx: any) => {
       await tx.cartItem.delete({ where: { id: itemId } });
-      const cart = await tx.cart.findUnique({ where: { id: cartId }, include: { items: { include: { product: { include: { translations: true } } } } } });
+      const cart = await tx.cart.findUnique({ where: { id: cartId }, include: this.cartItemsInclude() });
       return this.calculateCartTotals(cart);
     });
   }
@@ -132,9 +137,42 @@ export class CartService {
   }
 
   private calculateCartTotals(cart: any) {
-    const totalItems = cart.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
-    const subtotal = cart.items.reduce((sum: number, item: any) => sum + Number(item.subtotal), 0);
-    return { ...cart, totalItems, subtotal };
+    const now = Date.now();
+    const items = cart.items.map((item: any) => {
+      const confirmedAtStoredPrice = item.product?.prices?.some((price: any) =>
+        price.isActive && !price.isEstimate && Number(price.sellingPrice) === Number(item.price)
+        && new Date(price.effectiveFrom).getTime() <= now
+        && (!price.effectiveUntil || new Date(price.effectiveUntil).getTime() >= now),
+      );
+      return { ...item, priceIsEstimate: !confirmedAtStoredPrice };
+    });
+    const totalItems = items.reduce((sum: number, item: any) => sum + item.quantity, 0);
+    const subtotal = items.reduce((sum: number, item: any) => sum + Number(item.subtotal), 0);
+    return { ...cart, items, totalItems, subtotal };
+  }
+
+  private cartItemsInclude(now = new Date()) {
+    return {
+      items: {
+        include: {
+          product: {
+            include: {
+              translations: true,
+              prices: {
+                where: {
+                  AND: [
+                    { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
+                    { effectiveFrom: { lte: now } },
+                    { OR: [{ effectiveUntil: null }, { effectiveUntil: { gte: now } }] },
+                  ],
+                },
+                select: { sellingPrice: true, currency: true, isActive: true, isEstimate: true, effectiveFrom: true, effectiveUntil: true },
+              },
+            },
+          },
+        },
+      },
+    };
   }
 
   private async getSessionCartId(sessionId: string): Promise<string> {

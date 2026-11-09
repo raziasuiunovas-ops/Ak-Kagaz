@@ -1,17 +1,24 @@
 ﻿.page {
   max-width: 1400px;
-}
-
-.title {
-  margin: 0 0 1.5rem 0;
-  font-size: 1.75rem;
-  font-weight: 700;
   color: #111827;
 }
 
+.title {
+  margin: 0 0 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 .content {
-  padding: 1.5rem;
+  padding: 2rem;
   background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
 }

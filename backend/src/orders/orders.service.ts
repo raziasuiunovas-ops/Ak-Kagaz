@@ -15,7 +15,24 @@ export class OrdersService {
       // Get active cart with lock (use findFirst with status check inside transaction)
       const cart = await tx.cart.findFirst({
         where: { userId, status: 'ACTIVE' },
-        include: { items: { include: { product: true } } },
+        include: {
+          items: {
+            include: {
+              product: {
+                include: {
+                  prices: {
+                    where: {
+                      isActive: true,
+                      isEstimate: false,
+                      effectiveFrom: { lte: new Date() },
+                      OR: [{ effectiveUntil: null }, { effectiveUntil: { gte: new Date() } }],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!cart || cart.items.length === 0) {
@@ -25,6 +42,13 @@ export class OrdersService {
       // Double-check cart wasn't already converted (race condition protection)
       if (cart.status !== 'ACTIVE') {
         throw new BadRequestException('Cart has already been converted to an order');
+      }
+
+      const needsPriceApproval = cart.items.some((item: any) =>
+        !item.product.prices.some((price: any) => Number(price.sellingPrice) === Number(item.price)),
+      );
+      if (needsPriceApproval) {
+        throw new BadRequestException('One or more estimated prices must be approved before checkout');
       }
 
       // Validate fulfillment type requirements
@@ -41,6 +65,44 @@ export class OrdersService {
         throw new BadRequestException('Minimum order amount is 400 KGS');
       }
 
+      let deliveryZoneId: string | undefined;
+      let deliveryFee = 0;
+      if (dto.fulfillmentType === 'DELIVERY') {
+        const address = await tx.userAddress.findFirst({
+          where: { id: dto.deliveryAddressId, userId },
+        });
+
+        if (!address || address.country !== 'KG') {
+          throw new BadRequestException('A valid Kyrgyzstan delivery address is required');
+        }
+
+        const deliveryZones = await tx.deliveryZone.findMany({
+          where: { isActive: true },
+          select: { id: true, city: true, region: true, baseFee: true, freeDeliveryThreshold: true },
+        });
+        const normalizeLocation = (value: string | null | undefined) =>
+          value?.trim().normalize('NFKC').toLocaleLowerCase() ?? '';
+        const city = normalizeLocation(address.city);
+        const region = normalizeLocation(address.region);
+        const matchingZones = deliveryZones
+          .filter((zone: any) => normalizeLocation(zone.city) === city)
+          .filter((zone: any) => !zone.region || normalizeLocation(zone.region) === region)
+          .sort((left: any, right: any) => Number(Boolean(right.region)) - Number(Boolean(left.region)));
+        const deliveryZone = matchingZones[0];
+
+        if (!deliveryZone) {
+          throw new BadRequestException(
+            'Delivery price is not configured for this destination. Contact the store to confirm the fee before placing the order.',
+          );
+        }
+
+        deliveryZoneId = deliveryZone.id;
+        deliveryFee = deliveryZone.freeDeliveryThreshold != null &&
+          subtotal >= Number(deliveryZone.freeDeliveryThreshold)
+          ? 0
+          : Number(deliveryZone.baseFee);
+      }
+
       // Check stock availability BEFORE creating order
       const stockItems = cart.items.map((item: any) => ({
         productId: item.productId,
@@ -55,7 +117,6 @@ export class OrdersService {
         throw new BadRequestException(`Insufficient stock: ${details}`);
       }
 
-      const deliveryFee = dto.fulfillmentType === 'DELIVERY' ? 50 : 0;
       const total = subtotal + deliveryFee;
 
       // Generate order number
@@ -84,6 +145,12 @@ export class OrdersService {
         },
       });
 
+      if (deliveryZoneId) {
+        await tx.delivery.create({
+          data: { orderId: order.id, zoneId: deliveryZoneId, status: 'PENDING' },
+        });
+      }
+
       // Create order items
       await tx.orderItem.createMany({
         data: cart.items.map((item: any) => ({
@@ -110,6 +177,7 @@ export class OrdersService {
           deliveryAddress: true,
           billingAddress: true,
           pickupLocation: true,
+          delivery: true,
           statusHistory: { orderBy: { createdAt: 'desc' } },
         },
       });

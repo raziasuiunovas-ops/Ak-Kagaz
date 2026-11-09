@@ -1,16 +1,29 @@
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Icon } from '@/components/Icon';
-import { Menu } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
 interface AdminSidebarProps {
   isOpen: boolean;
-  isCollapsed: boolean;
   onClose: () => void;
-  onToggleCollapse: () => void;
 }
 
-export function AdminSidebar({ isOpen, isCollapsed, onClose, onToggleCollapse }: AdminSidebarProps) {
+export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    return localStorage.getItem('adminSidebarCollapsed') === 'true';
+  });
+
+  useEffect(() => {
+    const handleToggle = (event: CustomEvent) => {
+      setIsCollapsed(event.detail.collapsed);
+    };
+
+    window.addEventListener('toggleSidebar', handleToggle as EventListener);
+    return () => {
+      window.removeEventListener('toggleSidebar', handleToggle as EventListener);
+    };
+  }, []);
+
   const menuItems = [
     { path: '/admin', label: 'Панель управления', icon: 'dashboard' },
     { path: '/admin/products', label: 'Товары', icon: 'inventory_2' },
@@ -39,13 +52,6 @@ export function AdminSidebar({ isOpen, isCollapsed, onClose, onToggleCollapse }:
           />
           {!isCollapsed && <span className={styles.logoText}>АК КАГАЗ</span>}
         </div>
-        <button
-          className={styles.collapseBtn}
-          onClick={onToggleCollapse}
-          aria-label="Toggle sidebar"
-        >
-          <Menu size={20} />
-        </button>
       </div>
 
       <nav className={styles.nav}>

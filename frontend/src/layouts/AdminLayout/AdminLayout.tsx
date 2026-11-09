@@ -6,7 +6,9 @@ import styles from './AdminLayout.module.css';
 
 export function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    return localStorage.getItem('adminSidebarCollapsed') === 'true';
+  });
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const isSwiping = useRef(false);
@@ -15,13 +17,21 @@ export function AdminLayout() {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const toggleCollapse = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-
   const closeSidebar = () => {
     setSidebarOpen(false);
   };
+
+  // Слушаем события изменения состояния sidebar из header
+  useEffect(() => {
+    const handleToggle = (event: CustomEvent) => {
+      setSidebarCollapsed(event.detail.collapsed);
+    };
+
+    window.addEventListener('toggleSidebar', handleToggle as EventListener);
+    return () => {
+      window.removeEventListener('toggleSidebar', handleToggle as EventListener);
+    };
+  }, []);
 
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
@@ -83,9 +93,7 @@ export function AdminLayout() {
     <div className={styles.adminLayout}>
       <AdminSidebar
         isOpen={sidebarOpen}
-        isCollapsed={sidebarCollapsed}
         onClose={closeSidebar}
-        onToggleCollapse={toggleCollapse}
       />
       
       <div className={`${styles.mainContent} ${sidebarCollapsed ? styles.collapsed : ''}`}>

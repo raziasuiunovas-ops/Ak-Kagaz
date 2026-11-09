@@ -39,10 +39,10 @@ export function HomePage() {
   });
 
   const popularProducts = usePopularProducts({
-    limit: 8,
+    limit: 16,
     locale,
   });
-  const publishedProducts = useProducts({ locale, status: 'ACTIVE', limit: 8 });
+  const publishedProducts = useProducts({ locale, status: 'ACTIVE', limit: 16 });
 
   const trendingProducts = useTrendingProducts({
     limit: 8,
@@ -54,14 +54,24 @@ export function HomePage() {
 
   // Choose which recommendations to show
   const recommendations = authenticated ? personalRecommendations : guestRecommendations;
-  const popularCandidates = popularProducts.data ?? [];
+  const popularCandidates = Array.from(new Map((popularProducts.data ?? []).map((product) => [product.id, product])).values());
   const popularIds = new Set(popularCandidates.map((product) => product.id));
   const popularList = [
     ...popularCandidates,
     ...(publishedProducts.data?.data ?? []).filter((product) => !popularIds.has(product.id)),
-  ].slice(0, 8);
-  const popularLoading = popularProducts.isLoading || (popularList.length < 8 && publishedProducts.isLoading);
+  ].slice(0, 16);
+  const popularLoading = popularProducts.isLoading || (popularList.length < 16 && publishedProducts.isLoading);
   const popularError = !popularList.length && popularProducts.error && publishedProducts.error
+    ? publishedProducts.error
+    : null;
+  const trendingCandidates = Array.from(new Map((trendingProducts.data ?? []).map((product) => [product.id, product])).values());
+  const trendingIds = new Set(trendingCandidates.map((product) => product.id));
+  const trendingList = [
+    ...trendingCandidates,
+    ...(publishedProducts.data?.data ?? []).filter((product) => !trendingIds.has(product.id)),
+  ].slice(0, 8);
+  const trendingLoading = trendingProducts.isLoading || (trendingList.length < 8 && publishedProducts.isLoading);
+  const trendingError = !trendingList.length && trendingProducts.error && publishedProducts.error
     ? publishedProducts.error
     : null;
 
@@ -154,11 +164,13 @@ export function HomePage() {
         <Container>
           <RecommendationsBlock
             title={t('recommendations.trending')}
-            products={trendingProducts.data}
-            isLoading={trendingProducts.isLoading}
-            error={trendingProducts.error}
+            products={trendingList}
+            isLoading={trendingLoading}
+            error={trendingError}
             linkTo="/catalog?sort=trending"
             linkText={t('common.showMore')}
+            emptyMessage={t('recommendations.empty')}
+            onRetry={() => { void trendingProducts.refetch(); void publishedProducts.refetch(); }}
           />
         </Container>
       </section>

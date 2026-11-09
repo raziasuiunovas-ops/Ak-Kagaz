@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart } from 'lucide-react';
 import type { Product } from '@/types';
+import { CartToast } from '@/components/CartToast/CartToast';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAddProductToCart, useFavorites } from '@/hooks';
-import { getCurrentConfirmedPrice } from '@/utils/productPrice';
+import { getCurrentDisplayPrice } from '@/utils/productPrice';
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
@@ -14,6 +15,8 @@ interface ProductCardProps {
   isFavorite?: boolean;
   showQuickAdd?: boolean;
 }
+
+type ProductCardPhoto = { src: string; alt?: string; variantName?: string };
 
 export function ProductCard({
   product,
@@ -29,10 +32,10 @@ export function ProductCard({
   const [photoIndex, setPhotoIndex] = useState(0);
   const translation = product.translations.find((item) => item.locale === locale) ?? product.translations[0];
   const photos = useMemo(() => {
-    const attached = [
+    const attached: ProductCardPhoto[] = [
       ...(product.images ?? []).map((image) => ({ src: image.url, alt: image.altText || undefined })),
       ...(product.variants ?? []).filter((variant) => variant.isActive && variant.imageUrl)
-        .map((variant) => ({ src: variant.imageUrl as string, alt: variant.name })),
+        .map((variant) => ({ src: variant.imageUrl as string, alt: variant.name, variantName: variant.name })),
     ];
     if (product.thumbnailUrl) attached.unshift({ src: product.thumbnailUrl, alt: undefined });
     const seen = new Set<string>();
@@ -42,12 +45,16 @@ export function ProductCard({
       return true;
     });
   }, [product.images, product.variants, product.thumbnailUrl]);
-  const price = getCurrentConfirmedPrice(product.prices);
+  const displayPrice = getCurrentDisplayPrice(product.prices);
+  const price = displayPrice?.price;
   const markedFavorite = isFavorite ?? favorites.isFavorite(product.id);
   const favoriteLabel = markedFavorite ? t('product.removeFromFavorites') : t('product.addToFavorites');
-  const canAdd = product.status === 'ACTIVE' && !!price && !addToCart.isPending;
-  const currentPhoto = photos[photoIndex % Math.max(photos.length, 1)];
-  const movePhoto = (offset: number) => setPhotoIndex((current) => (current + offset + photos.length) % photos.length);
+  const canAdd = product.status === 'ACTIVE' && !addToCart.isPending;
+  const currentPhotoIndex = photos.length ? photoIndex % photos.length : 0;
+  const currentPhoto = photos[currentPhotoIndex];
+  const movePhoto = (offset: number) => setPhotoIndex((current) => photos.length > 1
+    ? (current + offset + photos.length) % photos.length
+    : 0);
 
   const handleAddToCart = async () => {
     if (!canAdd) return;
@@ -77,7 +84,8 @@ export function ProductCard({
             <span className={styles.imagePlaceholder} aria-hidden="true" />
           )}
         </Link>
-        {photos.length > 1 && <span className={styles.photoCounter} aria-live="polite">{photoIndex + 1} / {photos.length}</span>}
+        {photos.length > 1 && <span className={styles.photoCounter} aria-live="polite">{currentPhotoIndex + 1} / {photos.length}</span>}
+        {photos.length > 1 && currentPhoto?.variantName && <span className={styles.photoVariant}>{currentPhoto.variantName}</span>}
         {photos.length > 1 && <>
           <button type="button" className={`${styles.photoArrow} ${styles.photoPrevious}`} onClick={() => movePhoto(-1)} aria-label={t('product.previousPhoto')} title={t('product.previousPhoto')}><ChevronLeft aria-hidden="true" /></button>
           <button type="button" className={`${styles.photoArrow} ${styles.photoNext}`} onClick={() => movePhoto(1)} aria-label={t('product.nextPhoto')} title={t('product.nextPhoto')}><ChevronRight aria-hidden="true" /></button>
@@ -112,7 +120,7 @@ export function ProductCard({
 
         <div className={styles.footer}>
           <span className={`${styles.price} ${!price ? styles.pricePending : ''}`}>
-            {price ? `${Number(price.sellingPrice).toLocaleString(locale === 'ru' ? 'ru-RU' : 'ky-KG')} сом` : t('product.priceToConfirm')}
+            {price ? <>{Number(price.sellingPrice).toLocaleString(locale === 'ru' ? 'ru-RU' : 'ky-KG')} сом</> : t('product.priceUnavailable')}
           </span>
           {showQuickAdd && (
             <button
@@ -120,19 +128,15 @@ export function ProductCard({
               onClick={() => void handleAddToCart()}
               disabled={!canAdd}
               className={styles.addToCartBtn}
-              aria-label={price ? t('product.addToCart') : t('product.priceToConfirm')}
-              title={!price ? t('product.priceToConfirm') : t('product.addToCart')}
+              aria-label={product.status === 'ACTIVE' ? t('product.addToCart') : t('product.outOfStock')}
+              title={product.status === 'ACTIVE' ? t('product.addToCart') : t('product.outOfStock')}
             >
               <ShoppingCart className={styles.cartIcon} aria-hidden="true" />
-              <span>{addToCart.isPending ? t('common.loading') : t('product.addToCart')}</span>
+              <span>{addToCart.isPending ? t('product.addingToCart') : t('product.addToCart')}</span>
             </button>
           )}
         </div>
-        {notice && (
-          <p className={notice === 'added' ? styles.successMessage : styles.errorMessage} role="status" aria-live="polite">
-            {notice === 'added' ? t('product.addedToCart') : t('product.addToCartError')}
-          </p>
-        )}
+        {notice && <CartToast type={notice} message={notice === 'added' ? t('product.addedToCart') : t('product.addToCartError')} />}
       </div>
     </article>
   );

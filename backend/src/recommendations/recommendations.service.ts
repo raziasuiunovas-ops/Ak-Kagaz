@@ -137,7 +137,7 @@ export class RecommendationsService {
         translations: true,
         images: { orderBy: { sortOrder: 'asc' } },
         prices: {
-          where: { isActive: true },
+          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
           include: { tier: true },
         },
         reviews: {
@@ -187,7 +187,7 @@ export class RecommendationsService {
             translations: true,
             images: { orderBy: { sortOrder: 'asc' } },
             prices: {
-              where: { isActive: true },
+              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
               include: { tier: true },
             },
             reviews: {
@@ -224,7 +224,7 @@ export class RecommendationsService {
             translations: true,
             images: { orderBy: { sortOrder: 'asc' } },
             prices: {
-              where: { isActive: true },
+              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
               include: { tier: true },
             },
           },
@@ -247,7 +247,7 @@ export class RecommendationsService {
             translations: true,
             images: { orderBy: { sortOrder: 'asc' } },
             prices: {
-              where: { isActive: true },
+              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
               include: { tier: true },
             },
           },
@@ -286,7 +286,7 @@ export class RecommendationsService {
         translations: true,
         images: { orderBy: { sortOrder: 'asc' } },
         prices: {
-          where: { isActive: true },
+          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
           include: { tier: true },
         },
         reviews: {
@@ -312,7 +312,7 @@ export class RecommendationsService {
             translations: true,
             images: { orderBy: { sortOrder: 'asc' } },
             prices: {
-              where: { isActive: true },
+              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
               include: { tier: true },
             },
           },
@@ -341,7 +341,7 @@ export class RecommendationsService {
                 translations: true,
                 images: { orderBy: { sortOrder: 'asc' } },
                 prices: {
-                  where: { isActive: true },
+                  where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
                   include: { tier: true },
                 },
               },
@@ -425,7 +425,7 @@ export class RecommendationsService {
           variants: { orderBy: { sortOrder: 'asc' } },
           attributes: { include: { attribute: true } },
           prices: {
-            where: { isActive: true },
+            where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
             include: { tier: true },
           },
         },
@@ -442,7 +442,7 @@ export class RecommendationsService {
         variants: { orderBy: { sortOrder: 'asc' } },
         attributes: { include: { attribute: true } },
         prices: {
-          where: { isActive: true },
+          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
           include: { tier: true },
         },
         reviews: {
@@ -482,7 +482,7 @@ export class RecommendationsService {
         translations: true,
         images: { orderBy: { sortOrder: 'asc' } },
         prices: {
-          where: { isActive: true },
+          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
           include: { tier: true },
         },
         reviews: {

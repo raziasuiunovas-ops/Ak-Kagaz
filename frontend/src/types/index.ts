@@ -159,6 +159,7 @@ export interface CartItem {
   quantity: number;
   price: number;
   subtotal: number;
+  priceIsEstimate?: boolean;
   product?: Product;
 }
 

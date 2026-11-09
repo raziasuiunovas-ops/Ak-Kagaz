@@ -2,22 +2,79 @@
 .heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
 .title { margin: 0 0 .4rem; font-size: 1.75rem; }
 .muted { color: #6b7280; margin: 0; }
-.primaryButton, .secondaryButton { border: 0; border-radius: .5rem; padding: .7rem 1rem; font: inherit; font-weight: 600; cursor: pointer; }
-.primaryButton { background: #2563eb; color: white; }
-.primaryButton:disabled { opacity: .65; cursor: wait; }
-.secondaryButton { background: #f3f4f6; color: #374151; }
-.textButton { background: none; border: 0; color: #2563eb; cursor: pointer; font: inherit; font-weight: 600; }
-.deleteButton { background: none; border: 0; color: #b91c1c; cursor: pointer; font: inherit; font-weight: 600; }
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.primaryButton, .secondaryButton { border: 0; border-radius: .5rem; padding: .7rem 1rem; font: inherit; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.primaryButton { 
+  background: linear-gradient(135deg, #26577C 0%, #1d4160 100%); 
+  color: white;
+  box-shadow: 0 2px 8px rgba(38, 87, 124, 0.3);
+}
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(38, 87, 124, 0.4);
+}
+.primaryButton:disabled { opacity: .65; cursor: wait; transform: none; }
+.secondaryButton { background: #EBE4D1; color: #374151; }
+.secondaryButton:hover { background: #d9d0bb; }
+.textButton { background: none; border: 0; color: #26577C; cursor: pointer; font: inherit; font-weight: 600; }
+.textButton:hover { color: #1d4160; }
+.deleteButton { background: none; border: 0; color: #E55604; cursor: pointer; font: inherit; font-weight: 600; }
+.deleteButton:hover { color: #c44803; }
+
+/* Icon Buttons */
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.iconButton,
+.iconButtonDelete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.iconButton:hover {
+  background: #e8eef3;
+  color: #26577C;
+}
+
+.iconButtonDelete {
+  color: #E55604;
+}
+
+.iconButtonDelete:hover {
+  background: #fef3ed;
+  color: #c44803;
+}
+
 .tableWrap { overflow-x: auto; border: 1px solid #e5e7eb; border-radius: .75rem; background: #fff; }
 .table { width: 100%; border-collapse: collapse; min-width: 740px; }
 .table th, .table td { padding: .8rem 1rem; border-bottom: 1px solid #e5e7eb; text-align: left; }
 .table th { background: #f9fafb; color: #4b5563; font-size: .85rem; }
 .table tr:last-child td { border-bottom: 0; }
 .thumbnail { width: 48px; height: 48px; object-fit: contain; background: #f9fafb; border-radius: .35rem; }
-.active, .inactive { display: inline-block; padding: .25rem .5rem; border-radius: 1rem; font-size: .78rem; white-space: nowrap; }
-.active { background: #dcfce7; color: #166534; }
+.active, .inactive { display: inline-block; padding: .25rem .5rem; border-radius: 1rem; font-size: .78rem; white-space: nowrap; font-weight: 500; }
+.active { background: #d1fae5; color: #065f46; }
 .inactive { background: #f3f4f6; color: #4b5563; }
-.error { color: #b91c1c; }
+.error { color: #f97316; }
 .dialogBackdrop { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 1rem; background: #11182780; }
 .dialog { width: min(850px, 100%); max-height: 92vh; overflow: auto; background: white; border-radius: .8rem; padding: 1.25rem; box-shadow: 0 20px 60px #0003; }
 .dialogHeader, .actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
@@ -27,6 +84,6 @@
 .formGrid input, .formGrid select, .formGrid textarea { width: 100%; box-sizing: border-box; padding: .65rem .7rem; border: 1px solid #d1d5db; border-radius: .4rem; font: inherit; color: #111827; background: white; }
 .formGrid textarea { min-height: 5rem; resize: vertical; }
 .fullWidth { grid-column: 1 / -1; }
-.note { background: #fffbeb; color: #92400e; border-radius: .45rem; padding: .75rem; font-size: .875rem; line-height: 1.45; }
+.note { background: #fff7ed; color: #9a3412; border-radius: .45rem; padding: .75rem; font-size: .875rem; line-height: 1.45; border-left: 3px solid #f97316; }
 .actions { justify-content: flex-end; }
 @media (max-width: 640px) { .heading { flex-direction: column; } .formGrid { grid-template-columns: 1fr; } .fullWidth { grid-column: auto; } .dialog { padding: 1rem; } }

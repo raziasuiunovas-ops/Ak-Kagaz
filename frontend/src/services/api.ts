@@ -1,6 +1,10 @@
 // API client configuration
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+// Local development goes through Vite's /api proxy so the storefront and admin
+// stay connected to the same backend even when the shell has a stale URL set.
+export const API_BASE_URL = import.meta.env.DEV
+  ? '/api'
+  : import.meta.env.VITE_API_URL || '/api';
 
 export interface FetchOptions extends RequestInit {
   params?: Record<string, string | number | boolean>;

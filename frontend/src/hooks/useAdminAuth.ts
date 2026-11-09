@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '@/services/api';
 import { setToken } from './useAuth';
 
 interface AdminLoginCredentials {
@@ -34,8 +35,6 @@ interface Verify2FAResponse {
   token: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
-
 async function getResponseError(response: Response, fallback: string): Promise<string> {
   const body = await response.text();
   if (!body) return fallback;
@@ -53,7 +52,7 @@ async function getResponseError(response: Response, fallback: string): Promise<s
 
 async function adminLoginAPI(credentials: AdminLoginCredentials): Promise<AdminLoginResponse> {
   try {
-    const response = await fetch(`${API_URL}/auth/admin/login`, {
+    const response = await fetch(`${API_BASE_URL}/auth/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials),
@@ -80,7 +79,7 @@ async function adminLoginAPI(credentials: AdminLoginCredentials): Promise<AdminL
     return data;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new Error('Не удалось подключиться к серверу. Убедитесь, что backend запущен на http://localhost:4000');
+      throw new Error('Не удалось подключиться к серверу. Проверьте, что API доступен.');
     }
     throw error;
   }
@@ -88,7 +87,7 @@ async function adminLoginAPI(credentials: AdminLoginCredentials): Promise<AdminL
 
 async function adminVerify2FAAPI(data: Verify2FAData): Promise<Verify2FAResponse> {
   try {
-    const response = await fetch(`${API_URL}/auth/admin/verify-2fa`, {
+    const response = await fetch(`${API_BASE_URL}/auth/admin/verify-2fa`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -108,7 +107,7 @@ async function adminVerify2FAAPI(data: Verify2FAData): Promise<Verify2FAResponse
     return result;
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new Error('Не удалось подключиться к серверу. Убедитесь, что backend запущен на http://localhost:4000');
+      throw new Error('Не удалось подключиться к серверу. Проверьте, что API доступен.');
     }
     throw error;
   }

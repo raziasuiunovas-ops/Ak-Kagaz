@@ -1,27 +1,16 @@
+import { StatCard } from '@/components/StatCard';
 import styles from './DashboardPage.module.css';
 
 export function DashboardPage() {
   return (
     <div className={styles.dashboard}>
-      <h1 className={styles.title}>Dashboard</h1>
+      <h1 className={styles.title}>Панель управления</h1>
       
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <h3>Заказы</h3>
-          <p className={styles.statValue}>—</p>
-        </div>
-        <div className={styles.statCard}>
-          <h3>Продажи</h3>
-          <p className={styles.statValue}>—</p>
-        </div>
-        <div className={styles.statCard}>
-          <h3>Выручка</h3>
-          <p className={styles.statValue}>—</p>
-        </div>
-        <div className={styles.statCard}>
-          <h3>Покупатели</h3>
-          <p className={styles.statValue}>—</p>
-        </div>
+        <StatCard title="Заказы" value="—" icon="shopping_cart" color="blue" />
+        <StatCard title="Продажи" value="—" icon="trending_up" color="green" />
+        <StatCard title="Выручка" value="—" icon="payments" color="orange" subtitle="KGS" />
+        <StatCard title="Покупатели" value="—" icon="people" color="orange" />
       </div>
 
       <div className={styles.section}>

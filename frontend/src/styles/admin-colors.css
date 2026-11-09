@@ -1,0 +1,81 @@
+/* 
+ * AK KAGAZ Admin Panel Color Palette
+ * Оригинальные брендовые цвета
+ */
+
+:root {
+  /* Primary Brand Colors */
+  --admin-primary: #26577C;
+  --admin-primary-dark: #1d4160;
+  --admin-primary-light: #3a6b94;
+  --admin-primary-bg: #e8eef3;
+  
+  /* Secondary/Accent Colors */
+  --admin-accent: #E55604;
+  --admin-accent-dark: #c44803;
+  --admin-accent-light: #ff6d1f;
+  --admin-accent-bg: #fef3ed;
+  
+  /* Tertiary/Canvas Colors */
+  --admin-canvas: #EBE4D1;
+  --admin-canvas-dark: #d9d0bb;
+  --admin-canvas-light: #f5f0e3;
+  
+  /* Success/Active Colors */
+  --admin-success: #10b981;
+  --admin-success-dark: #059669;
+  --admin-success-bg: #d1fae5;
+  --admin-success-text: #065f46;
+  
+  /* Neutral Colors */
+  --admin-gray-50: #f9fafb;
+  --admin-gray-100: #f3f4f6;
+  --admin-gray-200: #e5e7eb;
+  --admin-gray-300: #d1d5db;
+  --admin-gray-400: #9ca3af;
+  --admin-gray-500: #6b7280;
+  --admin-gray-600: #4b5563;
+  --admin-gray-700: #374151;
+  --admin-gray-800: #1f2937;
+  --admin-gray-900: #111827;
+  
+  /* Semantic Colors */
+  --admin-text-primary: #111827;
+  --admin-text-secondary: #6b7280;
+  --admin-text-muted: #9ca3af;
+  
+  --admin-bg-white: #ffffff;
+  --admin-bg-light: #f9fafb;
+  --admin-bg-hover: #f3f4f6;
+  
+  --admin-border: #e5e7eb;
+  --admin-border-light: #f3f4f6;
+  
+  /* Shadows */
+  --admin-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --admin-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --admin-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --admin-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  
+  /* Button Shadows */
+  --admin-shadow-primary: 0 2px 8px rgba(38, 87, 124, 0.3);
+  --admin-shadow-primary-hover: 0 4px 12px rgba(38, 87, 124, 0.4);
+  --admin-shadow-accent: 0 2px 8px rgba(229, 86, 4, 0.3);
+  --admin-shadow-accent-hover: 0 4px 12px rgba(229, 86, 4, 0.4);
+  
+  /* Gradients */
+  --admin-gradient-primary: linear-gradient(135deg, #26577C 0%, #1d4160 100%);
+  --admin-gradient-accent: linear-gradient(135deg, #E55604 0%, #c44803 100%);
+  --admin-gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* Dark theme overrides */
+[data-theme='dark'] {
+  --admin-bg-white: #1f2937;
+  --admin-bg-light: #111827;
+  --admin-bg-hover: #374151;
+  --admin-border: #374151;
+  --admin-text-primary: #f9fafb;
+  --admin-text-secondary: #9ca3af;
+  --admin-text-muted: #6b7280;
+}

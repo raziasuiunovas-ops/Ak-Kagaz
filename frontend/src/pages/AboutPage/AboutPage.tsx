@@ -49,9 +49,9 @@ export function AboutPage() {
                   <Truck className={styles.icon} />
                 </div>
                 <div className={styles.featureContent}>
-                  <h3 className={styles.featureTitle}>Быстрая доставка</h3>
+                  <h3 className={styles.featureTitle}>Доставка по Кыргызстану</h3>
                   <p className={styles.featureText}>
-                    Оперативная доставка по городу Ош
+                    Доставка по всему Кыргызстану; стоимость зависит от адреса
                   </p>
                 </div>
               </div>

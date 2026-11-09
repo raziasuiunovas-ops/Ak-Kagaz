@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/services/api';
 import type { Category, Product, ProductAttribute, ProductStatus } from '@/types';
 import { useCurrentUser } from '@/hooks';
+import { StatCard } from '@/components/StatCard';
+import { Icon } from '@/components/Icon';
 import styles from './ProductsPage.module.css';
 
 type ProductDraft = {
@@ -154,11 +156,25 @@ export function ProductsPage() {
   const change = (field: keyof ProductDraft, value: string) => setDraft((current) => current ? { ...current, [field]: value } : current);
   const defaultTier = tiers.data?.data[0];
 
+  // Calculate statistics
+  const totalProducts = products.data?.data.length ?? 0;
+  const activeProducts = products.data?.data.filter(p => p.status === 'ACTIVE').length ?? 0;
+  const productsWithPrice = prices.data?.data.filter(p => p.isActive).length ?? 0;
+  const featuredProducts = products.data?.data.filter(p => p.isFeatured).length ?? 0;
+
   return (
     <div className={styles.page}>
       <div className={styles.heading}>
         <div><h1 className={styles.title}>Товары</h1><p className={styles.muted}>Каталог из API. Новые карточки сохраняются неопубликованными, пока вы не укажете актуальную цену и остаток.</p></div>
         <button className={styles.primaryButton} onClick={() => setDraft({ ...emptyDraft })}>Добавить товар</button>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className={styles.statsGrid}>
+        <StatCard title="Всего товаров" value={totalProducts} icon="inventory_2" color="blue" />
+        <StatCard title="Активных" value={activeProducts} icon="check_circle" color="green" />
+        <StatCard title="С ценой" value={productsWithPrice} icon="payments" color="orange" />
+        <StatCard title="Популярные" value={featuredProducts} icon="star" color="orange" />
       </div>
 
       {errorMessage && <p className={styles.error}>{errorMessage}</p>}
@@ -171,7 +187,7 @@ export function ProductsPage() {
             const category = categories.data?.data.find((item) => item.id === product.categoryId);
             const categoryName = category?.translations.find((item) => item.locale === 'ru')?.name ?? '—';
             const price = prices.data?.data.find((item) => item.productId === product.id);
-            return <tr key={product.id}><td>{product.thumbnailUrl && <img className={styles.thumbnail} src={product.thumbnailUrl} alt="" />}</td><td>{translation?.name ?? product.slug}</td><td>{product.sku}</td><td>{categoryName}</td><td><span className={product.status === 'ACTIVE' ? styles.active : styles.inactive}>{product.status === 'ACTIVE' ? 'Опубликован' : product.status}</span></td><td>{price?.isEstimate ? <span className={styles.inactive}>Оценка: {Number(price.sellingPrice).toLocaleString()} KGS</span> : price?.isActive ? `${Number(price.sellingPrice).toLocaleString()} KGS` : 'Не задана'}</td><td><button className={styles.textButton} onClick={() => beginEdit(product)}>Редактировать</button>{defaultTier && <button className={styles.textButton} onClick={() => { const current = prices.data?.data.find((item) => item.productId === product.id); setPriceDraft({ productId: product.id, tierId: current?.tierId ?? defaultTier.id, sellingPrice: current ? String(current.sellingPrice) : '', purchasePrice: current?.purchasePrice === null || current?.purchasePrice === undefined ? '' : String(current.purchasePrice), estimateBasis: current?.estimateBasis ?? '', mode: current?.isEstimate === false ? 'confirmed' : 'estimate' }); }}>Цена</button>}{isSuperAdmin && <button className={styles.deleteButton} onClick={async () => { if (!window.confirm(`Удалить «${translation?.name ?? product.sku}»?`)) return; try { await apiClient.delete(`/products/${product.id}`); await Promise.all([queryClient.invalidateQueries({ queryKey: ['admin', 'products'] }), queryClient.invalidateQueries({ queryKey: ['products'] }), queryClient.invalidateQueries({ queryKey: ['categories'] }), queryClient.invalidateQueries({ queryKey: ['recommendations', 'popular'] })]); } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Не удалось удалить товар'); } }}>Удалить</button>}</td></tr>;
+            return <tr key={product.id}><td>{product.thumbnailUrl && <img className={styles.thumbnail} src={product.thumbnailUrl} alt="" />}</td><td>{translation?.name ?? product.slug}</td><td>{product.sku}</td><td>{categoryName}</td><td><span className={product.status === 'ACTIVE' ? styles.active : styles.inactive}>{product.status === 'ACTIVE' ? 'Опубликован' : product.status}</span></td><td>{price?.isEstimate ? <span className={styles.inactive}>{Number(price.sellingPrice).toLocaleString()} KGS</span> : price?.isActive ? `${Number(price.sellingPrice).toLocaleString()} KGS` : 'Не задана'}</td><td><div className={styles.actionButtons}><button className={styles.iconButton} onClick={() => beginEdit(product)} title="Редактировать"><Icon name="edit" size={20} /></button>{defaultTier && <button className={styles.iconButton} onClick={() => { const current = prices.data?.data.find((item) => item.productId === product.id); setPriceDraft({ productId: product.id, tierId: current?.tierId ?? defaultTier.id, sellingPrice: current ? String(current.sellingPrice) : '', purchasePrice: current?.purchasePrice === null || current?.purchasePrice === undefined ? '' : String(current.purchasePrice), estimateBasis: current?.estimateBasis ?? '', mode: current?.isEstimate === false ? 'confirmed' : 'estimate' }); }} title="Цена"><Icon name="payments" size={20} /></button>}{isSuperAdmin && <button className={styles.iconButtonDelete} onClick={async () => { if (!window.confirm(`Удалить «${translation?.name ?? product.sku}»?`)) return; try { await apiClient.delete(`/products/${product.id}`); await Promise.all([queryClient.invalidateQueries({ queryKey: ['admin', 'products'] }), queryClient.invalidateQueries({ queryKey: ['products'] }), queryClient.invalidateQueries({ queryKey: ['categories'] }), queryClient.invalidateQueries({ queryKey: ['recommendations', 'popular'] })]); } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Не удалось удалить товар'); } }} title="Удалить"><Icon name="delete" size={20} /></button>}</div></td></tr>;
           })}
         </tbody></table></div>
       ) : <p className={styles.muted}>Товаров пока нет.</p>)}

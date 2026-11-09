@@ -18,7 +18,8 @@ export function CartPage() {
   const [actionError, setActionError] = useState(false);
   const minOrderAmount = 400;
   const subtotal = Number(cart.data?.subtotal ?? 0);
-  const canCheckout = subtotal >= minOrderAmount;
+  const hasEstimatedItems = cart.data?.items.some((item) => item.priceIsEstimate) ?? false;
+  const canCheckout = subtotal >= minOrderAmount && !hasEstimatedItems;
   const currency = locale === 'ru' ? 'ru-RU' : 'ky-KG';
 
   const changeQuantity = (cartId: string, itemId: string, quantity: number) => {
@@ -45,6 +46,7 @@ export function CartPage() {
         ) : (
           <>
             {actionError && <p className={styles.actionError} role="alert">{t('cart.updateError')}</p>}
+            {hasEstimatedItems && <p className={styles.minOrderWarning} role="status">{t('cart.estimateNotice')}</p>}
             <div className={styles.cartGrid}>
               <div className={styles.cartItems}>
                 {cart.data.items.map((item) => {
@@ -83,6 +85,10 @@ export function CartPage() {
 
               <aside className={styles.cartSummary}>
                 <h2 className={styles.summaryTitle}>{t('cart.total')}</h2>
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>{t('cart.itemCount')}:</span>
+                  <span className={styles.summaryValue}>{cart.data?.totalItems ?? 0}</span>
+                </div>
                 <div className={styles.summaryRow}>
                   <span className={styles.summaryLabel}>{t('cart.subtotal')}:</span>
                   <span className={styles.summaryValue}>{subtotal.toLocaleString(currency)} сом</span>
