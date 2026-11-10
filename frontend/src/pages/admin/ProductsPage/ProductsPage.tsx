@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/services/api';
 import type { Category, Product } from '@/types';
 import { useCurrentUser } from '@/hooks';
@@ -8,7 +8,6 @@ import { StatCard } from '@/components/StatCard';
 import { Icon } from '@/components/Icon';
 import styles from './ProductsPage.module.css';
 
-type PriceTier = { id: string; displayNameRu: string };
 type PriceRecord = { id: string; productId: string; tierId: string; sellingPrice: number; purchasePrice: number | null; isActive: boolean; isEstimate: boolean; estimateBasis?: string };
 
 export function ProductsPage() {
@@ -27,10 +26,7 @@ export function ProductsPage() {
     queryKey: ['admin', 'categories'],
     queryFn: () => apiClient.get<{ data: Category[] }>('/categories', { params: { page: 1, limit: 100 } }),
   });
-  const tiers = useQuery({
-    queryKey: ['admin', 'price-tiers'],
-    queryFn: () => apiClient.get<{ data: PriceTier[] }>('/pricing/tiers', { params: { page: 1, limit: 100, isActive: true } }),
-  });
+
   const prices = useQuery({
     queryKey: ['admin', 'prices'],
     queryFn: () => apiClient.get<{ data: PriceRecord[] }>('/pricing/prices', { params: { page: 1, limit: 100 } }),

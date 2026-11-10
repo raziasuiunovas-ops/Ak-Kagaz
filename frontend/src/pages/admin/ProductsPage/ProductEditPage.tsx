@@ -132,7 +132,7 @@ export function ProductEditPage() {
     setDraft((current) => current ? { ...current, [field]: value } : current);
 
   if (product.isLoading || !draft) return <LoadingState />;
-  if (product.error) return <ErrorState error={product.error} />;
+  if (product.error) return <ErrorState message={product.error.message} />;
 
   const categoryOptions: SelectOption[] = [
     { value: '', label: 'Выберите категорию' },

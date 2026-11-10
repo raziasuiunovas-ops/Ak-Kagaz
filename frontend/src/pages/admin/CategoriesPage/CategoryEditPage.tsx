@@ -85,7 +85,7 @@ export function CategoryEditPage() {
   };
 
   if (category.isLoading || !draft) return <LoadingState />;
-  if (category.error) return <ErrorState error={category.error} />;
+  if (category.error) return <ErrorState message={category.error.message} />;
 
   return (
     <div className={styles.page}>
