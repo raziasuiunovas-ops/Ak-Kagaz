@@ -208,11 +208,11 @@ export class AuthService {
       return { message: 'If email exists, reset link will be sent' };
     }
 
-    const isAdmin = user.userRoles.some(({ role }) =>
-      ['SUPER_ADMIN', 'ADMIN', 'MANAGER', 'WAREHOUSE'].includes(role.name),
-    );
+    // Check if password reset is enabled (email mode required for production)
     const testMode = this.config.get<string>('PASSWORD_RESET_MODE', 'test') !== 'email';
-    if (testMode && !isAdmin) {
+    if (testMode) {
+      // Password reset temporarily disabled until email service is configured
+      // This prevents token leakage in API responses
       return { message: 'If email exists, reset link will be sent' };
     }
 
@@ -232,11 +232,7 @@ export class AuthService {
     const frontendUrl = this.config.get<string>('NEXTAUTH_URL', 'http://localhost:3000');
     const resetUrl = `${frontendUrl}/forgot-password?token=${encodeURIComponent(token)}`;
 
-    if (testMode) {
-      this.logger.log('Test password reset link created for an administrator.');
-      return { message: 'Password reset link created in test mode', testResetUrl: resetUrl };
-    }
-
+    // Send password reset email via Resend
     const apiKey = this.config.get<string>('RESEND_API_KEY');
     const from = this.config.get<string>('RESEND_FROM_EMAIL');
     if (!apiKey || !from) {
