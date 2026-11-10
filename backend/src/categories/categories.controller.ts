@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import type { MergeCategoryDto } from './dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -107,6 +108,16 @@ export class CategoriesController {
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
     return this.categoriesService.update(id, updateCategoryDto);
+  }
+
+  /**
+   * Safely merge the duplicate school-supplies category into the canonical backpacks category.
+   */
+  @Post(':id/merge')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('SUPER_ADMIN')
+  async merge(@Param('id') id: string, @Body() mergeCategoryDto: MergeCategoryDto) {
+    return this.categoriesService.mergeSchoolCategory(id, mergeCategoryDto);
   }
 
   /**

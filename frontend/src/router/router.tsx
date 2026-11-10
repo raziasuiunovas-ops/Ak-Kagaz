@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { RootLayout } from '@/layouts/RootLayout';
 
 // Pages
@@ -61,6 +61,10 @@ export const router = createBrowserRouter([
       {
         path: 'catalog',
         element: <CatalogPage />,
+      },
+      {
+        path: 'catalog/school-supplies',
+        element: <Navigate to="/catalog/backpacks" replace />,
       },
       {
         path: 'catalog/:slug',

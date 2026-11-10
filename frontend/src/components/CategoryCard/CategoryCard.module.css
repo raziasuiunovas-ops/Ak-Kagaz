@@ -32,7 +32,7 @@
   place-items: center;
   overflow: hidden;
   border-radius: 0.85rem;
-  background: #ebe4d1;
+  background: transparent;
 }
 
 .image {
@@ -41,6 +41,13 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
+  filter: drop-shadow(0 0.35rem 0.3rem rgb(38 87 124 / 12%));
+  transition: transform 220ms ease, filter 220ms ease;
+}
+
+.card:hover .image {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0.5rem 0.4rem rgb(38 87 124 / 16%));
 }
 
 .icon {
@@ -63,4 +70,9 @@
 @media (max-width: 480px) {
   .card { gap: 0.65rem; padding: 0.7rem; }
   .imageFrame, .icon { border-radius: 0.7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .image { transition: none; }
+  .card:hover, .card:hover .image { transform: none; }
 }

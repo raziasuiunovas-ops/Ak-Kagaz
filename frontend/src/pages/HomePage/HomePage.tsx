@@ -90,7 +90,7 @@ export function HomePage() {
 
       {/* Categories Section */}
       <section className={`${styles.section} ${styles.catalogSection}`}>
-        <Container>
+        <Container size="wide">
           <div className={styles.catalogBanner}>
             <div className={styles.catalogBannerContent}>
               <span className={styles.catalogEyebrow}>AK KAGAZ · {t('nav.catalog')}</span>
@@ -115,14 +115,6 @@ export function HomePage() {
               <p>{t('home.categories.empty')}</p>
             )}
           </div>
-          {!categories.isLoading && !categories.error && !!categories.data?.data.length && (
-            <div className={styles.catalogFooter}>
-              <span>{t('home.categories.footer')}</span>
-              <Link to="/catalog" className={styles.catalogFooterLink}>
-                {t('home.categories.viewCatalog')} <ArrowRight className={styles.sectionLinkIcon} aria-hidden="true" />
-              </Link>
-            </div>
-          )}
         </Container>
       </section>
 

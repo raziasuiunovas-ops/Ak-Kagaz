@@ -5,7 +5,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../common/services/prisma.service';
+import { Prisma } from '@prisma/client';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import type { MergeCategoryDto } from './dto';
 
 @Injectable()
 export class CategoriesService {
@@ -406,6 +408,116 @@ export class CategoriesService {
           },
         },
       });
+    });
+  }
+
+  /**
+   * Merge the legacy school-supplies category into the canonical backpacks category.
+   * Only Product.categoryId changes; product details and product-linked records stay intact.
+   */
+  async mergeSchoolCategory(sourceId: string, mergeCategoryDto: MergeCategoryDto) {
+    if (!mergeCategoryDto || typeof mergeCategoryDto !== 'object') {
+      throw new BadRequestException('Merge details are required');
+    }
+    const {
+      targetCategoryId,
+      imageUrl,
+      expectedSourceProductCount,
+      expectedTargetProductCount,
+      translations,
+    } = mergeCategoryDto;
+    if (typeof targetCategoryId !== 'string' || !targetCategoryId || sourceId === targetCategoryId) {
+      throw new BadRequestException('Source and target categories must be different');
+    }
+    if (typeof imageUrl !== 'string' || !imageUrl || imageUrl.length > 500) {
+      throw new BadRequestException('A valid category image path is required');
+    }
+    if (!Number.isSafeInteger(expectedSourceProductCount) || expectedSourceProductCount < 0 ||
+      !Number.isSafeInteger(expectedTargetProductCount) || expectedTargetProductCount < 0) {
+      throw new BadRequestException('Expected category product counts are invalid');
+    }
+    if (!Array.isArray(translations) || translations.some((translation) =>
+      !translation || !['ru', 'ky'].includes(translation.locale) ||
+      typeof translation.name !== 'string' || !translation.name.trim() || translation.name.length > 100 ||
+      (translation.description !== undefined && (typeof translation.description !== 'string' || translation.description.length > 500)),
+    )) {
+      throw new BadRequestException('Valid Russian and Kyrgyz category translations are required');
+    }
+    const translationByLocale = new Map(translations.map((translation) => [translation.locale, translation]));
+    if (translationByLocale.get('ru')?.name !== 'Школа и канцелярские принадлежности' ||
+      translationByLocale.get('ky')?.name !== 'Мектеп жана кеңсе буюмдары') {
+      throw new BadRequestException('The canonical Russian and Kyrgyz category names are required');
+    }
+    const expectedImageUrl = `/catalog/${encodeURIComponent('Школьные принадлежности с рюкзаком.png')}`;
+    if (imageUrl !== expectedImageUrl) {
+      throw new BadRequestException('The approved transparent school-supplies image is required');
+    }
+
+    const locales = translations.map((translation) => translation.locale);
+    if (locales.length !== 2 || !locales.includes('ru') || !locales.includes('ky')) {
+      throw new BadRequestException('Both Russian and Kyrgyz category translations are required');
+    }
+
+    return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const source = await tx.category.findUnique({
+        where: { id: sourceId },
+        include: { children: { select: { id: true } } },
+      });
+      const target = await tx.category.findUnique({ where: { id: targetCategoryId } });
+
+      if (!source) throw new NotFoundException(`Category with ID "${sourceId}" not found`);
+      if (!target) throw new NotFoundException(`Category with ID "${targetCategoryId}" not found`);
+      if (source.slug !== 'school-supplies' || target.slug !== 'backpacks') {
+        throw new BadRequestException('Only the duplicate school-supplies category can be merged into backpacks');
+      }
+      if (!target.isActive) {
+        throw new BadRequestException('The canonical school category must remain active');
+      }
+      if (source.children.length > 0) {
+        throw new BadRequestException('The source category has subcategories and cannot be merged safely');
+      }
+      if (source.parentId !== target.parentId) {
+        throw new BadRequestException('Categories must have the same parent before they can be merged');
+      }
+
+      const sourceProductCount = await tx.product.count({ where: { categoryId: source.id } });
+      const targetProductCountBefore = await tx.product.count({ where: { categoryId: target.id } });
+      if (sourceProductCount !== expectedSourceProductCount || targetProductCountBefore !== expectedTargetProductCount) {
+        throw new BadRequestException('Category product counts changed. Refresh categories and confirm the merge again');
+      }
+      const movedProducts = await tx.product.updateMany({
+        where: { categoryId: source.id },
+        data: { categoryId: target.id },
+      });
+      const remainingSourceProducts = await tx.product.count({ where: { categoryId: source.id } });
+      if (movedProducts.count !== sourceProductCount || remainingSourceProducts !== 0) {
+        throw new BadRequestException('Not all products could be transferred; no category changes were committed');
+      }
+
+      await tx.category.update({ where: { id: target.id }, data: { imageUrl } });
+      await tx.categoryTranslation.deleteMany({ where: { categoryId: target.id } });
+      await tx.categoryTranslation.createMany({
+        data: translations.map((translation) => ({
+          categoryId: target.id,
+          locale: translation.locale,
+          name: translation.name,
+          description: translation.description,
+        })),
+      });
+      await tx.category.delete({ where: { id: source.id } });
+
+      const targetProductCount = await tx.product.count({ where: { categoryId: target.id } });
+      if (targetProductCount !== targetProductCountBefore + sourceProductCount) {
+        throw new BadRequestException('The final product count did not match; no category changes were committed');
+      }
+
+      return {
+        sourceSlug: source.slug,
+        targetSlug: target.slug,
+        sourceProductCount,
+        movedProductCount: movedProducts.count,
+        targetProductCount,
+      };
     });
   }
 
