@@ -58,7 +58,7 @@ export function HomePage() {
   });
 
   const activeCampaigns = useActiveCampaigns(locale);
-  const categories = useCategories({ locale, isActive: true, limit: 100 });
+  const categories = useCategories({ locale, isActive: true, limit: 4 });
 
   // Choose which recommendations to show
   const recommendations = authenticated ? personalRecommendations : guestRecommendations;
@@ -89,10 +89,20 @@ export function HomePage() {
       <HeroSection />
 
       {/* Categories Section */}
-      <section className={styles.section}>
+      <section className={`${styles.section} ${styles.catalogSection}`}>
         <Container>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>{t('home.categories.title')}</h2>
+          <div className={styles.catalogBanner}>
+            <div className={styles.catalogBannerContent}>
+              <span className={styles.catalogEyebrow}>AK KAGAZ · {t('nav.catalog')}</span>
+              <h2 className={styles.sectionTitle}>{t('home.categories.title')}</h2>
+              <p className={styles.catalogDescription}>{t('home.categories.description')}</p>
+              <Link to="/catalog" className={styles.catalogBannerLink}>
+                {t('home.categories.viewCatalog')} <ArrowRight className={styles.sectionLinkIcon} aria-hidden="true" />
+              </Link>
+            </div>
+            <div className={styles.catalogBannerVisual} aria-hidden="true">
+              <img src="/catalog/Баннер каталог товаров.png" alt="" loading="lazy" />
+            </div>
           </div>
           <div className={styles.categoriesGrid}>
             {categories.isLoading ? (
@@ -100,11 +110,19 @@ export function HomePage() {
             ) : categories.error ? (
               <ErrorState message={t('home.categories.error')} onRetry={() => void categories.refetch()} />
             ) : categories.data?.data.length ? (
-              categories.data.data.map((category) => <CategoryCard key={category.id} category={category} locale={locale} />)
+              categories.data.data.slice(0, 4).map((category) => <CategoryCard key={category.id} category={category} locale={locale} />)
             ) : (
               <p>{t('home.categories.empty')}</p>
             )}
           </div>
+          {!categories.isLoading && !categories.error && !!categories.data?.data.length && (
+            <div className={styles.catalogFooter}>
+              <span>{t('home.categories.footer')}</span>
+              <Link to="/catalog" className={styles.catalogFooterLink}>
+                {t('home.categories.viewCatalog')} <ArrowRight className={styles.sectionLinkIcon} aria-hidden="true" />
+              </Link>
+            </div>
+          )}
         </Container>
       </section>
 

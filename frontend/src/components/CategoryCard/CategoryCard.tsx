@@ -37,7 +37,13 @@ export function CategoryCard({ category, locale, count }: Props) {
 
   return (
     <Link to={`/catalog/${category.slug}`} className={styles.card}>
-      <span className={styles.icon} aria-hidden="true"><Icon strokeWidth={1.7} /></span>
+      {category.imageUrl ? (
+        <span className={styles.imageFrame} aria-hidden="true">
+          <img className={styles.image} src={category.imageUrl} alt="" loading="lazy" />
+        </span>
+      ) : (
+        <span className={styles.icon} aria-hidden="true"><Icon strokeWidth={1.7} /></span>
+      )}
       <span className={styles.content}>
         <span className={styles.name}>{translation?.name ?? category.slug}</span>
         {description && <span className={styles.description}>{description}</span>}

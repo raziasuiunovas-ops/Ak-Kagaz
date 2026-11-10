@@ -370,11 +370,144 @@
   gap: 24px;
 }
 
+/* Catalog showcase */
+.catalogSection { padding-top: 1.75rem; }
+.catalogBanner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(20rem, 1.05fr);
+  align-items: center;
+  min-height: clamp(19rem, 34vw, 28rem);
+  margin-bottom: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  overflow: hidden;
+  border: 1px solid rgb(38 87 124 / 12%);
+  border-radius: 1.5rem;
+  background: #ebe4d1;
+  box-shadow: 0 16px 42px rgb(38 87 124 / 9%);
+  isolation: isolate;
+}
+.catalogBanner::before {
+  position: absolute;
+  z-index: -1;
+  top: -8rem;
+  right: 24%;
+  width: 21rem;
+  height: 21rem;
+  border: 1px solid rgb(38 87 124 / 13%);
+  border-radius: 50%;
+  content: '';
+}
+.catalogBanner::after {
+  position: absolute;
+  z-index: -1;
+  right: 8%;
+  bottom: 9%;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: #e55604;
+  box-shadow: -4.5rem -1.8rem 0 -0.15rem #26577c, 2rem -6rem 0 -0.2rem #e55604;
+  content: '';
+}
+.catalogBannerContent { position: relative; z-index: 1; max-width: 34rem; }
+.catalogEyebrow {
+  display: inline-flex;
+  margin-bottom: 0.8rem;
+  color: #e55604;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.catalogBanner .sectionTitle {
+  max-width: 12ch;
+  color: #26577c;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.08;
+}
+.catalogDescription {
+  max-width: 36rem;
+  margin: 1rem 0 1.5rem;
+  color: #26577c;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  line-height: 1.65;
+}
+.catalogBannerLink, .catalogFooterLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 2.9rem;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid #e55604;
+  border-radius: 999px;
+  background: #e55604;
+  color: #fff;
+  font-weight: 650;
+  text-decoration: none;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+.catalogBannerLink:hover, .catalogFooterLink:hover { transform: translateY(-1px); background: #c94b04; }
+.catalogBannerVisual {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 0;
+  height: 100%;
+  min-height: 16rem;
+  place-items: center;
+}
+.catalogBannerVisual img {
+  display: block;
+  width: min(100%, 38rem);
+  max-height: 27rem;
+  object-fit: contain;
+  object-position: center;
+}
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+}
+.catalogFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgb(38 87 124 / 14%);
+  border-radius: 1rem;
+  background: #fff;
+  color: #26577c;
+}
+.catalogFooterLink { flex: 0 0 auto; min-height: 2.6rem; padding: 0.55rem 1rem; }
+
+@media (max-width: 900px) {
+  .catalogBanner { grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.9fr); }
+  .categoriesGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 768px) {
+  .catalogBanner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+    padding: 1.5rem;
+  }
+  .catalogBannerContent { max-width: none; }
+  .catalogBanner .sectionTitle { max-width: none; font-size: clamp(1.9rem, 8vw, 2.6rem); }
+  .catalogBannerVisual { min-height: 10rem; max-height: 16rem; }
+  .catalogBannerVisual img { max-height: 16rem; }
   .campaignsGrid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
+}
+
+@media (max-width: 560px) {
+  .categoriesGrid { grid-template-columns: minmax(0, 1fr); }
+  .catalogFooter { align-items: flex-start; flex-direction: column; }
 }
 
 /* ============================================

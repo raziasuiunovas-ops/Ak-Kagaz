@@ -31,8 +31,8 @@ import { AuthRoute } from '@/components/AuthRoute/AuthRoute';
 
 // Admin pages
 import { DashboardPage } from '@/pages/admin/DashboardPage';
-import { ProductsPage } from '@/pages/admin/ProductsPage';
-import { CategoriesPage } from '@/pages/admin/CategoriesPage';
+import { ProductsPage, ProductCreatePage, ProductEditPage } from '@/pages/admin/ProductsPage';
+import { CategoriesPage, CategoryCreatePage, CategoryEditPage } from '@/pages/admin/CategoriesPage';
 import { OrdersPage } from '@/pages/admin/OrdersPage';
 import { CustomersPage } from '@/pages/admin/CustomersPage';
 import { WarehousePage } from '@/pages/admin/WarehousePage';
@@ -180,8 +180,24 @@ export const router = createBrowserRouter([
         element: <ProductsPage />,
       },
       {
+        path: 'products/create',
+        element: <ProductCreatePage />,
+      },
+      {
+        path: 'products/:id/edit',
+        element: <ProductEditPage />,
+      },
+      {
         path: 'categories',
         element: <CategoriesPage />,
+      },
+      {
+        path: 'categories/create',
+        element: <CategoryCreatePage />,
+      },
+      {
+        path: 'categories/:id/edit',
+        element: <CategoryEditPage />,
       },
       {
         path: 'orders',

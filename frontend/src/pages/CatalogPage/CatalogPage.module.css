@@ -3,6 +3,26 @@
   min-height: 60vh;
 }
 
+.catalogIntro {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(13rem, 0.8fr);
+  align-items: center;
+  min-height: 12rem;
+  margin: 1rem 0 1.75rem;
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 3.5vw, 2.5rem);
+  overflow: hidden;
+  border: 1px solid rgb(38 87 124 / 12%);
+  border-radius: 1.25rem;
+  background: #ebe4d1;
+}
+.catalogIntroContent { position: relative; z-index: 1; }
+.catalogEyebrow { color: #e55604; font-size: .7rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+.catalogIntro .title { margin: .55rem 0 .4rem; color: #26577c; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+.catalogDescription { max-width: 38rem; margin: 0; color: #26577c; line-height: 1.6; }
+.catalogIntroVisual { display: grid; min-width: 0; height: 100%; min-height: 9rem; place-items: center; }
+.catalogIntroVisual img { display: block; width: min(100%, 22rem); max-height: 13rem; object-fit: contain; }
+
 .title {
   margin: 1.5rem 0;
   font-size: 2rem;
@@ -72,6 +92,12 @@
   .categoriesGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+@media (max-width: 680px) {
+  .catalogIntro { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .catalogIntroVisual { min-height: 7rem; max-height: 10rem; }
+  .catalogIntroVisual img { max-height: 10rem; }
 }
 
 /* ============================================

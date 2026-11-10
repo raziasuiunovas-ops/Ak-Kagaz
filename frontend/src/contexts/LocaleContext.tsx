@@ -135,6 +135,9 @@ const translationsRu: Record<string, string> = {
   'home.hero.benefit.delivery': 'Удобная доставка',
   'home.hero.benefit.care': 'Забота о клиентах',
   'home.categories.title': 'Категории товаров',
+  'home.categories.description': 'Товары для учёбы, работы, творчества и повседневных задач — выбирайте подходящий раздел каталога.',
+  'home.categories.viewCatalog': 'Перейти в каталог',
+  'home.categories.footer': 'Все категории и товары собраны в полном каталоге.',
   'home.categories.empty': 'Категории пока не добавлены.',
   'home.categories.error': 'Не удалось загрузить категории. Попробуйте ещё раз.',
   'home.popular.title': 'Популярные товары',
@@ -144,6 +147,7 @@ const translationsRu: Record<string, string> = {
   
   // Catalog
   'catalog.title': 'Каталог товаров',
+  'catalog.description': 'Выберите раздел, чтобы найти нужные товары для школы, работы и творчества.',
   'catalog.filters': 'Фильтры',
   'catalog.sort': 'Сортировка',
   'catalog.sort.popular': 'По популярности',
@@ -400,6 +404,9 @@ const translationsKy: Record<string, string> = {
   'home.hero.benefit.delivery': 'Ыңгайлуу жеткирүү',
   'home.hero.benefit.care': 'Кардарларга камкордук',
   'home.categories.title': 'Товар категориялары',
+  'home.categories.description': 'Окуу, иш, чыгармачылык жана күнүмдүк керектөөлөр үчүн ылайыктуу бөлүмдү тандаңыз.',
+  'home.categories.viewCatalog': 'Каталогго өтүү',
+  'home.categories.footer': 'Бардык бөлүмдөр жана товарлар толук каталогдо топтолгон.',
   'home.categories.empty': 'Азырынча категориялар жок.',
   'home.categories.error': 'Категорияларды жүктөө мүмкүн болгон жок. Кайра аракет кылыңыз.',
   'home.popular.title': 'Популярдуу товарлар',
@@ -409,6 +416,7 @@ const translationsKy: Record<string, string> = {
   
   // Catalog
   'catalog.title': 'Товарлар каталогу',
+  'catalog.description': 'Окууга, ишке жана чыгармачылыкка керектүү товарларды табуу үчүн бөлүмдү тандаңыз.',
   'catalog.filters': 'Фильтрлер',
   'catalog.sort': 'Сорттоо',
   'catalog.sort.popular': 'Популярдуулугу боюнча',

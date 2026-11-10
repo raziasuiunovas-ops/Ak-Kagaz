@@ -110,14 +110,15 @@ export function setPageMetadata(metadata: PageMetadata): void {
   updateMetaTag('meta[property="og:title"]', 'content', title);
   updateMetaTag('meta[property="og:description"]', 'content', description);
   updateMetaTag('meta[property="og:image"]', 'content', ogImage);
+  updateMetaTag('meta[property="og:image:secure_url"]', 'content', ogImage);
   updateMetaTag('meta[property="og:url"]', 'content', pageUrl);
   updateMetaTag('meta[property="og:type"]', 'content', type);
   updateMetaTag('meta[property="og:locale"]', 'content', ogLocale);
   updateMetaTag('meta[property="og:site_name"]', 'content', 'AK KAGAZ');
   
   // Дополнительные OG теги для изображения
-  updateMetaTag('meta[property="og:image:width"]', 'content', '1200');
-  updateMetaTag('meta[property="og:image:height"]', 'content', '630');
+  updateMetaTag('meta[property="og:image:width"]', 'content', '1672');
+  updateMetaTag('meta[property="og:image:height"]', 'content', '941');
   updateMetaTag('meta[property="og:image:alt"]', 'content', title);
   updateMetaTag('meta[property="og:image:type"]', 'content', 'image/png');
   

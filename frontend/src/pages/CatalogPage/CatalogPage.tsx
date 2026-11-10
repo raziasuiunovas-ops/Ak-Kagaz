@@ -30,7 +30,16 @@ export function CatalogPage() {
       <Container>
         <BackButton />
         <Breadcrumbs items={breadcrumbs} />
-        <h1 className={styles.title}>{t('catalog.title')}</h1>
+        <section className={styles.catalogIntro} aria-labelledby="catalog-title">
+          <div className={styles.catalogIntroContent}>
+            <span className={styles.catalogEyebrow}>AK KAGAZ · {t('nav.catalog')}</span>
+            <h1 className={styles.title} id="catalog-title">{t('catalog.title')}</h1>
+            <p className={styles.catalogDescription}>{t('catalog.description')}</p>
+          </div>
+          <div className={styles.catalogIntroVisual} aria-hidden="true">
+            <img src="/catalog/Баннер каталог товаров.png" alt="" loading="lazy" />
+          </div>
+        </section>
         {categories.isLoading ? (
           <LoadingState message={t('common.loading')} />
         ) : categories.error ? (
