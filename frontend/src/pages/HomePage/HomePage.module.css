@@ -457,6 +457,7 @@
   height: 100%;
   min-height: 16rem;
   place-items: center;
+  background: transparent;
 }
 .catalogBannerVisual img {
   display: block;
@@ -501,80 +502,89 @@
    ============================================ */
 
 [data-theme="dark"] .homePage {
-  background: var(--color-background);
+  background: #0a0e14;
 }
 
-[data-theme="dark"] .hero { background: #000000; }
+[data-theme="dark"] .hero { 
+  background: #26577C;
+}
 
 [data-theme="dark"] .heroTitle {
-  color: var(--color-text-primary);
+  color: #EBE4D1;
 }
 
 [data-theme="dark"] .heroSubtitle {
-  color: var(--color-text-secondary);
+  color: rgba(235, 228, 209, 0.9);
 }
 
 [data-theme="dark"] .heroCta {
-  background-color: var(--color-primary);
-  box-shadow: 0 0 20px rgba(38, 87, 124, 0.4);
+  background-color: #E55604;
+  box-shadow: 0 0 20px rgba(229, 86, 4, 0.4);
 }
 
 [data-theme="dark"] .heroCta:hover {
-  background-color: var(--color-primary-hover);
-  box-shadow: 0 0 30px rgba(38, 87, 124, 0.6);
+  background-color: #cc4d04;
+  box-shadow: 0 0 30px rgba(229, 86, 4, 0.6);
 }
 
-[data-theme="dark"] .heroVisualPlaceholder { background: #ADD8E6; opacity: 0.5; }
+[data-theme="dark"] .heroVisualPlaceholder { 
+  background: rgba(38, 87, 124, 0.3);
+  opacity: 0.5; 
+}
 
 [data-theme="dark"] .sectionTitle {
   color: var(--color-text-primary);
 }
 
 [data-theme="dark"] .sectionLink {
-  color: var(--color-primary);
+  color: #26577C;
 }
 
 [data-theme="dark"] .sectionLink:hover {
-  color: var(--color-primary-hover);
+  color: #1e4560;
 }
 
 [data-theme="dark"] .categoryCardPlaceholder {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: rgba(38, 87, 124, 0.15);
+  border: 1px solid rgba(173, 216, 230, 0.25);
 }
 
 [data-theme="dark"] .categoryCardPlaceholder:hover {
-  background-color: var(--color-hover);
+  background-color: rgba(38, 87, 124, 0.25);
   box-shadow: 0 0 20px rgba(38, 87, 124, 0.2);
 }
 
-[data-theme="dark"] .categoryImage { background: #ADD8E6; }
+[data-theme="dark"] .categoryImage { 
+  background: rgba(38, 87, 124, 0.2);
+}
 
 [data-theme="dark"] .categoryName {
   color: var(--color-text-primary);
 }
 
 [data-theme="dark"] .productCardPlaceholder {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: rgba(38, 87, 124, 0.15);
+  border: 1px solid rgba(173, 216, 230, 0.25);
 }
 
 [data-theme="dark"] .productCardPlaceholder:hover {
   box-shadow: 0 4px 20px rgba(38, 87, 124, 0.3);
 }
 
-[data-theme="dark"] .productImage { background: #ADD8E6; }
+[data-theme="dark"] .productImage { 
+  background: rgba(38, 87, 124, 0.2);
+}
 
 [data-theme="dark"] .productName {
   color: var(--color-text-primary);
 }
 
 [data-theme="dark"] .productPrice {
-  color: var(--color-primary);
+  color: #26577C;
 }
 
 [data-theme="dark"] .aboutSection {
-  background-color: var(--color-surface);
+  background-color: rgba(38, 87, 124, 0.15);
 }
 
 [data-theme="dark"] .aboutText {
@@ -582,18 +592,20 @@
 }
 
 [data-theme="dark"] .aboutLink {
-  color: var(--color-primary);
+  color: #26577C;
 }
 
 [data-theme="dark"] .aboutLink:hover {
-  color: var(--color-primary-hover);
+  color: #1e4560;
 }
 
-[data-theme="dark"] .aboutImagePlaceholder { background: #ADD8E6; }
+[data-theme="dark"] .aboutImagePlaceholder { 
+  background: rgba(38, 87, 124, 0.3);
+}
 
 [data-theme="dark"] .reviewCardPlaceholder {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background-color: rgba(38, 87, 124, 0.15);
+  border: 1px solid rgba(173, 216, 230, 0.25);
 }
 
 [data-theme="dark"] .reviewText {
@@ -609,4 +621,49 @@
   opacity: 0.7;
 }
 
-[data-theme="dark"] .reviewAvatar { background: #ADD8E6; }
+[data-theme="dark"] .reviewAvatar { 
+  background: rgba(38, 87, 124, 0.3);
+}
+
+[data-theme="dark"] .reviewStar {
+  fill: #E55604;
+  color: #E55604;
+}
+
+/* Dark theme - Catalog Banner */
+[data-theme="dark"] .catalogBanner {
+  background: #26577C;
+  border-color: rgba(173, 216, 230, 0.2);
+  box-shadow: 0 16px 42px rgba(38, 87, 124, 0.3);
+}
+
+[data-theme="dark"] .catalogBanner::before {
+  border-color: rgba(173, 216, 230, 0.15);
+}
+
+[data-theme="dark"] .catalogBannerVisual {
+  background: transparent;
+}
+
+[data-theme="dark"] .catalogEyebrow {
+  color: #E55604;
+}
+
+[data-theme="dark"] .catalogBanner .sectionTitle {
+  color: #EBE4D1;
+}
+
+[data-theme="dark"] .catalogDescription {
+  color: rgba(235, 228, 209, 0.9);
+}
+
+[data-theme="dark"] .catalogBannerLink {
+  background: #E55604;
+  border-color: #E55604;
+  box-shadow: 0 0 20px rgba(229, 86, 4, 0.3);
+}
+
+[data-theme="dark"] .catalogBannerLink:hover {
+  background: #c94b04;
+  box-shadow: 0 0 30px rgba(229, 86, 4, 0.4);
+}

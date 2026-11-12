@@ -138,7 +138,7 @@ export function HomePage() {
 
       {/* Popular Products Section */}
       <section className={styles.section}>
-        <Container>
+        <Container size="wide">
           <RecommendationsBlock
             title={t('home.popular.title')}
             products={popularList}
@@ -155,7 +155,7 @@ export function HomePage() {
       {/* Personalized Recommendations */}
       {authenticated && (
         <section className={styles.section}>
-          <Container>
+          <Container size="wide">
             <RecommendationsBlock
               title={t('recommendations.forYou')}
               products={recommendations.data}
@@ -171,7 +171,7 @@ export function HomePage() {
       {/* Repeat Purchases - for authenticated users */}
       {authenticated && (
         <section className={styles.section}>
-          <Container>
+          <Container size="wide">
             <RepeatPurchases />
           </Container>
         </section>
@@ -179,7 +179,7 @@ export function HomePage() {
 
       {/* Trending Products */}
       <section className={styles.section}>
-        <Container>
+        <Container size="wide">
           <RecommendationsBlock
             title={t('recommendations.trending')}
             products={trendingList}
@@ -195,7 +195,7 @@ export function HomePage() {
 
       {/* About Section */}
       <section className={styles.aboutSection}>
-        <Container>
+        <Container size="wide">
           <div className={styles.aboutGrid}>
             <div className={styles.aboutContent}>
               <h2 className={styles.sectionTitle}>{t('home.about.title')}</h2>
@@ -219,7 +219,7 @@ export function HomePage() {
 
       {/* Customer Reviews Section */}
       <section className={styles.section}>
-        <Container>
+        <Container size="wide">
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>{t('home.reviews.title')}</h2>
           </div>

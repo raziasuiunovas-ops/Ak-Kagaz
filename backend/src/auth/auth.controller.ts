@@ -71,7 +71,14 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleCallback(@Request() req: any, @Res() res: Response) {
     const result = await this.authService.loginWithGoogle(req.user);
-    const frontendUrl = this.config.get<string>('NEXTAUTH_URL') || 'http://localhost:3000';
+    
+    // Determine frontend URL based on environment
+    const nodeEnv = this.config.get<string>('NODE_ENV');
+    const isProduction = nodeEnv === 'production';
+    
+    const frontendUrl = isProduction
+      ? this.config.get<string>('NEXT_PUBLIC_SITE_URL') || 'https://ak-kagaz.vercel.app'
+      : this.config.get<string>('NEXTAUTH_URL') || 'http://localhost:3000';
 
     if ('requires2FA' in result && result.userId) {
       return res.redirect(`${frontendUrl}/login?oauth2fa=${encodeURIComponent(result.userId)}`);

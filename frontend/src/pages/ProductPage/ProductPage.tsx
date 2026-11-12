@@ -23,6 +23,8 @@ export function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariantId, setSelectedVariantId] = useState<string | undefined>();
   const [selectedTab, setSelectedTab] = useState<'description' | 'specifications' | 'reviews'>('description');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageLoading, setImageLoading] = useState(true);
 
   const { data: product, isLoading, error } = useProductBySlug(slug || '', locale);
   
@@ -89,6 +91,38 @@ export function ProductPage() {
     ? ({ 'Зелёный': 'Жашыл', 'Красный': 'Кызыл', 'Синий': 'Көк', 'Чёрный': 'Кара', 'Розовый': 'Кызгылт', 'Голубой': 'Көгүлтүр', 'Светло-голубой': 'Ачык көк' }[name] ?? name)
     : name;
 
+  // Prepare gallery images
+  const galleryImages = [
+    selectedVariant?.imageUrl || product.thumbnailUrl,
+    ...(product.images?.map((img) => img.url) || [])
+  ].filter(Boolean) as string[];
+
+  const currentImage = galleryImages[selectedImageIndex] || product.thumbnailUrl;
+
+  // Preload adjacent images
+  useEffect(() => {
+    if (galleryImages.length > 1) {
+      const nextIndex = (selectedImageIndex + 1) % galleryImages.length;
+      const prevIndex = (selectedImageIndex - 1 + galleryImages.length) % galleryImages.length;
+      [galleryImages[nextIndex], galleryImages[prevIndex]].forEach((src) => {
+        if (src) {
+          const img = new Image();
+          img.src = src;
+        }
+      });
+    }
+  }, [selectedImageIndex, galleryImages]);
+
+  // Reset image loading when image changes
+  useEffect(() => {
+    setImageLoading(true);
+  }, [currentImage]);
+
+  // Reset selected image when variant changes
+  useEffect(() => {
+    setSelectedImageIndex(0);
+  }, [selectedVariantId]);
+
   // Check if product is in active campaign
   const activeCampaign = productCampaigns.data?.[0];
   const campaignProduct = activeCampaign?.products.find((cp) => cp.productId === product.id);
@@ -129,18 +163,55 @@ export function ProductPage() {
           {/* Product Images Gallery */}
           <div className={styles.gallery}>
             <div className={styles.mainImage}>
-              {selectedVariant?.imageUrl || product.thumbnailUrl ? (
-                <img src={selectedVariant?.imageUrl || product.thumbnailUrl} alt={translation?.name} />
+              {currentImage ? (
+                <>
+                  <img 
+                    src={currentImage} 
+                    alt={translation?.name}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    onLoad={() => setImageLoading(false)}
+                    style={{
+                      opacity: imageLoading ? 0 : 1,
+                      transition: 'opacity 0.3s ease'
+                    }}
+                  />
+                  {imageLoading && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: '50px',
+                      height: '50px',
+                      border: '4px solid #e0e0e0',
+                      borderTop: '4px solid #26577C',
+                      borderRadius: '50%',
+                      animation: 'spin 0.8s linear infinite'
+                    }} />
+                  )}
+                </>
               ) : (
                 <div className={styles.imagePlaceholder} />
               )}
             </div>
-            {product.images && product.images.length > 0 && (
+            {galleryImages.length > 1 && (
               <div className={styles.thumbnails}>
-                {product.images.slice(0, 4).map((img) => (
-                  <div key={img.id} className={styles.thumbnail}>
-                    <img src={img.url} alt={img.altText || translation?.name} />
-                  </div>
+                {galleryImages.slice(0, 4).map((imgSrc, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className={`${styles.thumbnail} ${index === selectedImageIndex ? styles.thumbnailActive : ''}`}
+                    onClick={() => setSelectedImageIndex(index)}
+                  >
+                    <img 
+                      src={imgSrc} 
+                      alt={`${translation?.name} - ${index + 1}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
                 ))}
               </div>
             )}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart } from 'lucide-react';
 import type { Product } from '@/types';
@@ -30,6 +30,9 @@ export function ProductCard({
   const addToCart = useAddProductToCart();
   const [notice, setNotice] = useState<'added' | 'error' | null>(null);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  
   const translation = product.translations.find((item) => item.locale === locale) ?? product.translations[0];
   const photos = useMemo(() => {
     const attached: ProductCardPhoto[] = [
@@ -45,6 +48,7 @@ export function ProductCard({
       return true;
     });
   }, [product.images, product.variants, product.thumbnailUrl]);
+  
   const displayPrice = getCurrentDisplayPrice(product.prices);
   const price = displayPrice?.price;
   const markedFavorite = isFavorite ?? favorites.isFavorite(product.id);
@@ -52,6 +56,25 @@ export function ProductCard({
   const canAdd = product.status === 'ACTIVE' && !addToCart.isPending;
   const currentPhotoIndex = photos.length ? photoIndex % photos.length : 0;
   const currentPhoto = photos[currentPhotoIndex];
+  
+  // Reset image loaded state when photo changes
+  useEffect(() => {
+    setImageLoaded(false);
+    setImageError(false);
+  }, [currentPhotoIndex, currentPhoto?.src]);
+  
+  // Preload next image on hover or after current image loads
+  useEffect(() => {
+    if (photos.length > 1 && imageLoaded) {
+      const nextIndex = (currentPhotoIndex + 1) % photos.length;
+      const nextPhoto = photos[nextIndex];
+      if (nextPhoto?.src) {
+        const img = new Image();
+        img.src = nextPhoto.src;
+      }
+    }
+  }, [photos, currentPhotoIndex, imageLoaded]);
+  
   const movePhoto = (offset: number) => setPhotoIndex((current) => photos.length > 1
     ? (current + offset + photos.length) % photos.length
     : 0);
@@ -79,9 +102,47 @@ export function ProductCard({
       <div className={styles.imageContainer}>
         <Link to={`/product/${product.slug}`} className={styles.imageLink} aria-label={translation?.name}>
           {currentPhoto ? (
-            <img src={currentPhoto.src} alt={currentPhoto.alt || translation?.name || ''} className={styles.image} loading="lazy" />
+            <img 
+              src={currentPhoto.src} 
+              alt={currentPhoto.alt || translation?.name || ''} 
+              className={styles.image} 
+              loading="lazy"
+              fetchPriority="auto"
+              decoding="async"
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+              style={{ 
+                opacity: imageLoaded ? 1 : 0,
+                transition: 'opacity 0.3s ease'
+              }}
+            />
           ) : (
             <span className={styles.imagePlaceholder} aria-hidden="true" />
+          )}
+          {!imageLoaded && !imageError && currentPhoto && (
+            <div 
+              className={styles.imagePlaceholder}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#f5f5f5'
+              }}
+            >
+              <div style={{
+                width: '40px',
+                height: '40px',
+                border: '3px solid #e0e0e0',
+                borderTop: '3px solid #26577C',
+                borderRadius: '50%',
+                animation: 'spin 0.8s linear infinite'
+              }} />
+            </div>
           )}
         </Link>
         {photos.length > 1 && <span className={styles.photoCounter} aria-live="polite">{currentPhotoIndex + 1} / {photos.length}</span>}

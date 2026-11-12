@@ -76,3 +76,45 @@
   .card, .image { transition: none; }
   .card:hover, .card:hover .image { transform: none; }
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .card {
+  background: rgba(38, 87, 124, 0.15);
+  border-color: rgba(173, 216, 230, 0.25);
+  box-shadow: 0 5px 18px rgba(38, 87, 124, 0.2);
+}
+
+[data-theme="dark"] .card:hover {
+  border-color: #26577C;
+  box-shadow: 0 10px 26px rgba(38, 87, 124, 0.35), 0 0 30px rgba(38, 87, 124, 0.15);
+  background: rgba(38, 87, 124, 0.25);
+}
+
+[data-theme="dark"] .imageFrame {
+  background: transparent;
+}
+
+[data-theme="dark"] .image {
+  filter: drop-shadow(0 0.35rem 0.3rem rgba(0, 0, 0, 0.3));
+}
+
+[data-theme="dark"] .card:hover .image {
+  filter: drop-shadow(0 0.5rem 0.4rem rgba(0, 0, 0, 0.4));
+}
+
+[data-theme="dark"] .icon {
+  background: rgba(235, 228, 209, 0.2);
+  color: #EBE4D1;
+}
+
+[data-theme="dark"] .name {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .description,
+[data-theme="dark"] .count {
+  color: var(--color-text-secondary);
+}

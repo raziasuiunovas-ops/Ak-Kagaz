@@ -486,7 +486,7 @@
    ============================================ */
 
 [data-theme="dark"] .hero {
-  background: var(--color-background);
+  background: #26577C;
 }
 
 [data-theme="dark"] .badge {

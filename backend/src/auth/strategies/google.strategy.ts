@@ -6,12 +6,22 @@ import { Profile, Strategy } from 'passport-google-oauth20';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(config: ConfigService) {
+    const nodeEnv = config.get<string>('NODE_ENV');
+    const isProduction = nodeEnv === 'production';
+    
+    // Determine base URL based on environment
+    const baseUrl = isProduction
+      ? config.get<string>('NEXT_PUBLIC_SITE_URL') || 'https://ak-kagaz.vercel.app'
+      : config.get<string>('NEXT_PUBLIC_APP_URL') || 'http://localhost:4000';
+    
+    // Construct callback URL: baseUrl + /api/auth/google/callback
+    const callbackURL = config.get<string>('GOOGLE_CALLBACK_URL') 
+      || `${baseUrl}/api/auth/google/callback`;
+
     super({
       clientID: config.get<string>('GOOGLE_CLIENT_ID') || '',
       clientSecret: config.get<string>('GOOGLE_CLIENT_SECRET') || '',
-      callbackURL:
-        config.get<string>('GOOGLE_CALLBACK_URL') ||
-        'http://localhost:4000/api/auth/google/callback',
+      callbackURL,
       scope: ['email', 'profile'],
     });
   }

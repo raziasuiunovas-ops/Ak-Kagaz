@@ -96,3 +96,19 @@
     gap: 12px;
   }
 }
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+
+[data-theme="dark"] .title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .link {
+  color: #26577C;
+}
+
+[data-theme="dark"] .link:hover {
+  color: #1e4560;
+}
