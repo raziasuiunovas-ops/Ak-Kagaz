@@ -26,6 +26,11 @@
   display: none;
 }
 
+[data-theme='dark'] .adminLayout {
+  background: #14212c;
+  color: #f3f0e7;
+}
+
 /* Tablet */
 @media (max-width: 1024px) {
   .mainContent {

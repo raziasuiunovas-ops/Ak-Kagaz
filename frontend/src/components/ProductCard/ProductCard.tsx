@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart } from 'lucide-react';
 import type { Product } from '@/types';
 import { CartToast } from '@/components/CartToast/CartToast';
+import { LoadingState } from '@/components/LoadingState';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useAddProductToCart, useFavorites } from '@/hooks';
 import { getCurrentDisplayPrice } from '@/utils/productPrice';
@@ -99,7 +100,7 @@ export function ProductCard({
 
   return (
     <article className={styles.card}>
-      <div className={styles.imageContainer}>
+      <div className={styles.imageContainer} aria-busy={!imageLoaded && !imageError && Boolean(currentPhoto)}>
         <Link to={`/product/${product.slug}`} className={styles.imageLink} aria-label={translation?.name}>
           {currentPhoto ? (
             <img 
@@ -120,28 +121,8 @@ export function ProductCard({
             <span className={styles.imagePlaceholder} aria-hidden="true" />
           )}
           {!imageLoaded && !imageError && currentPhoto && (
-            <div 
-              className={styles.imagePlaceholder}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: '#f5f5f5'
-              }}
-            >
-              <div style={{
-                width: '40px',
-                height: '40px',
-                border: '3px solid #e0e0e0',
-                borderTop: '3px solid #26577C',
-                borderRadius: '50%',
-                animation: 'spin 0.8s linear infinite'
-              }} />
+            <div className={styles.imageLoading}>
+              <LoadingState variant="inline" message={t('common.loading')} />
             </div>
           )}
         </Link>
@@ -189,10 +170,13 @@ export function ProductCard({
               onClick={() => void handleAddToCart()}
               disabled={!canAdd}
               className={styles.addToCartBtn}
+              aria-busy={addToCart.isPending}
               aria-label={product.status === 'ACTIVE' ? t('product.addToCart') : t('product.outOfStock')}
               title={product.status === 'ACTIVE' ? t('product.addToCart') : t('product.outOfStock')}
             >
-              <ShoppingCart className={styles.cartIcon} aria-hidden="true" />
+              {addToCart.isPending
+                ? <LoadingState variant="inline" message={t('product.addingToCart')} />
+                : <ShoppingCart className={styles.cartIcon} aria-hidden="true" />}
               <span>{addToCart.isPending ? t('product.addingToCart') : t('product.addToCart')}</span>
             </button>
           )}

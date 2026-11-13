@@ -12,6 +12,34 @@
   z-index: 20;
 }
 
+[data-theme='dark'] .header {
+  background: #1b2a37;
+  border-color: #3b5366;
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme='dark'] .title {
+  color: #f3f0e7;
+}
+
+[data-theme='dark'] .menuBtn,
+[data-theme='dark'] .toggleBtn,
+[data-theme='dark'] .iconBtn,
+[data-theme='dark'] .userName {
+  color: #c1cfda;
+}
+
+[data-theme='dark'] .menuBtn:hover,
+[data-theme='dark'] .toggleBtn:hover,
+[data-theme='dark'] .iconBtn:hover {
+  color: #b9dcf4;
+  background: #2a3d4f;
+}
+
+[data-theme='dark'] .divider {
+  background: #3b5366;
+}
+
 .left {
   display: flex;
   align-items: center;

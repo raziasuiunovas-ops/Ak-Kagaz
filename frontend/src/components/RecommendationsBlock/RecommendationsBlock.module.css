@@ -106,9 +106,9 @@
 }
 
 [data-theme="dark"] .link {
-  color: #26577C;
+  color: var(--color-primary-text);
 }
 
 [data-theme="dark"] .link:hover {
-  color: #1e4560;
+  color: #B8DDF5;
 }

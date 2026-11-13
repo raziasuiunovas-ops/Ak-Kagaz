@@ -148,6 +148,19 @@
   font-weight: 600;
 }
 
+[data-theme='dark'] .page { color: #f3f0e7; }
+[data-theme='dark'] .section { background: #1b2a37; border-color: #3b5366; }
+[data-theme='dark'] .sectionTitle,
+[data-theme='dark'] .label,
+[data-theme='dark'] .checkboxField span { color: #e8eef5; }
+[data-theme='dark'] .field input,
+[data-theme='dark'] .field textarea { color: #f3f0e7; background: #14212c; border-color: #496579; }
+[data-theme='dark'] .field input:disabled,
+[data-theme='dark'] .field textarea:disabled { background: #20313e; color: #a2b4c2; }
+[data-theme='dark'] .hint { color: #c1cfda; }
+[data-theme='dark'] .note,
+[data-theme='dark'] .errorBanner { background: rgba(229, 86, 4, 0.13); color: #ffd1b5; }
+
 .actions {
   display: flex;
   justify-content: flex-end;

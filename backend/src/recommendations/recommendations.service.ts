@@ -417,44 +417,41 @@ export class RecommendationsService {
       take: limit,
     });
 
-    const productIds = popularProductIds.map((p) => p.productId);
+    const productIds = popularProductIds.map((product) => product.productId);
+    const include = {
+      translations: true,
+      images: { orderBy: { sortOrder: 'asc' as const } },
+      variants: { orderBy: { sortOrder: 'asc' as const } },
+      attributes: { include: { attribute: true } },
+      prices: {
+        where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
+        include: { tier: true },
+      },
+      reviews: { where: { status: 'APPROVED' as const }, select: { rating: true } },
+    };
 
-    if (productIds.length === 0) {
-      // With no order history, show the admin-curated featured selection.
-      return this.prisma.product.findMany({
+    const [featured, ordered] = await Promise.all([
+      this.prisma.product.findMany({
         where: { status: 'ACTIVE', isFeatured: true, category: { isActive: true } },
-        include: {
-          translations: true,
-          images: { orderBy: { sortOrder: 'asc' } },
-          variants: { orderBy: { sortOrder: 'asc' } },
-          attributes: { include: { attribute: true } },
-          prices: {
-            where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-            include: { tier: true },
-          },
-        },
+        include,
         orderBy: { updatedAt: 'desc' },
         take: limit,
-      });
-    }
-
-    return this.prisma.product.findMany({
-      where: { id: { in: productIds }, status: 'ACTIVE', category: { isActive: true } },
-      include: {
-        translations: true,
-        images: { orderBy: { sortOrder: 'asc' } },
-        variants: { orderBy: { sortOrder: 'asc' } },
-        attributes: { include: { attribute: true } },
-        prices: {
-          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-          include: { tier: true },
-        },
-        reviews: {
-          where: { status: 'APPROVED' },
-          select: { rating: true },
-        },
-      },
+      }),
+      productIds.length
+        ? this.prisma.product.findMany({
+          where: { id: { in: productIds }, status: 'ACTIVE', category: { isActive: true } },
+          include,
+        })
+        : Promise.resolve([]),
+    ]);
+    const orderedById = new Map(ordered.map((product) => [product.id, product]));
+    const orderedProducts = productIds.flatMap((id) => {
+      const product = orderedById.get(id);
+      return product ? [product] : [];
     });
+
+    return Array.from(new Map([...featured, ...orderedProducts].map((product) => [product.id, product])).values())
+      .slice(0, limit);
   }
 
   /**

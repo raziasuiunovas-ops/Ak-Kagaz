@@ -49,6 +49,7 @@ export class UpdateProductDto {
   @IsOptional()
   isFeatured?: boolean;
 
+
   @IsBoolean()
   @IsOptional()
   hasVariants?: boolean;

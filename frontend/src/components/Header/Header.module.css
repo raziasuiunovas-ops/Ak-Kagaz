@@ -16,7 +16,7 @@
 }
 
 .headerContainer {
-  background: white !important;
+  background: var(--color-surface-elevated);
   border-radius: 22px;
   box-shadow: none;
   border: 1px solid rgba(255, 255, 255, 0.9);
@@ -240,22 +240,49 @@
    ============================================ */
 
 [data-theme="dark"] .headerContainer {
-  background: transparent !important;
-  box-shadow: none;
-  border-color: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(115deg, #203748, #1a2b38 68%, #242f38);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border);
 }
 
 [data-theme="dark"] .headerScrolled .headerContainer {
-  box-shadow: none;
-  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .logoText,
+[data-theme="dark"] .navLink {
+  color: #EBE4D1;
+}
+
+[data-theme="dark"] .logoText {
+  text-shadow: 0 0 18px rgba(143, 198, 236, 0.18);
+}
+
+[data-theme="dark"] .navLink:hover {
+  color: var(--color-primary-text);
+}
+
+[data-theme="dark"] .iconButton,
+[data-theme="dark"] .mobileMenuButton {
+  color: #EBE4D1;
+  border-color: var(--color-border);
+  background: rgba(16, 24, 32, 0.35);
+}
+
+[data-theme="dark"] .iconButton:hover,
+[data-theme="dark"] .mobileMenuButton:hover {
+  color: var(--color-primary-text);
+  border-color: var(--color-primary-text);
+  background: var(--color-hover);
 }
 
 [data-theme="dark"] .mobileMenuButton {
-  box-shadow: 0 0 8px rgba(38, 87, 124, 0.15);
+  box-shadow: 0 0 12px rgba(38, 87, 124, 0.2);
 }
 
 [data-theme="dark"] .iconButton {
-  box-shadow: 0 0 8px rgba(38, 87, 124, 0.15);
+  box-shadow: 0 0 12px rgba(38, 87, 124, 0.2);
 }
 
 [data-theme="dark"] .mobileMenuButton:hover,

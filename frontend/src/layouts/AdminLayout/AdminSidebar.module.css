@@ -147,6 +147,37 @@
   padding-right: 0;
 }
 
+[data-theme='dark'] .sidebar,
+[data-theme='dark'] .sidebarHeader {
+  background: #1b2a37;
+  color: #f3f0e7;
+  border-color: #3b5366;
+}
+
+[data-theme='dark'] .logoText,
+[data-theme='dark'] .logoIcon {
+  color: #f3f0e7;
+}
+
+[data-theme='dark'] .navItem {
+  color: #c1cfda;
+}
+
+[data-theme='dark'] .navItem::before {
+  background: #2a3d4f;
+}
+
+[data-theme='dark'] .navItem:hover {
+  color: #f3f0e7;
+}
+
+[data-theme='dark'] .navItem.active,
+[data-theme='dark'] .navItem.active::before {
+  color: #b9dcf4;
+  background: rgba(38, 87, 124, 0.35);
+  border-color: #78afd5;
+}
+
 /* Tablet & Mobile */
 @media (max-width: 1024px) {
   .sidebar {

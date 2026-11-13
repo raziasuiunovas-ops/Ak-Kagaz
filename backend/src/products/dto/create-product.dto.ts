@@ -51,6 +51,7 @@ export class CreateProductDto {
   @IsOptional()
   isFeatured?: boolean;
 
+
   @IsBoolean()
   @IsOptional()
   hasVariants?: boolean;

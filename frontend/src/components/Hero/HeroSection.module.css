@@ -482,91 +482,194 @@
   }
 }
 /* ============================================
-   DARK THEME
+   DARK THEME - Premium Night Atmosphere
    ============================================ */
 
 [data-theme="dark"] .hero {
-  background: #26577C;
+  background: linear-gradient(165deg, 
+    #1a3a52 0%, 
+    #26577C 35%, 
+    #1e4460 100%
+  );
+  position: relative;
 }
 
+/* Enhanced gradient overlay for depth */
+[data-theme="dark"] .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 30%, 
+    rgba(38, 87, 124, 0.4) 0%, 
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Text Elements - Maximum Readability */
+[data-theme="dark"] .heading {
+  color: #EBE4D1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .headingAnimated {
+  color: #FF9A61;
+  text-shadow: 0 2px 16px rgba(229, 86, 4, 0.4);
+}
+
+[data-theme="dark"] .headingAnimated::after {
+  background: linear-gradient(90deg, 
+    rgba(229, 86, 4, 0.6) 0%, 
+    transparent 100%
+  );
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .subtitle {
+  color: rgba(235, 228, 209, 0.92);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Badge - Glowing Orange */
 [data-theme="dark"] .badge {
-  background: rgba(229, 86, 4, 0.15);
-  box-shadow: 0 0 20px rgba(229, 86, 4, 0.2);
+  background: linear-gradient(135deg, 
+    rgba(229, 86, 4, 0.22) 0%, 
+    rgba(229, 86, 4, 0.15) 100%
+  );
+  border: 1.5px solid rgba(229, 86, 4, 0.5);
+  box-shadow: 0 4px 16px rgba(229, 86, 4, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+[data-theme="dark"] .badgeText {
+  color: #FFB380;
+}
+
+[data-theme="dark"] .badgeIcon {
+  color: #FF9A61;
+  filter: drop-shadow(0 0 8px rgba(229, 86, 4, 0.6));
+}
+
+/* Primary Button - Enhanced Orange Glow */
 [data-theme="dark"] .primaryButton {
-  box-shadow: 0 6px 20px rgba(229, 86, 4, 0.4), 0 0 30px rgba(229, 86, 4, 0.2);
+  background: linear-gradient(135deg, 
+    #E55604 0%, 
+    #FF6B1A 100%
+  );
+  box-shadow: 0 8px 24px rgba(229, 86, 4, 0.45),
+              0 0 40px rgba(229, 86, 4, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="dark"] .primaryButton:hover {
-  box-shadow: 0 10px 28px rgba(229, 86, 4, 0.5), 0 0 40px rgba(229, 86, 4, 0.3);
+  background: linear-gradient(135deg, 
+    #FF6B1A 0%, 
+    #FF8040 100%
+  );
+  box-shadow: 0 12px 32px rgba(229, 86, 4, 0.55),
+              0 0 50px rgba(229, 86, 4, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
+/* Secondary Button - Cream Border with Hover Fill */
+[data-theme="dark"] .secondaryButton {
+  color: #EBE4D1;
+  border-color: rgba(235, 228, 209, 0.4);
+  background: rgba(235, 228, 209, 0.05);
+}
+
+[data-theme="dark"] .secondaryButton::before {
+  background: linear-gradient(135deg, 
+    rgba(235, 228, 209, 0.15) 0%, 
+    rgba(235, 228, 209, 0.25) 100%
+  );
+}
+
+[data-theme="dark"] .secondaryButton:hover {
+  color: #26577C;
+  border-color: rgba(235, 228, 209, 0.6);
+}
+
+/* Benefits - Enhanced Icons */
 [data-theme="dark"] .benefitIcon {
-  background: var(--color-primary-light);
-  box-shadow: 0 0 10px var(--color-glow);
+  background: linear-gradient(135deg, 
+    rgba(143, 198, 236, 0.18) 0%, 
+    rgba(143, 198, 236, 0.12) 100%
+  );
+  color: #8FC6EC;
+  box-shadow: 0 4px 12px rgba(143, 198, 236, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(143, 198, 236, 0.3);
 }
 
+[data-theme="dark"] .benefitText {
+  color: #E8EEF5;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Decorative Background - Atmospheric Depth */
 [data-theme="dark"] .decorCircle1 {
   background: radial-gradient(circle, 
-    rgba(38, 87, 124, 0.25) 0%, 
-    rgba(38, 87, 124, 0.12) 30%, 
+    rgba(38, 87, 124, 0.35) 0%, 
+    rgba(38, 87, 124, 0.18) 30%, 
     transparent 65%
   );
-  filter: blur(100px);
-  opacity: 0.5;
+  filter: blur(110px);
+  opacity: 0.7;
 }
 
 [data-theme="dark"] .decorCircle2 {
   background: radial-gradient(circle, 
-    rgba(38, 87, 124, 0.2) 0%, 
-    rgba(38, 87, 124, 0.1) 35%, 
+    rgba(76, 150, 204, 0.28) 0%, 
+    rgba(76, 150, 204, 0.14) 35%, 
     transparent 65%
   );
-  filter: blur(120px);
-  opacity: 0.4;
+  filter: blur(130px);
+  opacity: 0.6;
 }
 
 [data-theme="dark"] .decorCircle3 {
   background: radial-gradient(circle, 
-    rgba(229, 86, 4, 0.15) 0%, 
-    rgba(229, 86, 4, 0.08) 40%, 
+    rgba(229, 86, 4, 0.22) 0%, 
+    rgba(229, 86, 4, 0.12) 40%, 
     transparent 70%
   );
-  filter: blur(90px);
-  opacity: 0.6;
+  filter: blur(95px);
+  opacity: 0.7;
 }
 
+/* Blue Glass Forms - More Visible */
 [data-theme="dark"] .backgroundDecor::before {
   background: linear-gradient(145deg, 
-    rgba(38, 87, 124, 0.2) 0%, 
-    rgba(38, 87, 124, 0.12) 35%,
-    rgba(38, 87, 124, 0.05) 65%,
+    rgba(76, 150, 204, 0.25) 0%, 
+    rgba(76, 150, 204, 0.15) 35%,
+    rgba(76, 150, 204, 0.08) 65%,
     transparent 100%
   );
-  filter: blur(40px);
-  opacity: 0.7;
+  filter: blur(45px);
+  opacity: 0.85;
 }
 
 [data-theme="dark"] .backgroundDecor::after {
   background: linear-gradient(165deg, 
-    rgba(38, 87, 124, 0.18) 0%, 
-    rgba(38, 87, 124, 0.1) 40%,
-    rgba(38, 87, 124, 0.04) 70%,
+    rgba(76, 150, 204, 0.22) 0%, 
+    rgba(76, 150, 204, 0.13) 40%,
+    rgba(76, 150, 204, 0.06) 70%,
     transparent 100%
   );
-  filter: blur(35px);
-  opacity: 0.6;
+  filter: blur(40px);
+  opacity: 0.75;
 }
 
 [data-theme="dark"] .kyrgyzLetters {
   background: linear-gradient(135deg, 
-    rgba(38, 87, 124, 0.15) 0%, 
-    rgba(38, 87, 124, 0.08) 50%,
+    rgba(143, 198, 236, 0.18) 0%, 
+    rgba(143, 198, 236, 0.1) 50%,
     transparent 100%
   );
-  filter: blur(50px);
-  opacity: 0.5;
+  filter: blur(55px);
+  opacity: 0.7;
 }
 
 /* ============================================

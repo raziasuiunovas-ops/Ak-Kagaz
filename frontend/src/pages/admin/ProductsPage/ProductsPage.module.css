@@ -86,4 +86,21 @@
 .fullWidth { grid-column: 1 / -1; }
 .note { background: #fef3ed; color: #9a3412; border-radius: .45rem; padding: .75rem; font-size: .875rem; line-height: 1.45; border-left: 3px solid #E55604; }
 .actions { justify-content: flex-end; }
+[data-theme='dark'] .page { color: #f3f0e7; }
+[data-theme='dark'] .muted { color: #c1cfda; }
+[data-theme='dark'] .tableWrap,
+[data-theme='dark'] .dialog { background: #1b2a37; border-color: #3b5366; }
+[data-theme='dark'] .table th { background: #223645; color: #e4edf4; }
+[data-theme='dark'] .table td { color: #e4edf4; border-color: #354c5e; }
+[data-theme='dark'] .thumbnail { background: #14212c; }
+[data-theme='dark'] .inactive { background: #2a3d4f; color: #d5e0e9; }
+[data-theme='dark'] .textButton { color: #8fc6ec; }
+[data-theme='dark'] .textButton:hover { color: #b8ddf5; }
+[data-theme='dark'] .formGrid label { color: #e4edf4; }
+[data-theme='dark'] .formGrid input,
+[data-theme='dark'] .formGrid select,
+[data-theme='dark'] .formGrid textarea { color: #f3f0e7; background: #14212c; border-color: #496579; }
+[data-theme='dark'] .secondaryButton { background: #394b5b; color: #f3f0e7; }
+[data-theme='dark'] .secondaryButton:hover { background: #4a5f72; }
+[data-theme='dark'] .note { color: #ffd1b5; background: rgba(229, 86, 4, 0.13); }
 @media (max-width: 640px) { .heading { flex-direction: column; } .formGrid { grid-template-columns: 1fr; } .fullWidth { grid-column: auto; } .dialog { padding: 1rem; } }

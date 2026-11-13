@@ -47,13 +47,13 @@ export function HomePage() {
   });
 
   const popularProducts = usePopularProducts({
-    limit: 16,
+    limit: 20,
     locale,
   });
-  const publishedProducts = useProducts({ locale, status: 'ACTIVE', limit: 16 });
+  const publishedProducts = useProducts({ locale, status: 'ACTIVE', limit: 100 });
 
   const trendingProducts = useTrendingProducts({
-    limit: 8,
+    limit: 10,
     locale,
   });
 
@@ -67,18 +67,22 @@ export function HomePage() {
   const popularList = [
     ...popularCandidates,
     ...(publishedProducts.data?.data ?? []).filter((product) => !popularIds.has(product.id)),
-  ].slice(0, 16);
-  const popularLoading = popularProducts.isLoading || (popularList.length < 16 && publishedProducts.isLoading);
+  ].slice(0, 20);
+  const popularLoading = popularProducts.isLoading || (popularList.length < 20 && publishedProducts.isLoading);
   const popularError = !popularList.length && popularProducts.error && publishedProducts.error
     ? publishedProducts.error
     : null;
   const trendingCandidates = Array.from(new Map((trendingProducts.data ?? []).map((product) => [product.id, product])).values());
   const trendingIds = new Set(trendingCandidates.map((product) => product.id));
+  const popularIdSet = new Set(popularList.map((product) => product.id));
+  const uniqueTrendingCandidates = trendingCandidates.filter((product) => !popularIdSet.has(product.id));
+  const uniqueTrendingIds = new Set(uniqueTrendingCandidates.map((product) => product.id));
   const trendingList = [
-    ...trendingCandidates,
-    ...(publishedProducts.data?.data ?? []).filter((product) => !trendingIds.has(product.id)),
-  ].slice(0, 8);
-  const trendingLoading = trendingProducts.isLoading || (trendingList.length < 8 && publishedProducts.isLoading);
+    ...uniqueTrendingCandidates,
+    ...(publishedProducts.data?.data ?? []).filter((product) =>
+      !popularIdSet.has(product.id) && !uniqueTrendingIds.has(product.id) && !trendingIds.has(product.id)),
+  ].slice(0, 10);
+  const trendingLoading = trendingProducts.isLoading || (trendingList.length < 10 && publishedProducts.isLoading);
   const trendingError = !trendingList.length && trendingProducts.error && publishedProducts.error
     ? publishedProducts.error
     : null;
@@ -106,7 +110,7 @@ export function HomePage() {
           </div>
           <div className={styles.categoriesGrid}>
             {categories.isLoading ? (
-              <LoadingState message={t('common.loading')} />
+              <LoadingState message={t('common.loading')} variant="section" skeletonCount={4} />
             ) : categories.error ? (
               <ErrorState message={t('home.categories.error')} onRetry={() => void categories.refetch()} />
             ) : categories.data?.data.length ? (
@@ -143,6 +147,7 @@ export function HomePage() {
             title={t('home.popular.title')}
             products={popularList}
             isLoading={popularLoading}
+            loadingCount={20}
             error={popularError}
             linkTo="/catalog?sort=popular"
             linkText={t('common.showMore')}
@@ -184,6 +189,7 @@ export function HomePage() {
             title={t('recommendations.trending')}
             products={trendingList}
             isLoading={trendingLoading}
+            loadingCount={10}
             error={trendingError}
             linkTo="/catalog?sort=trending"
             linkText={t('common.showMore')}

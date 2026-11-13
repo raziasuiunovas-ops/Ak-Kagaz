@@ -21,6 +21,7 @@ interface RecommendationsBlockProps {
   emptyMessage?: string;
   onRetry?: () => void;
   className?: string;
+  loadingCount?: number;
 }
 
 export function RecommendationsBlock({
@@ -36,6 +37,7 @@ export function RecommendationsBlock({
   emptyMessage,
   onRetry,
   className,
+  loadingCount = 8,
 }: RecommendationsBlockProps) {
   const { t } = useLocale();
 
@@ -45,7 +47,7 @@ export function RecommendationsBlock({
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
         </div>
-        <LoadingState message={t('recommendations.loading')} />
+        <LoadingState message={t('recommendations.loading')} variant="section" skeletonCount={loadingCount} />
       </section>
     );
   }

@@ -158,6 +158,7 @@ export function ProductCreatePage() {
               <input type="checkbox" checked={draft.isFeatured} onChange={(e) => change('isFeatured', e.target.checked)} />
               <span>Показывать в «Популярные товары»</span>
             </label>
+
           </div>
         </div>
 

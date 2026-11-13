@@ -47,6 +47,7 @@
 
 .card:hover .image { transform: scale(1.025); }
 .imagePlaceholder { width: 100%; height: 100%; background: #FFFFFF; }
+.imageLoading { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(245, 245, 245, 0.9); }
 
 .photoCounter { position: absolute; top: 0.625rem; left: 0.625rem; z-index: 2; padding: 0.3rem 0.55rem; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 999px; background: #FFFFFF; color: #000000; font-size: 0.75rem; font-weight: 650; line-height: 1.2; }
 .photoVariant { position: absolute; top: 2.45rem; left: 0.625rem; z-index: 2; max-width: calc(100% - 5rem); overflow: hidden; padding: 0.25rem 0.5rem; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 999px; background: #FFFFFF; color: #000000; font-size: 0.7rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
@@ -161,8 +162,10 @@
 .addToCartBtn:disabled { border-color: #CC5500; background: #CC5500; color: #FFFFFF; opacity: 0.72; cursor: not-allowed; }
 .cartIcon { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; }
 
-[data-theme="dark"] .card { border-color: rgba(173, 216, 230, 0.4); background: #000000; color: #FFFFFF; }
+[data-theme="dark"] .card { border-color: var(--color-border); background: linear-gradient(155deg, #223645, #182733 70%); color: #FFFFFF; box-shadow: var(--shadow-sm); }
+[data-theme="dark"] .card:hover { border-color: var(--color-border-dark); box-shadow: var(--shadow-md); }
 [data-theme="dark"] .imageContainer, [data-theme="dark"] .imagePlaceholder { background: #FFFFFF; }
+[data-theme="dark"] .imageLoading { background: rgba(235, 228, 209, 0.92); }
 [data-theme="dark"] .favoriteBtn { border-color: #ADD8E6; background: #FFFFFF; color: #000000; }
 [data-theme="dark"] .favoriteActive { color: #CC5500; }
 [data-theme="dark"] .name, [data-theme="dark"] .pricePending { color: #FFFFFF; }
@@ -170,6 +173,8 @@
 [data-theme="dark"] .attributes { color: #E5E5E5; }
 [data-theme="dark"] .attributes strong { color: #FFFFFF; }
 [data-theme="dark"] .priceQualifier { color: #E5E5E5; }
+[data-theme="dark"] .price { color: #FF9A61; }
+[data-theme="dark"] .favoriteBtn { border-color: #d8e6ef; }
 
 @media (max-width: 480px) {
   .favoriteBtn { top: 0.375rem; right: 0.375rem; width: 2.5rem; height: 2.5rem; }
@@ -189,9 +194,4 @@
 
 @media (prefers-reduced-motion: reduce) {
   .card, .image, .favoriteBtn, .addToCartBtn { transition: none; }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }

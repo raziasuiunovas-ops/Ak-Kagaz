@@ -106,6 +106,8 @@ export function ProductEditPage() {
         queryClient.invalidateQueries({ queryKey: ['products'] }),
         queryClient.invalidateQueries({ queryKey: ['product', id] }),
         queryClient.invalidateQueries({ queryKey: ['categories'] }),
+        queryClient.invalidateQueries({ queryKey: ['recommendations', 'popular'] }),
+        queryClient.invalidateQueries({ queryKey: ['recommendations', 'trending'] }),
       ]);
       navigate('/admin/products');
     },
@@ -179,6 +181,7 @@ export function ProductEditPage() {
               <input type="checkbox" checked={draft.isFeatured} onChange={(e) => change('isFeatured', e.target.checked)} />
               <span>Показывать в «Популярные товары»</span>
             </label>
+
           </div>
         </div>
 

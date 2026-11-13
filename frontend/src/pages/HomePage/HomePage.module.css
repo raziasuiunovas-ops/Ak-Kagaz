@@ -537,11 +537,11 @@
 }
 
 [data-theme="dark"] .sectionLink {
-  color: #26577C;
+  color: var(--color-primary-text);
 }
 
 [data-theme="dark"] .sectionLink:hover {
-  color: #1e4560;
+  color: #B8DDF5;
 }
 
 [data-theme="dark"] .categoryCardPlaceholder {
@@ -580,7 +580,7 @@
 }
 
 [data-theme="dark"] .productPrice {
-  color: #26577C;
+  color: #FF9A61;
 }
 
 [data-theme="dark"] .aboutSection {
@@ -592,11 +592,11 @@
 }
 
 [data-theme="dark"] .aboutLink {
-  color: #26577C;
+  color: var(--color-primary-text);
 }
 
 [data-theme="dark"] .aboutLink:hover {
-  color: #1e4560;
+  color: #B8DDF5;
 }
 
 [data-theme="dark"] .aboutImagePlaceholder { 
