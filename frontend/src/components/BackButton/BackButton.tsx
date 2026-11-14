@@ -1,14 +1,17 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './BackButton.module.css';
+import { useLocale } from '@/contexts/LocaleContext';
 
 interface BackButtonProps {
   fallback?: string;
   label?: string;
 }
 
-export function BackButton({ fallback = '/admin', label = 'Назад' }: BackButtonProps) {
+export function BackButton({ fallback = '/catalog', label }: BackButtonProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLocale();
+  const buttonLabel = label ?? t('common.back');
 
   const handleBack = () => {
     // Проверяем, есть ли история
@@ -26,11 +29,11 @@ export function BackButton({ fallback = '/admin', label = 'Назад' }: BackBu
   }
 
   return (
-    <button className={styles.backButton} onClick={handleBack} aria-label={label}>
+    <button type="button" className={styles.backButton} onClick={handleBack} aria-label={buttonLabel}>
       <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
       </svg>
-      <span>{label}</span>
+      <span>{buttonLabel}</span>
     </button>
   );
 }

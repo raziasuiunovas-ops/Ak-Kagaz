@@ -1,49 +1,54 @@
+import { lazy } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { RootLayout } from '@/layouts/RootLayout';
 
-// Pages
-import { HomePage } from '@/pages/HomePage';
-import { CatalogPage } from '@/pages/CatalogPage';
-import { CategoryPage } from '@/pages/CategoryPage';
-import { ProductPage } from '@/pages/ProductPage';
-import { BundlesPage } from '@/pages/BundlesPage';
-import { BundleDetailPage } from '@/pages/BundleDetailPage';
-import { CartPage } from '@/pages/CartPage';
-import { FavoritesPage } from '@/pages/FavoritesPage';
-import { CheckoutPage } from '@/pages/CheckoutPage';
-import { LoginPage } from '@/pages/LoginPage';
-import { RegisterPage } from '@/pages/RegisterPage';
-import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
-import { GoogleCallbackPage } from '@/pages/GoogleCallbackPage';
-import { ProfilePage } from '@/pages/ProfilePage';
-import { OrderHistoryPage } from '@/pages/OrderHistoryPage';
-import { AboutPage } from '@/pages/AboutPage';
-import { ContactsPage } from '@/pages/ContactsPage';
-import { DeliveryPage } from '@/pages/DeliveryPage';
-import { InstallmentPage } from '@/pages/InstallmentPage';
-import { TermsPage } from '@/pages/LegalPages/TermsPage';
-import { PrivacyPage } from '@/pages/LegalPages/PrivacyPage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
-import { AdminVerify2FAPage } from '@/pages/AdminVerify2FAPage';
+// Route components are split so the storefront only downloads the active page.
+const HomePage = lazy(() => import('@/pages/HomePage/HomePage').then((module) => ({ default: module.HomePage })));
+const CatalogPage = lazy(() => import('@/pages/CatalogPage/CatalogPage').then((module) => ({ default: module.CatalogPage })));
+const CategoryPage = lazy(() => import('@/pages/CategoryPage/CategoryPage').then((module) => ({ default: module.CategoryPage })));
+const ProductPage = lazy(() => import('@/pages/ProductPage/ProductPage').then((module) => ({ default: module.ProductPage })));
+const BundlesPage = lazy(() => import('@/pages/BundlesPage/BundlesPage').then((module) => ({ default: module.BundlesPage })));
+const BundleDetailPage = lazy(() => import('@/pages/BundleDetailPage/BundleDetailPage').then((module) => ({ default: module.BundleDetailPage })));
+const CartPage = lazy(() => import('@/pages/CartPage/CartPage').then((module) => ({ default: module.CartPage })));
+const FavoritesPage = lazy(() => import('@/pages/FavoritesPage/FavoritesPage').then((module) => ({ default: module.FavoritesPage })));
+const CheckoutPage = lazy(() => import('@/pages/CheckoutPage/CheckoutPage').then((module) => ({ default: module.CheckoutPage })));
+const LoginPage = lazy(() => import('@/pages/LoginPage/LoginPage').then((module) => ({ default: module.LoginPage })));
+const RegisterPage = lazy(() => import('@/pages/RegisterPage/RegisterPage').then((module) => ({ default: module.RegisterPage })));
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage').then((module) => ({ default: module.ForgotPasswordPage })));
+const GoogleCallbackPage = lazy(() => import('@/pages/GoogleCallbackPage').then((module) => ({ default: module.GoogleCallbackPage })));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage/ProfilePage').then((module) => ({ default: module.ProfilePage })));
+const OrderHistoryPage = lazy(() => import('@/pages/OrderHistoryPage/OrderHistoryPage').then((module) => ({ default: module.OrderHistoryPage })));
+const AboutPage = lazy(() => import('@/pages/AboutPage/AboutPage').then((module) => ({ default: module.AboutPage })));
+const ContactsPage = lazy(() => import('@/pages/ContactsPage/ContactsPage').then((module) => ({ default: module.ContactsPage })));
+const DeliveryPage = lazy(() => import('@/pages/DeliveryPage/DeliveryPage').then((module) => ({ default: module.DeliveryPage })));
+const InstallmentPage = lazy(() => import('@/pages/InstallmentPage/InstallmentPage').then((module) => ({ default: module.InstallmentPage })));
+const TermsPage = lazy(() => import('@/pages/LegalPages/TermsPage').then((module) => ({ default: module.TermsPage })));
+const PrivacyPage = lazy(() => import('@/pages/LegalPages/PrivacyPage').then((module) => ({ default: module.PrivacyPage })));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then((module) => ({ default: module.NotFoundPage })));
+const AdminVerify2FAPage = lazy(() => import('@/pages/AdminVerify2FAPage').then((module) => ({ default: module.AdminVerify2FAPage })));
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { AdminRoute } from '@/components/AdminRoute';
 import { AuthRoute } from '@/components/AuthRoute/AuthRoute';
+import { PaymentResultPage } from '@/pages/PaymentResultPage';
 
-// Admin pages
-import { DashboardPage } from '@/pages/admin/DashboardPage';
-import { ProductsPage, ProductCreatePage, ProductEditPage } from '@/pages/admin/ProductsPage';
-import { CategoriesPage, CategoryCreatePage, CategoryEditPage } from '@/pages/admin/CategoriesPage';
-import { OrdersPage } from '@/pages/admin/OrdersPage';
-import { CustomersPage } from '@/pages/admin/CustomersPage';
-import { WarehousePage } from '@/pages/admin/WarehousePage';
-import { BundlesAdminPage } from '@/pages/admin/BundlesAdminPage';
-import { RecommendationsAdminPage } from '@/pages/admin/RecommendationsAdminPage';
-import { CampaignsAdminPage } from '@/pages/admin/CampaignsAdminPage';
-import { ReviewsAdminPage } from '@/pages/admin/ReviewsAdminPage';
-import { AIAssistantAdminPage } from '@/pages/admin/AIAssistantAdminPage';
-import { EmployeesPage } from '@/pages/admin/EmployeesPage';
-import { AnalyticsPage } from '@/pages/admin/AnalyticsPage';
-import { SettingsPage } from '@/pages/admin/SettingsPage';
+const DashboardPage = lazy(() => import('@/pages/admin/DashboardPage/DashboardPage').then((module) => ({ default: module.DashboardPage })));
+const ProductsPage = lazy(() => import('@/pages/admin/ProductsPage/ProductsPage').then((module) => ({ default: module.ProductsPage })));
+const ProductCreatePage = lazy(() => import('@/pages/admin/ProductsPage/ProductCreatePage').then((module) => ({ default: module.ProductCreatePage })));
+const ProductEditPage = lazy(() => import('@/pages/admin/ProductsPage/ProductEditPage').then((module) => ({ default: module.ProductEditPage })));
+const CategoriesPage = lazy(() => import('@/pages/admin/CategoriesPage/CategoriesPage').then((module) => ({ default: module.CategoriesPage })));
+const CategoryCreatePage = lazy(() => import('@/pages/admin/CategoriesPage/CategoryCreatePage').then((module) => ({ default: module.CategoryCreatePage })));
+const CategoryEditPage = lazy(() => import('@/pages/admin/CategoriesPage/CategoryEditPage').then((module) => ({ default: module.CategoryEditPage })));
+const OrdersPage = lazy(() => import('@/pages/admin/OrdersPage/OrdersPage').then((module) => ({ default: module.OrdersPage })));
+const CustomersPage = lazy(() => import('@/pages/admin/CustomersPage/CustomersPage').then((module) => ({ default: module.CustomersPage })));
+const WarehousePage = lazy(() => import('@/pages/admin/WarehousePage/WarehousePage').then((module) => ({ default: module.WarehousePage })));
+const BundlesAdminPage = lazy(() => import('@/pages/admin/BundlesAdminPage/BundlesAdminPage').then((module) => ({ default: module.BundlesAdminPage })));
+const RecommendationsAdminPage = lazy(() => import('@/pages/admin/RecommendationsAdminPage/RecommendationsAdminPage').then((module) => ({ default: module.RecommendationsAdminPage })));
+const CampaignsAdminPage = lazy(() => import('@/pages/admin/CampaignsAdminPage/CampaignsAdminPage').then((module) => ({ default: module.CampaignsAdminPage })));
+const ReviewsAdminPage = lazy(() => import('@/pages/admin/ReviewsAdminPage/ReviewsAdminPage').then((module) => ({ default: module.ReviewsAdminPage })));
+const AIAssistantAdminPage = lazy(() => import('@/pages/admin/AIAssistantAdminPage/AIAssistantAdminPage').then((module) => ({ default: module.AIAssistantAdminPage })));
+const EmployeesPage = lazy(() => import('@/pages/admin/EmployeesPage/EmployeesPage').then((module) => ({ default: module.EmployeesPage })));
+const AnalyticsPage = lazy(() => import('@/pages/admin/AnalyticsPage/AnalyticsPage').then((module) => ({ default: module.AnalyticsPage })));
+const SettingsPage = lazy(() => import('@/pages/admin/SettingsPage/SettingsPage').then((module) => ({ default: module.SettingsPage })));
 
 export const router = createBrowserRouter([
   {
@@ -96,8 +101,14 @@ export const router = createBrowserRouter([
       },
       {
         path: 'checkout',
-        element: <CheckoutPage />,
+        element: <AuthRoute><CheckoutPage /></AuthRoute>,
       },
+
+      // Customer authentication pages share the storefront shell.
+      { path: 'login', element: <LoginPage /> },
+      { path: 'register', element: <RegisterPage /> },
+      { path: 'forgot-password', element: <ForgotPasswordPage /> },
+      { path: 'auth/google/callback', element: <GoogleCallbackPage /> },
 
       // Auth - moved outside RootLayout
 
@@ -144,22 +155,13 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // Auth routes (outside RootLayout - standalone pages)
   {
-    path: '/login',
-    element: <LoginPage />,
+    path: '/payment/success',
+    element: <PaymentResultPage variant="success" />,
   },
   {
-    path: '/register',
-    element: <RegisterPage />,
-  },
-  {
-    path: '/forgot-password',
-    element: <ForgotPasswordPage />,
-  },
-  {
-    path: '/auth/google/callback',
-    element: <GoogleCallbackPage />,
+    path: '/payment/failed',
+    element: <PaymentResultPage variant="failed" />,
   },
   // Admin routes (outside RootLayout)
   {

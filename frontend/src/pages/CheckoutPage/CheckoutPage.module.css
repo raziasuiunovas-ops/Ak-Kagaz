@@ -10,6 +10,40 @@
   color: #111827;
 }
 
+.submitError {
+  margin: 0 0 1.25rem;
+  padding: 1rem;
+  color: #9f2d20;
+  background: #fff1ed;
+  border: 1px solid #f4c5b8;
+  border-radius: 0.65rem;
+}
+
+.pendingNotice {
+  margin: 0;
+  padding: 1rem;
+  color: #26577c;
+  background: #edf5fa;
+  border: 1px solid #cadde9;
+  border-radius: 0.65rem;
+}
+
+.textButton {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0;
+  color: #26577c;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
 .checkoutForm {
   display: flex;
   flex-direction: column;

@@ -10,6 +10,10 @@ export class OrdersService {
     private readonly warehouseService: WarehouseService,
   ) {}
 
+  async findPickupLocations() {
+    return this.prisma.pickupLocation.findMany({ where: { isActive: true }, orderBy: [{ city: 'asc' }, { name: 'asc' }] });
+  }
+
   async create(dto: CreateOrderDto, userId: string) {
     return this.prisma.$transaction(async (tx: any) => {
       // Get active cart with lock (use findFirst with status check inside transaction)

@@ -10,6 +10,11 @@
   flex-direction: column;
 }
 
+.routeBack {
+  width: min(100% - 2rem, 1280px);
+  margin: 0.75rem auto 0;
+}
+
 /* Add padding for mobile bottom navigation */
 @media (max-width: 767px) {
   .main {

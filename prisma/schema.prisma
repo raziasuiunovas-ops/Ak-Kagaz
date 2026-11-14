@@ -109,6 +109,7 @@ enum PaymentProvider {
   STRIPE
   PAYPAL
   MBANK
+  FINIK
 }
 
 enum PaymentMethod {
@@ -520,18 +521,18 @@ model ProductTranslation {
 }
 
 model ProductVariant {
-  id         String   @id @default(cuid())
-  productId  String
-  sku        String   @unique
-  name       String
-  nameRu     String?
-  nameKy     String?
-  sortOrder  Int      @default(0)
-  imageUrl   String?
-  price      Decimal? @db.Decimal(10, 2)
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(cuid())
+  productId String
+  sku       String   @unique
+  name      String
+  nameRu    String?
+  nameKy    String?
+  sortOrder Int      @default(0)
+  imageUrl  String?
+  price     Decimal? @db.Decimal(10, 2)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
   cartItems CartItem[]
@@ -869,6 +870,7 @@ model Order {
   orderNumber       String          @unique
   userId            String
   status            OrderStatus     @default(PENDING)
+  activePaymentId   String?
   fulfillmentType   FulfillmentType
   deliveryAddressId String?
   billingAddressId  String?
@@ -947,9 +949,11 @@ model Payment {
   amount                Decimal         @db.Decimal(10, 2)
   currency              String          @default("KGS")
   providerTransactionId String?
+  providerPaymentId     String?         @unique
   metadata              String?
   completedAt           DateTime?
   failedAt              DateTime?
+  expiresAt             DateTime?
   failureReason         String?
   createdAt             DateTime        @default(now())
   updatedAt             DateTime        @updatedAt
@@ -984,15 +988,16 @@ model PaymentTransaction {
 }
 
 model PaymentWebhookEvent {
-  id          String          @id @default(cuid())
-  paymentId   String?
-  provider    PaymentProvider
-  eventType   String
-  status      WebhookStatus   @default(PENDING)
-  payload     String
-  processedAt DateTime?
-  error       String?
-  createdAt   DateTime        @default(now())
+  id              String          @id @default(cuid())
+  paymentId       String?
+  provider        PaymentProvider
+  eventType       String
+  providerEventId String?         @unique
+  status          WebhookStatus   @default(PENDING)
+  payload         String
+  processedAt     DateTime?
+  error           String?
+  createdAt       DateTime        @default(now())
 
   payment Payment? @relation(fields: [paymentId], references: [id])
 

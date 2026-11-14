@@ -1,147 +1,165 @@
-import { useState, FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container } from '@/components/Container';
 import { BackButton } from '@/components/BackButton';
+import { ErrorState } from '@/components/ErrorState';
+import { LoadingState } from '@/components/LoadingState';
+import { apiClient } from '@/services/api';
+import { useCart } from '@/hooks/useCart';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useQuery } from '@tanstack/react-query';
 import styles from './CheckoutPage.module.css';
 
-export function CheckoutPage() {
-  const { t } = useLocale();
-  const [deliveryType, setDeliveryType] = useState<'delivery' | 'pickup'>('delivery');
+interface Address {
+  id: string;
+  label: string | null;
+  addressLine1: string;
+  city: string;
+  region: string | null;
+}
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    // Future: Submit order
-    console.log('Order submitted');
+interface PickupLocation {
+  id: string;
+  name: string;
+  address: string;
+  city: string;
+}
+
+export function CheckoutPage() {
+  const { t, locale } = useLocale();
+  const navigate = useNavigate();
+  const cart = useCart();
+  const [deliveryType, setDeliveryType] = useState<'delivery' | 'pickup'>('delivery');
+  const [createdOrderId, setCreatedOrderId] = useState(() => sessionStorage.getItem('ak-kagaz-pending-checkout-order') ?? '');
+  const [addressId, setAddressId] = useState('');
+  const [pickupLocationId, setPickupLocationId] = useState('');
+  const [useNewAddress, setUseNewAddress] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+
+  const addresses = useQuery({
+    queryKey: ['checkout', 'addresses'],
+    queryFn: () => apiClient.get<Address[]>('/users/me/addresses'),
+  });
+  const locations = useQuery({
+    queryKey: ['checkout', 'pickup-locations'],
+    queryFn: () => apiClient.get<PickupLocation[]>('/orders/pickup-locations'),
+  });
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(false);
+    const form = new FormData(event.currentTarget);
+    try {
+      let currentOrderId = createdOrderId;
+      if (!currentOrderId) {
+        let selectedAddressId = addressId;
+        if (deliveryType === 'delivery' && (useNewAddress || !selectedAddressId)) {
+          const address = await apiClient.post<Address>('/users/me/addresses', {
+            label: String(form.get('label') || ''),
+            addressLine1: String(form.get('addressLine1') || ''),
+            city: String(form.get('city') || ''),
+            region: String(form.get('region') || ''),
+            country: 'KG',
+            isDefault: addresses.data?.length === 0,
+          });
+          selectedAddressId = address.id;
+        }
+        const order = await apiClient.post<{ id: string }>('/orders', {
+          fulfillmentType: deliveryType === 'delivery' ? 'DELIVERY' : 'PICKUP',
+          ...(deliveryType === 'delivery' ? { deliveryAddressId: selectedAddressId } : { pickupLocationId }),
+        });
+        currentOrderId = order.id;
+        sessionStorage.setItem('ak-kagaz-pending-checkout-order', currentOrderId);
+        setCreatedOrderId(currentOrderId);
+      }
+      const payment = await apiClient.post<{ paymentUrl: string }>('/payments/finik', { orderId: currentOrderId, locale });
+      window.location.assign(payment.paymentUrl);
+    } catch {
+      setSubmitError(true);
+      setIsSubmitting(false);
+    }
   };
+
+  if (cart.isLoading || addresses.isLoading || locations.isLoading) return <LoadingState />;
+  if (cart.error) return <ErrorState message={t('checkout.loadError')} onRetry={() => void cart.refetch()} />;
+  if (!cart.data?.items.length && !createdOrderId) {
+    return <div className={styles.checkoutPage}><Container size="narrow"><BackButton fallback="/cart" /><ErrorState message={t('checkout.emptyCart')} onRetry={() => navigate('/cart')} /></Container></div>;
+  }
+
+  const savedAddresses = addresses.data ?? [];
+  const pickupLocations = locations.data ?? [];
 
   return (
     <div className={styles.checkoutPage}>
       <Container size="narrow">
         <BackButton fallback="/cart" />
         <h1 className={styles.title}>{t('checkout.title')}</h1>
-
-        <form onSubmit={handleSubmit} className={styles.checkoutForm}>
-          {/* Contacts Section */}
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>{t('checkout.contacts')}</h2>
-            <div className={styles.formGrid}>
-              <div className={styles.formGroup}>
-                <label htmlFor="firstName" className={styles.label}>
-                  {t('auth.firstName')}
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  className={styles.input}
-                  required
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="lastName" className={styles.label}>
-                  {t('auth.lastName')}
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  className={styles.input}
-                  required
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="phone" className={styles.label}>
-                  {t('auth.phone')}
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  className={styles.input}
-                  required
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="email" className={styles.label}>
-                  {t('auth.email')}
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className={styles.input}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Delivery Type Selection */}
+        {submitError && <p className={styles.submitError} role="alert">{t('checkout.paymentError')}</p>}
+        <form onSubmit={(event) => void handleSubmit(event)} className={styles.checkoutForm}>
+          {createdOrderId ? <p className={styles.pendingNotice}>{t('checkout.pendingOrderNotice')}</p> : <>
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>{t('checkout.deliveryType')}</h2>
             <div className={styles.deliveryTypeGroup}>
-              <label className={styles.radioLabel}>
-                <input
-                  type="radio"
-                  name="deliveryType"
-                  value="delivery"
-                  checked={deliveryType === 'delivery'}
-                  onChange={(e) => setDeliveryType(e.target.value as 'delivery')}
-                  className={styles.radio}
-                />
-                <span>{t('checkout.deliveryType.delivery')}</span>
-              </label>
-              <label className={styles.radioLabel}>
-                <input
-                  type="radio"
-                  name="deliveryType"
-                  value="pickup"
-                  checked={deliveryType === 'pickup'}
-                  onChange={(e) => setDeliveryType(e.target.value as 'pickup')}
-                  className={styles.radio}
-                />
-                <span>{t('checkout.deliveryType.pickup')}</span>
-              </label>
+              {(['delivery', 'pickup'] as const).map((type) => (
+                <label className={styles.radioLabel} key={type}>
+                  <input type="radio" name="deliveryType" checked={deliveryType === type} onChange={() => setDeliveryType(type)} className={styles.radio} />
+                  <span>{t(`checkout.deliveryType.${type}`)}</span>
+                </label>
+              ))}
             </div>
           </section>
 
-          {/* Delivery Address (if delivery selected) */}
-          {deliveryType === 'delivery' && (
+          {deliveryType === 'delivery' ? (
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>{t('checkout.address')}</h2>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
-                  <label htmlFor="address" className={styles.label}>
-                    {t('checkout.address')}
+              {savedAddresses.length > 0 && !useNewAddress && (
+                <>
+                  <label className={styles.formGroup}>
+                    <span className={styles.label}>{t('checkout.savedAddress')}</span>
+                    <select className={styles.input} value={addressId || savedAddresses[0]?.id || ''} onChange={(event) => setAddressId(event.target.value)}>
+                      {savedAddresses.map((address) => <option key={address.id} value={address.id}>{address.label || address.addressLine1}, {address.city}</option>)}
+                    </select>
                   </label>
-                  <textarea
-                    id="address"
-                    className={styles.textarea}
-                    rows={3}
-                    required
-                  />
+                  <button type="button" className={styles.textButton} onClick={() => setUseNewAddress(true)}>{t('checkout.addAddress')}</button>
+                </>
+              )}
+              {(useNewAddress || savedAddresses.length === 0) && (
+                <div className={styles.formGrid}>
+                  <label className={styles.formGroup}><span className={styles.label}>{t('checkout.addressLabel')}</span><input className={styles.input} name="label" maxLength={50} /></label>
+                  <label className={styles.formGroup}><span className={styles.label}>{t('checkout.city')}</span><input className={styles.input} name="city" required maxLength={100} /></label>
+                  <label className={`${styles.formGroup} ${styles.fullWidth}`}><span className={styles.label}>{t('checkout.streetAddress')}</span><input className={styles.input} name="addressLine1" required maxLength={200} autoComplete="street-address" /></label>
+                  <label className={styles.formGroup}><span className={styles.label}>{t('checkout.region')}</span><input className={styles.input} name="region" maxLength={100} /></label>
+                  {savedAddresses.length > 0 && <button type="button" className={styles.textButton} onClick={() => setUseNewAddress(false)}>{t('checkout.useSavedAddress')}</button>}
                 </div>
-              </div>
+              )}
+            </section>
+          ) : (
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>{t('checkout.pickupLocation')}</h2>
+              {pickupLocations.length ? pickupLocations.map((location) => (
+                <label className={styles.radioLabel} key={location.id}>
+                  <input type="radio" name="pickupLocation" required checked={pickupLocationId === location.id} onChange={() => setPickupLocationId(location.id)} className={styles.radio} />
+                  <span>{location.name} — {location.address}, {location.city}</span>
+                </label>
+              )) : <p role="status">{t('checkout.noPickupLocations')}</p>}
             </section>
           )}
+          </>}
 
-          {/* Order Summary */}
-          <section className={styles.section}>
+          {!createdOrderId && <section className={styles.section}>
             <h2 className={styles.sectionTitle}>{t('checkout.orderSummary')}</h2>
             <div className={styles.orderSummary}>
-              {/* Future: Dynamic order items */}
-              <div className={styles.orderItem}>
-                <span>Товар 1 × 1</span>
-                <span>000 сом</span>
-              </div>
+              {cart.data?.items.map((item) => <div className={styles.orderItem} key={item.id}><span>{item.product?.translations?.find((translation) => translation.locale === locale)?.name || item.product?.translations?.[0]?.name || item.productId} × {item.quantity}</span><span>{Number(item.subtotal).toLocaleString(locale)} сом</span></div>)}
               <div className={styles.orderDivider} />
-              <div className={styles.orderTotal}>
-                <span>{t('cart.total')}:</span>
-                <span className={styles.totalAmount}>000 сом</span>
-              </div>
+              <div className={styles.orderTotal}><span>{t('cart.total')}:</span><span className={styles.totalAmount}>{Number(cart.data?.subtotal ?? 0).toLocaleString(locale)} сом</span></div>
+              <p>{t('checkout.serverTotalNotice')}</p>
             </div>
-          </section>
+          </section>}
 
-          <button type="submit" className={styles.submitBtn}>
-            {t('checkout.placeOrder')}
+          <button type="submit" className={styles.submitBtn} disabled={isSubmitting || (deliveryType === 'pickup' && pickupLocations.length === 0)}>
+            {isSubmitting ? t('checkout.redirecting') : createdOrderId ? t('payment.retry') : t('checkout.placeOrder')}
           </button>
         </form>
       </Container>

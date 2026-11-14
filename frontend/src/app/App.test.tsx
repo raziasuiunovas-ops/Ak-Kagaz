@@ -8,9 +8,9 @@ describe('App', () => {
     expect(container).toBeTruthy();
   });
 
-  it('renders the home page content', () => {
+  it('renders the home page content', async () => {
     render(<App />);
-    const elements = screen.getAllByText(/AK KAGAZ/i);
+    const elements = await screen.findAllByText(/AK KAGAZ/i, {}, { timeout: 15_000 });
     expect(elements.length).toBeGreaterThan(0);
   });
 });

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { UserCircle, LogIn, UserPlus, ShoppingBag, Heart } from 'lucide-react';
 import { Container } from '@/components/Container';
+import { BackButton } from '@/components/BackButton';
 import { useLocale } from '@/contexts/LocaleContext';
 import styles from './ProfileGuestPage.module.css';
 
@@ -10,6 +11,7 @@ export function ProfileGuestPage() {
   return (
     <div className={styles.guestPage}>
       <Container>
+        <BackButton fallback="/" />
         <div className={styles.content}>
           <div className={styles.header}>
             <div className={styles.iconWrapper}>

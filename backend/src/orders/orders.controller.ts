@@ -10,6 +10,11 @@ import { Roles } from '../auth/decorators/roles.decorator';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @Get('pickup-locations')
+  async findPickupLocations() {
+    return this.ordersService.findPickupLocations();
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateOrderDto, @Request() req: any) {

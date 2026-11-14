@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@/components/Icon';
+import { useLocation } from 'react-router-dom';
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import styles from './ScrollToTop.module.css';
 
 export function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
   const { isOpen: isAIChatOpen } = useAIAssistant();
 
   useEffect(() => {
@@ -23,6 +25,11 @@ export function ScrollToTop() {
       window.removeEventListener('scroll', toggleVisibility);
     };
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    setIsVisible(false);
+  }, [location.pathname, location.search]);
 
   const scrollToTop = () => {
     window.scrollTo({
