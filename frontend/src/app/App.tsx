@@ -4,8 +4,10 @@ import { RouterProvider } from 'react-router-dom';
 import { LocaleProvider } from '@/contexts/LocaleContext';
 import { AIAssistantProvider } from '@/contexts/AIAssistantContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { ToastProvider } from '@/contexts/ToastContext';
 import { router } from '@/router/router';
 import { LoadingState } from '@/components/LoadingState';
+import { ToastContainer } from '@/components/ToastContainer/ToastContainer';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,11 +24,14 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <LocaleProvider>
-          <AIAssistantProvider>
-            <Suspense fallback={<LoadingState variant="global" />}>
-              <RouterProvider router={router} />
-            </Suspense>
-          </AIAssistantProvider>
+          <ToastProvider>
+            <AIAssistantProvider>
+              <Suspense fallback={<LoadingState variant="global" />}>
+                <RouterProvider router={router} />
+              </Suspense>
+              <ToastContainer />
+            </AIAssistantProvider>
+          </ToastProvider>
         </LocaleProvider>
       </ThemeProvider>
     </QueryClientProvider>

@@ -7,10 +7,12 @@ import { ErrorState } from '@/components/ErrorState';
 import { useCategories } from '@/hooks';
 import { useLocale } from '@/contexts/LocaleContext';
 import { usePageMetadata } from '@/hooks/usePageMetadata';
+import { usePointerTilt } from '@/hooks/usePointerTilt';
 import styles from './CatalogPage.module.css';
 
 export function CatalogPage() {
   const { t, locale } = useLocale();
+  const catalogIntroRef = usePointerTilt<HTMLElement>(3.2);
   
   // Set page metadata
   usePageMetadata({
@@ -30,7 +32,7 @@ export function CatalogPage() {
       <Container>
         <BackButton />
         <Breadcrumbs items={breadcrumbs} />
-        <section className={styles.catalogIntro} aria-labelledby="catalog-title">
+        <section ref={catalogIntroRef} className={styles.catalogIntro} aria-labelledby="catalog-title">
           <div className={styles.catalogIntroContent}>
             <span className={styles.catalogEyebrow}>AK KAGAZ · {t('nav.catalog')}</span>
             <h1 className={styles.title} id="catalog-title">{t('catalog.title')}</h1>

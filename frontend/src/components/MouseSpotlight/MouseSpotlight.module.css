@@ -1,0 +1,24 @@
+.spotlight {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle, rgb(38 87 124 / 9%) 0%, rgb(38 87 124 / 4%) 34%, transparent 72%);
+  mix-blend-mode: multiply;
+  will-change: transform, opacity;
+  transition: opacity 220ms ease, transform 110ms ease-out;
+}
+
+:global([data-theme='dark']) .spotlight {
+  background: radial-gradient(circle, rgb(235 228 209 / 10%) 0%, rgb(38 87 124 / 8%) 38%, transparent 73%);
+  mix-blend-mode: screen;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .spotlight { display: none; }
+}

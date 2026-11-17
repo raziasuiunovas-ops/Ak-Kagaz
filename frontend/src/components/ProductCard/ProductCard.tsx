@@ -2,9 +2,9 @@ import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Heart, ShoppingCart } from 'lucide-react';
 import type { Product } from '@/types';
-import { CartToast } from '@/components/CartToast/CartToast';
 import { LoadingState } from '@/components/LoadingState';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useToast } from '@/contexts/ToastContext';
 import { useAddProductToCart, useFavorites } from '@/hooks';
 import { getCurrentDisplayPrice } from '@/utils/productPrice';
 import styles from './ProductCard.module.css';
@@ -27,9 +27,9 @@ export function ProductCard({
   showQuickAdd = true,
 }: ProductCardProps) {
   const { locale, t } = useLocale();
+  const { showToast } = useToast();
   const favorites = useFavorites();
   const addToCart = useAddProductToCart();
-  const [notice, setNotice] = useState<'added' | 'error' | null>(null);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -82,14 +82,29 @@ export function ProductCard({
 
   const handleAddToCart = async () => {
     if (!canAdd) return;
-    setNotice(null);
     try {
       if (onAddToCart) await onAddToCart(product.id);
       else await addToCart.mutateAsync({ productId: product.id, quantity: 1 });
-      setNotice('added');
-      window.setTimeout(() => setNotice(null), 2500);
-    } catch {
-      setNotice('error');
+      
+      showToast({
+        type: 'success',
+        message: t('product.addedToCart'),
+        duration: 2500,
+      });
+    } catch (error) {
+      // Safe diagnostic logging without sensitive data
+      console.error('[ProductCard] Failed to add to cart:', {
+        productId: product.id,
+        productSlug: product.slug,
+        productStatus: product.status,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      });
+      
+      showToast({
+        type: 'error',
+        message: t('product.addToCartError'),
+        duration: 3000,
+      });
     }
   };
 
@@ -181,7 +196,6 @@ export function ProductCard({
             </button>
           )}
         </div>
-        {notice && <CartToast type={notice} message={notice === 'added' ? t('product.addedToCart') : t('product.addToCartError')} />}
       </div>
     </article>
   );

@@ -386,6 +386,11 @@
   background: #fff;
   box-shadow: 0 16px 42px rgb(38 87 124 / 9%);
   isolation: isolate;
+  transform: perspective(1100px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 180ms ease-out, box-shadow 260ms ease, border-color 260ms ease;
+  background-image: radial-gradient(ellipse at var(--pointer-x, 50%) var(--pointer-y, 50%), rgb(235 228 209 / 48%), transparent 46%);
+  animation: catalogReveal 780ms cubic-bezier(.2,.7,.25,1) both;
 }
 .catalogBanner::before {
   position: absolute;
@@ -458,6 +463,8 @@
   min-height: 16rem;
   place-items: center;
   background: transparent;
+  transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 22px);
+  transition: transform 180ms ease-out;
 }
 .catalogBannerVisual img {
   display: block;
@@ -465,6 +472,17 @@
   max-height: 27rem;
   object-fit: contain;
   object-position: center;
+  filter: drop-shadow(0 16px 19px rgb(38 87 124 / 12%));
+}
+.catalogBannerContent { transform: translateZ(12px); }
+.catalogBanner.pointer-tilt-active {
+  border-color: rgb(38 87 124 / 20%);
+  box-shadow: 0 24px 52px rgb(38 87 124 / 15%), 0 0 35px rgb(38 87 124 / 7%);
+}
+
+@keyframes catalogReveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .categoriesGrid {
   display: grid;
@@ -635,6 +653,7 @@
   background: #26577C;
   border-color: rgba(173, 216, 230, 0.2);
   box-shadow: 0 16px 42px rgba(38, 87, 124, 0.3);
+  background-image: radial-gradient(ellipse at var(--pointer-x, 50%) var(--pointer-y, 50%), rgb(235 228 209 / 10%), transparent 48%);
 }
 
 [data-theme="dark"] .catalogBanner::before {
@@ -666,4 +685,9 @@
 [data-theme="dark"] .catalogBannerLink:hover {
   background: #c94b04;
   box-shadow: 0 0 30px rgba(229, 86, 4, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalogBanner { animation: none; transition: none; transform: none; }
+  .catalogBannerVisual { transform: none; transition: none; }
 }

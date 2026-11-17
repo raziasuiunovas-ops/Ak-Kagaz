@@ -9,10 +9,10 @@ import { RecommendationsBlock } from '@/components/RecommendationsBlock';
 import { LoadingState } from '@/components/LoadingState';
 import { ErrorState } from '@/components/ErrorState';
 import { useLocale } from '@/contexts/LocaleContext';
+import { useToast } from '@/contexts/ToastContext';
 import { useAddProductToCart, useFavorites, useProductBySlug, useSimilarProducts, useTrackView, useProductCampaigns } from '@/hooks';
 import { useProductMetadata } from '@/hooks/usePageMetadata';
 import { getSessionId } from '@/utils/session';
-import { CartToast } from '@/components/CartToast/CartToast';
 import { getCurrentDisplayPrice } from '@/utils/productPrice';
 import { getAbsoluteImageUrl } from '@/utils/metadata';
 import styles from './ProductPage.module.css';
@@ -20,6 +20,7 @@ import styles from './ProductPage.module.css';
 export function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t, locale } = useLocale();
+  const { showToast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const [selectedVariantId, setSelectedVariantId] = useState<string | undefined>();
   const [selectedTab, setSelectedTab] = useState<'description' | 'specifications' | 'reviews'>('description');
@@ -40,7 +41,6 @@ export function ProductPage() {
   });
   const favorites = useFavorites();
   const addToCart = useAddProductToCart();
-  const [cartNotice, setCartNotice] = useState<'added' | 'error' | null>(null);
   const trackView = useTrackView();
 
   const similarProducts = useSimilarProducts(product?.id || '', {
@@ -142,14 +142,29 @@ export function ProductPage() {
 
   const handleAddToCart = async () => {
     if (product.status !== 'ACTIVE' || price === undefined) return;
-    setCartNotice(null);
     try {
       await addToCart.mutateAsync({ productId: product.id, quantity });
-      setCartNotice('added');
-      window.setTimeout(() => setCartNotice(null), 2500);
-    } catch {
-      setCartNotice('error');
-      window.setTimeout(() => setCartNotice(null), 3500);
+      
+      showToast({
+        type: 'success',
+        message: t('product.addedToCart'),
+        duration: 2500,
+      });
+    } catch (error) {
+      // Safe diagnostic logging without sensitive data
+      console.error('[ProductPage] Failed to add to cart:', {
+        productId: product.id,
+        productSlug: product.slug,
+        productStatus: product.status,
+        quantity,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      });
+      
+      showToast({
+        type: 'error',
+        message: t('product.addToCartError'),
+        duration: 3000,
+      });
     }
   };
 
@@ -299,7 +314,6 @@ export function ProductPage() {
                 <Heart className={styles.btnIcon} fill={favorites.isFavorite(product.id) ? 'currentColor' : 'none'} />
               </button>
             </div>
-            {cartNotice && <CartToast type={cartNotice} message={cartNotice === 'added' ? t('product.addedToCart') : t('product.addToCartError')} />}
           </div>
         </div>
 

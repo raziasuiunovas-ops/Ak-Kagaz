@@ -72,6 +72,15 @@ class ApiClient {
         statusCode: response.status,
       }));
 
+      // Safe diagnostic logging without sensitive data
+      console.error('[ApiClient] Request failed:', {
+        endpoint,
+        method: fetchOptions.method || 'GET',
+        status: response.status,
+        errorMessage: error.message,
+        // DO NOT log: authorization headers, tokens, session IDs, request body
+      });
+
       // НЕ перенаправляем при 401 в админке - пусть пользователь сам решает
       // if (response.status === 401) {
       //   window.location.href = '/';

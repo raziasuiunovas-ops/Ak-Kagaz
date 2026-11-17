@@ -20,10 +20,12 @@ import {
   useProducts,
 } from '@/hooks';
 import { isAuthenticated, getSessionId } from '@/utils/session';
+import { usePointerTilt } from '@/hooks/usePointerTilt';
 import styles from './HomePage.module.css';
 
 export function HomePage() {
   const { t, locale } = useLocale();
+  const catalogBannerRef = usePointerTilt<HTMLDivElement>(2.2);
   
   // Set page metadata with Open Graph support
   usePageMetadata({
@@ -95,7 +97,7 @@ export function HomePage() {
       {/* Categories Section */}
       <section className={`${styles.section} ${styles.catalogSection}`}>
         <Container size="wide">
-          <div className={styles.catalogBanner}>
+          <div ref={catalogBannerRef} className={styles.catalogBanner}>
             <div className={styles.catalogBannerContent}>
               <span className={styles.catalogEyebrow}>AK KAGAZ · {t('nav.catalog')}</span>
               <h2 className={styles.sectionTitle}>{t('home.categories.title')}</h2>
