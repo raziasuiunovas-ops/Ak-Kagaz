@@ -223,7 +223,7 @@ export function LoginPage() {
               </div>
 
               <Link to="/register" className={styles.registerLink}>
-                {t('auth.signUp')}
+                <span>{t('auth.signUp')}</span>
               </Link>
               <a href={`${import.meta.env.VITE_API_URL || '/api'}/auth/google`} className={styles.googleButton}>
                 <GoogleMark />

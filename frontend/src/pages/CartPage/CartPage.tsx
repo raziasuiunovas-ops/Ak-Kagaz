@@ -39,8 +39,10 @@ export function CartPage() {
   return (
     <div className={styles.cartPage}>
       <Container>
-        <BackButton />
-        <h1 className={styles.title}>{t('cart.title')}</h1>
+        <div className={styles.cartHeader}>
+          <h1 className={styles.title}>{t('cart.title')}</h1>
+          <BackButton />
+        </div>
         {cart.isLoading ? (
           <LoadingState message={t('common.loading')} />
         ) : cart.error ? (

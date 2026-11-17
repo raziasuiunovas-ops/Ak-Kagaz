@@ -439,21 +439,46 @@
   line-height: 1.65;
 }
 .catalogBannerLink {
+  position: absolute;
+  z-index: 3;
+  top: clamp(-0.35rem, 0.3vw, 0.2rem);
+  right: clamp(0.2rem, 1.3vw, 0.9rem);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  min-height: 2.9rem;
-  padding: 0.7rem 1.2rem;
-  border: 1px solid #e55604;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.65rem 0.55rem 1rem;
+  border: 1px solid rgb(38 87 124 / 28%);
   border-radius: 999px;
+  background: linear-gradient(145deg, #fff 8%, #ebe4d1 100%);
+  color: #26577c;
+  font-size: 0.94rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 70%);
+  text-decoration: none;
+  box-shadow: 0 10px 22px rgb(38 87 124 / 15%), inset 0 1px 0 rgb(255 255 255 / 90%);
+  transform: translateZ(38px);
+  transition: transform 220ms cubic-bezier(.2,.7,.25,1), box-shadow 220ms ease, border-color 220ms ease, background 220ms ease;
+}
+.catalogBannerLink:hover {
+  border-color: rgb(229 86 4 / 42%);
+  background: linear-gradient(145deg, #fff 0%, #fff7ec 100%);
+  box-shadow: 0 15px 28px rgb(38 87 124 / 18%), 0 0 18px rgb(229 86 4 / 10%), inset 0 1px 0 #fff;
+  transform: translate3d(0, -3px, 48px);
+}
+.catalogBannerLink:active { transform: translate3d(0, 0, 42px); }
+.catalogBannerLinkIcon {
+  width: 1.55rem;
+  height: 1.55rem;
+  padding: 0.32rem;
+  border-radius: 50%;
   background: #e55604;
   color: #fff;
-  font-weight: 650;
-  text-decoration: none;
-  transition: background-color 160ms ease, transform 160ms ease;
+  transition: transform 220ms ease;
 }
-.catalogBannerLink:hover { transform: translateY(-1px); background: #c94b04; }
+.catalogBannerLink:hover .catalogBannerLinkIcon { transform: translateX(2px); }
 .catalogBannerVisual {
   position: relative;
   z-index: 1;
@@ -677,17 +702,21 @@
 }
 
 [data-theme="dark"] .catalogBannerLink {
-  background: #E55604;
-  border-color: #E55604;
-  box-shadow: 0 0 20px rgba(229, 86, 4, 0.3);
+  color: #26577c;
+  border-color: rgb(235 228 209 / 34%);
+  background: linear-gradient(145deg, #fff 8%, #ebe4d1 100%);
+  box-shadow: 0 12px 25px rgb(8 24 36 / 30%), 0 0 20px rgb(235 228 209 / 10%), inset 0 1px 0 rgb(255 255 255 / 90%);
 }
 
 [data-theme="dark"] .catalogBannerLink:hover {
-  background: #c94b04;
-  box-shadow: 0 0 30px rgba(229, 86, 4, 0.4);
+  border-color: rgb(229 86 4 / 62%);
+  background: linear-gradient(145deg, #fff 0%, #fff7ec 100%);
+  box-shadow: 0 16px 30px rgb(8 24 36 / 36%), 0 0 22px rgb(229 86 4 / 16%), inset 0 1px 0 #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .catalogBanner { animation: none; transition: none; transform: none; }
   .catalogBannerVisual { transform: none; transition: none; }
+  .catalogBannerLink,
+  .catalogBannerLinkIcon { transition: none; }
 }

@@ -102,12 +102,13 @@ export function HomePage() {
               <span className={styles.catalogEyebrow}>AK KAGAZ · {t('nav.catalog')}</span>
               <h2 className={styles.sectionTitle}>{t('home.categories.title')}</h2>
               <p className={styles.catalogDescription}>{t('home.categories.description')}</p>
-              <Link to="/catalog" className={styles.catalogBannerLink}>
-                {t('home.categories.viewCatalog')} <ArrowRight className={styles.sectionLinkIcon} aria-hidden="true" />
-              </Link>
             </div>
-            <div className={styles.catalogBannerVisual} aria-hidden="true">
-              <img src="/catalog/Баннер каталог товаров.png" alt="" loading="lazy" />
+            <div className={styles.catalogBannerVisual}>
+              <Link to="/catalog" className={styles.catalogBannerLink}>
+                <span>{t('home.categories.viewCatalog')}</span>
+                <ArrowRight className={styles.catalogBannerLinkIcon} aria-hidden="true" />
+              </Link>
+              <img src="/catalog/Баннер каталог товаров.png" alt="" loading="lazy" aria-hidden="true" />
             </div>
           </div>
           <div className={styles.categoriesGrid}>

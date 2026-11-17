@@ -14,8 +14,8 @@
   transition: opacity 220ms ease, transform 110ms ease-out;
 }
 
-:global([data-theme='dark']) .spotlight {
-  background: radial-gradient(circle, rgb(235 228 209 / 10%) 0%, rgb(38 87 124 / 8%) 38%, transparent 73%);
+:global(html[data-theme='dark']) .spotlight {
+  background: radial-gradient(circle, rgb(235 228 209 / 22%) 0%, rgb(143 198 236 / 12%) 34%, rgb(38 87 124 / 7%) 52%, transparent 74%);
   mix-blend-mode: screen;
 }
 

@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -9,6 +10,16 @@ async function bootstrap() {
 
   // Global prefix
   app.setGlobalPrefix('api');
+
+  // Security: Helmet middleware for HTTP security headers
+  // Configure to work with CORS and OAuth redirects
+  app.use(
+    helmet({
+      contentSecurityPolicy: false, // Disable CSP to avoid blocking OAuth and external resources
+      crossOriginEmbedderPolicy: false, // Allow embedding for OAuth flows
+      crossOriginResourcePolicy: { policy: 'cross-origin' }, // Allow cross-origin resources
+    })
+  );
 
   // CORS configuration
   const frontendUrl = configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
@@ -51,6 +62,8 @@ async function bootstrap() {
 
   console.log(`🚀 Application is running on: http://localhost:${port}/api`);
   console.log(`📚 API documentation: http://localhost:${port}/api/docs`);
+  console.log(`🔒 Security: Helmet headers enabled`);
+  console.log(`🛡️  Rate limiting: Active (100 req/min default, 10 req/min for auth)`);
 }
 
 bootstrap();

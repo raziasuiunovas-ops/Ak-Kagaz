@@ -10,6 +10,7 @@ import {
   Inject,
   Res,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
@@ -30,12 +31,14 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 registrations per minute
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
 
   @Post('login')
+  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 login attempts per minute
   @HttpCode(HttpStatus.OK)
   async login(@Body() dto: LoginDto, @Request() req: any) {
     const ipAddress = req.ip || req.connection?.remoteAddress;
@@ -50,12 +53,14 @@ export class AuthController {
   }
 
   @Post('password-reset/request')
+  @Throttle({ default: { limit: 3, ttl: 60000 } }) // 3 password reset requests per minute
   @HttpCode(HttpStatus.OK)
   async requestPasswordReset(@Body() dto: RequestPasswordResetDto) {
     return this.authService.requestPasswordReset(dto.email);
   }
 
   @Post('password-reset/confirm')
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 password reset confirmations per minute
   @HttpCode(HttpStatus.OK)
   async resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto.token, dto.newPassword);
@@ -92,6 +97,7 @@ export class AuthController {
   }
 
   @Post('verify-2fa')
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 2FA attempts per minute
   @HttpCode(HttpStatus.OK)
   async verify2FA(@Body() dto: Verify2FADto) {
     return this.authService.adminVerify2FA(dto.userId, dto.code);
@@ -102,6 +108,7 @@ export class AuthController {
   // ============================================================
 
   @Post('admin/login')
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 admin login attempts per minute (stricter)
   @HttpCode(HttpStatus.OK)
   async adminLogin(
     @Body() dto: AdminLoginDto,
@@ -114,6 +121,7 @@ export class AuthController {
   }
 
   @Post('admin/verify-2fa')
+  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 admin 2FA attempts per minute
   @HttpCode(HttpStatus.OK)
   async adminVerify2FA(@Body() dto: Verify2FADto) {
     return this.authService.adminVerify2FA(dto.userId, dto.code);

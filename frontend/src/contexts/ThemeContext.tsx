@@ -34,14 +34,16 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   useEffect(() => {
     localStorage.setItem(THEME_STORAGE_KEY, theme);
-    document.documentElement.setAttribute('data-theme', theme);
+    const isAdminRoute = window.location.pathname === '/admin' || window.location.pathname.startsWith('/admin/');
+    const activeTheme = isAdminRoute ? 'light' : theme;
+    document.documentElement.setAttribute('data-theme', activeTheme);
     
     // Update meta theme-color
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
       metaThemeColor.setAttribute(
         'content',
-        theme === 'dark' ? '#1a2332' : '#EBE4D1'
+        activeTheme === 'dark' ? '#1a2332' : '#EBE4D1'
       );
     }
   }, [theme]);

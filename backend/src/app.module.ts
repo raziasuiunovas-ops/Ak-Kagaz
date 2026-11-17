@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -29,6 +31,21 @@ import { NotificationsModule } from './notifications/notifications.module';
       // Support starting Nest from either the repository root or backend folder.
       envFilePath: [resolve(process.cwd(), 'backend/.env'), resolve(process.cwd(), '.env')],
     }),
+    // Rate limiting configuration
+    // Default: 10 requests per minute per IP
+    // Auth endpoints have stricter limits applied via decorator
+    ThrottlerModule.forRoot([
+      {
+        name: 'default',
+        ttl: 60000, // 1 minute
+        limit: 100, // 100 requests per minute (generous for normal browsing)
+      },
+      {
+        name: 'strict',
+        ttl: 60000, // 1 minute
+        limit: 10, // 10 requests per minute for sensitive endpoints
+      },
+    ]),
     CommonModule,
     AuthModule,
     UsersModule,
@@ -48,6 +65,13 @@ import { NotificationsModule } from './notifications/notifications.module';
     NotificationsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // Global rate limiting guard
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -253,7 +253,7 @@ export function RegisterPage() {
           </div>
 
           <Link to="/login" className={styles.loginLink}>
-            {t('auth.signIn')}
+            <span>{t('auth.signIn')}</span>
           </Link>
           <a href={`${import.meta.env.VITE_API_URL || '/api'}/auth/google`} className={styles.googleButton}>
             <GoogleMark />

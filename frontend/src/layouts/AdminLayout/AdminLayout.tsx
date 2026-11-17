@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
+import { useTheme } from '@/contexts/ThemeContext';
 import { AdminSidebar } from './AdminSidebar';
 import { AdminHeader } from './AdminHeader';
 import styles from './AdminLayout.module.css';
 
 export function AdminLayout() {
+  const { theme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     return localStorage.getItem('adminSidebarCollapsed') === 'true';
@@ -12,6 +14,18 @@ export function AdminLayout() {
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const isSwiping = useRef(false);
+
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    root.setAttribute('data-theme', 'light');
+    themeColor?.setAttribute('content', '#EBE4D1');
+
+    return () => {
+      root.setAttribute('data-theme', theme);
+      themeColor?.setAttribute('content', theme === 'dark' ? '#1a2332' : '#EBE4D1');
+    };
+  }, [theme]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
