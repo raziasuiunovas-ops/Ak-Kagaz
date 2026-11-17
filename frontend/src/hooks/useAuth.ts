@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface LoginCredentials {
   email: string;
@@ -161,6 +161,7 @@ export function isAuthenticated(): boolean {
 // Hooks
 export function useLogin() {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -181,8 +182,19 @@ export function useLogin() {
         ['SUPER_ADMIN', 'ADMIN', 'MANAGER', 'WAREHOUSE'].includes(ur.role?.name)
       );
       
-      // Если админ - перенаправляем в админ-панель, иначе в профиль
-      navigate(isAdmin ? '/admin' : '/profile');
+      // Проверяем, есть ли сохранённый путь для возврата
+      const from = (location.state as { from?: string })?.from;
+      
+      if (from && !isAdmin) {
+        // Если есть сохранённый путь и пользователь не админ, возвращаем туда
+        navigate(from, { replace: true });
+      } else if (isAdmin) {
+        // Если админ - перенаправляем в админ-панель
+        navigate('/admin');
+      } else {
+        // Иначе в профиль
+        navigate('/profile');
+      }
     },
   });
 }
@@ -205,6 +217,7 @@ export function useVerify2FA() {
 
 export function useRegister() {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -212,7 +225,17 @@ export function useRegister() {
     onSuccess: (data) => {
       setToken(data.token);
       queryClient.setQueryData(['auth', 'user'], data.user);
-      navigate('/profile');
+      
+      // Проверяем, есть ли сохранённый путь для возврата
+      const from = (location.state as { from?: string })?.from;
+      
+      if (from) {
+        // Если есть сохранённый путь, возвращаем туда
+        navigate(from, { replace: true });
+      } else {
+        // Иначе в профиль
+        navigate('/profile');
+      }
     },
   });
 }

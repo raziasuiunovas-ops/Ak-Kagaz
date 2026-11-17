@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { isAuthenticated, removeToken, useCurrentUser } from '@/hooks';
 import { ProfileGuestPage } from '@/pages/ProfileGuestPage';
 
@@ -10,6 +10,7 @@ interface AuthRouteProps {
 export function AuthRoute({ children }: AuthRouteProps) {
   const { data: user, isLoading, isError } = useCurrentUser();
   const hasToken = isAuthenticated();
+  const location = useLocation();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
   useEffect(() => {
@@ -32,7 +33,8 @@ export function AuthRoute({ children }: AuthRouteProps) {
     if (isMobile) {
       return <ProfileGuestPage />;
     }
-    return <Navigate to="/login" replace />;
+    // Сохраняем текущий путь для возврата после авторизации
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
   if (isLoading) {
@@ -44,7 +46,8 @@ export function AuthRoute({ children }: AuthRouteProps) {
     if (isMobile) {
       return <ProfileGuestPage />;
     }
-    return <Navigate to="/login" replace />;
+    // Сохраняем текущий путь для возврата после авторизации
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
   return <>{children}</>;

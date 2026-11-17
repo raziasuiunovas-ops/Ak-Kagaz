@@ -29,6 +29,12 @@ export function CartPage() {
   const hasEstimatedItems = cart.data?.items.some((item) => item.priceIsEstimate) ?? false;
   const canCheckout = subtotal >= minOrderAmount && !hasEstimatedItems;
   const currency = locale === 'ru' ? 'ru-RU' : 'ky-KG';
+  const isAuthorizationError = cart.error instanceof Error && /unauthorized|forbidden/i.test(cart.error.message);
+  const cartErrorMessage = isAuthorizationError
+    ? locale === 'ru'
+      ? 'Сессия истекла или доступ к корзине ограничен. Войдите в аккаунт и попробуйте снова.'
+      : 'Сессиянын мөөнөтү бүткөн же себетке кирүү чектелген. Аккаунтка кирип, кайра аракет кылыңыз.'
+    : cart.error?.message;
 
   const changeQuantity = (cartId: string, itemId: string, quantity: number) => {
     if (quantity < 1) return;
@@ -40,13 +46,15 @@ export function CartPage() {
     <div className={styles.cartPage}>
       <Container>
         <div className={styles.cartHeader}>
-          <h1 className={styles.title}>{t('cart.title')}</h1>
           <BackButton />
+          <h1 className={styles.title}>{t('cart.title')}</h1>
         </div>
         {cart.isLoading ? (
           <LoadingState message={t('common.loading')} />
         ) : cart.error ? (
-          <ErrorState message={cart.error.message} onRetry={() => void cart.refetch()} />
+          <div className={styles.cartError}>
+            <ErrorState message={cartErrorMessage} onRetry={() => void cart.refetch()} />
+          </div>
         ) : !cart.data?.items.length ? (
           <EmptyState
             icon={<ShoppingBag className={styles.emptyIcon} />}
