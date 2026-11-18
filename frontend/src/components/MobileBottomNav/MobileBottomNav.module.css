@@ -183,3 +183,29 @@
 [data-theme="dark"] .navItem.active {
   color: var(--color-primary);
 }
+
+@media (max-width: 360px) {
+  .bottomNav {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .nav {
+    padding-right: 0.25rem;
+    padding-left: 0.25rem;
+  }
+
+  .navItem {
+    padding-right: 0.125rem;
+    padding-left: 0.125rem;
+  }
+
+  .label {
+    display: none;
+  }
+
+  .icon {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+}

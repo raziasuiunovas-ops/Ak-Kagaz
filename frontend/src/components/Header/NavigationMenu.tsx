@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Icon } from '@/components/Icon';
 import { useLocale } from '@/contexts/LocaleContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeSwitcher } from './ThemeSwitcher';
 import styles from './NavigationMenu.module.css';
 
 interface NavigationMenuProps {
@@ -150,6 +152,11 @@ export function NavigationMenu({ isOpen, onClose }: NavigationMenuProps) {
             </li>
           </ul>
         </nav>
+
+        <div className={styles.mobileControls}>
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </div>
       </aside>
     </>
   );

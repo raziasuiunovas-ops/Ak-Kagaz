@@ -17,6 +17,7 @@ export function MobileBottomNav() {
       <div className={styles.nav}>
         <NavLink
           to="/"
+          aria-label={t('nav.home')}
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
           end
         >
@@ -26,6 +27,7 @@ export function MobileBottomNav() {
 
         <NavLink
           to="/catalog"
+          aria-label={t('nav.catalog')}
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
           <Icon name="grid_view" className={styles.icon} />
@@ -34,6 +36,7 @@ export function MobileBottomNav() {
 
         <NavLink
           to="/favorites"
+          aria-label={t('nav.favorites')}
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
           <Icon name="favorite" className={styles.icon} />
@@ -42,6 +45,7 @@ export function MobileBottomNav() {
 
         <NavLink
           to="/cart"
+          aria-label={t('nav.cart')}
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
           <Icon name="shopping_cart" className={styles.icon} />
@@ -50,6 +54,7 @@ export function MobileBottomNav() {
 
         <NavLink
           to="/profile"
+          aria-label={t('nav.profile')}
           className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}
         >
           <Icon name="person" className={styles.icon} />

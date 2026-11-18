@@ -140,26 +140,29 @@ export function Header() {
                 <Search size={20} />
               </button>
 
-              <LanguageSwitcher />
+              <div className={styles.settingsActions}>
+                <LanguageSwitcher />
+                <ThemeSwitcher />
+              </div>
 
-              <ThemeSwitcher />
+              <div className={styles.accountActions}>
+                <Link to="/favorites" className={styles.iconButton} aria-label={t('nav.favorites')}>
+                  <Heart size={20} />
+                </Link>
 
-              <Link to="/favorites" className={styles.iconButton} aria-label={t('nav.favorites')}>
-                <Heart size={20} />
-              </Link>
+                <Link to="/cart" className={`${styles.iconButton} ${styles.cartIconButton}`} aria-label={cartCount ? `${t('nav.cart')}, ${cartCount}` : t('nav.cart')}>
+                  <ShoppingCart size={20} />
+                  {cartCount > 0 && <span className={styles.cartCountBadge} aria-hidden="true">{cartCount > 99 ? '99+' : cartCount}</span>}
+                </Link>
 
-              <Link to="/cart" className={`${styles.iconButton} ${styles.cartIconButton}`} aria-label={cartCount ? `${t('nav.cart')}, ${cartCount}` : t('nav.cart')}>
-                <ShoppingCart size={20} />
-                {cartCount > 0 && <span className={styles.cartCountBadge} aria-hidden="true">{cartCount > 99 ? '99+' : cartCount}</span>}
-              </Link>
-
-              <button 
-                onClick={handleProfileClick}
-                className={styles.iconButton} 
-                aria-label={t('nav.profile')}
-              >
-                <User size={20} />
-              </button>
+                <button
+                  onClick={handleProfileClick}
+                  className={styles.iconButton}
+                  aria-label={t('nav.profile')}
+                >
+                  <User size={20} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
