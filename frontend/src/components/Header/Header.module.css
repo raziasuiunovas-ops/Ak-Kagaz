@@ -431,12 +431,6 @@
   }
 }
 
-@media (max-width: 480px) {
-  .settingsActions {
-    display: none;
-  }
-}
-
 @media (max-width: 360px) {
   .headerContainer {
     margin: 0 0.5rem;
@@ -462,6 +456,6 @@
   }
 
   .logoText {
-    font-size: 0.875rem;
+    display: none;
   }
 }

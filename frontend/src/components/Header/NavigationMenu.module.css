@@ -80,20 +80,6 @@
   padding: 1rem 0;
 }
 
-.mobileControls {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  border-top: 1px solid var(--color-border);
-}
-
-@media (max-width: 480px) {
-  .mobileControls {
-    display: flex;
-  }
-}
-
 .navList {
   margin: 0;
   padding: 0;

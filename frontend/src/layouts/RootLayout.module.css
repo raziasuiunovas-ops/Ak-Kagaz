@@ -19,6 +19,6 @@
 /* Add padding for mobile bottom navigation */
 @media (max-width: 767px) {
   .root {
-    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
   }
 }

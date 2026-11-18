@@ -7,8 +7,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding: 0 1rem 1.5rem 1rem;
-  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  padding: 0 1rem 0.75rem 1rem;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
   pointer-events: none;
 }
 

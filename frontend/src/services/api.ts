@@ -1,10 +1,10 @@
 // API client configuration
 
-// Local development goes through Vite's /api proxy so the storefront and admin
-// stay connected to the same backend even when the shell has a stale URL set.
-export const API_BASE_URL = import.meta.env.DEV
-  ? '/api'
-  : import.meta.env.VITE_API_URL || '/api';
+// Используем переменную окружения, если она задана, иначе fallback на /api
+export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
+// В dev-режиме Vite проксирует /api на backend через vite.config.ts
+// В production режиме должен быть полный URL к backend API
 
 export interface FetchOptions extends RequestInit {
   params?: Record<string, string | number | boolean>;
