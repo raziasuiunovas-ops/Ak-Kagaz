@@ -66,9 +66,19 @@ export function CheckoutPage() {
           });
           selectedAddressId = address.id;
         }
+        
+        // Собираем контактные данные и комментарий
+        const contactInfo = {
+          firstName: String(form.get('firstName') || ''),
+          lastName: String(form.get('lastName') || ''),
+          phone: String(form.get('phone') || ''),
+          comment: String(form.get('comment') || ''),
+        };
+        
         const order = await apiClient.post<{ id: string }>('/orders', {
           fulfillmentType: deliveryType === 'delivery' ? 'DELIVERY' : 'PICKUP',
           ...(deliveryType === 'delivery' ? { deliveryAddressId: selectedAddressId } : { pickupLocationId }),
+          ...contactInfo, // Добавляем контактные данные в заказ
         });
         currentOrderId = order.id;
         sessionStorage.setItem('ak-kagaz-pending-checkout-order', currentOrderId);
@@ -147,6 +157,28 @@ export function CheckoutPage() {
             </section>
           )}
           </>}
+
+          {!createdOrderId && <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>{t('checkout.contactInfo')}</h2>
+            <div className={styles.formGrid}>
+              <label className={styles.formGroup}>
+                <span className={styles.label}>{t('checkout.firstName')}</span>
+                <input className={styles.input} name="firstName" required maxLength={50} autoComplete="given-name" />
+              </label>
+              <label className={styles.formGroup}>
+                <span className={styles.label}>{t('checkout.lastName')}</span>
+                <input className={styles.input} name="lastName" required maxLength={50} autoComplete="family-name" />
+              </label>
+              <label className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <span className={styles.label}>{t('checkout.phone')}</span>
+                <input className={styles.input} name="phone" type="tel" required maxLength={20} autoComplete="tel" placeholder="+996 XXX XXX XXX" />
+              </label>
+              <label className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <span className={styles.label}>{t('checkout.comment')}</span>
+                <textarea className={styles.textarea} name="comment" maxLength={500} rows={4} placeholder={t('checkout.commentPlaceholder')} />
+              </label>
+            </div>
+          </section>}
 
           {!createdOrderId && <section className={styles.section}>
             <h2 className={styles.sectionTitle}>{t('checkout.orderSummary')}</h2>

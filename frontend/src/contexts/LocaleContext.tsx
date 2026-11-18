@@ -234,6 +234,12 @@ const translationsRu: Record<string, string> = {
   'checkout.pendingOrderNotice': 'Заказ уже создан. Продолжите оплату этого заказа, чтобы не оформить его повторно.',
   'checkout.loadError': 'Не удалось загрузить корзину для оформления заказа.',
   'checkout.emptyCart': 'В корзине пока нет товаров.',
+  'checkout.contactInfo': 'Контактная информация',
+  'checkout.firstName': 'Имя',
+  'checkout.lastName': 'Фамилия',
+  'checkout.phone': 'Телефон',
+  'checkout.comment': 'Комментарий к заказу',
+  'checkout.commentPlaceholder': 'Дополнительные пожелания или комментарии к заказу',
   
   // Auth
   'auth.login': 'Вход',
@@ -533,6 +539,12 @@ const translationsKy: Record<string, string> = {
   'checkout.pendingOrderNotice': 'Буюртма түзүлдү. Кайра буйрутма бербөө үчүн ушул буюртманын төлөмүн улантыңыз.',
   'checkout.loadError': 'Буюртманы тариздөө үчүн себетти жүктөө мүмкүн болгон жок.',
   'checkout.emptyCart': 'Себетте азырынча товар жок.',
+  'checkout.contactInfo': 'Байланыш маалыматтары',
+  'checkout.firstName': 'Аты',
+  'checkout.lastName': 'Фамилиясы',
+  'checkout.phone': 'Телефон',
+  'checkout.comment': 'Буюртмага комментарий',
+  'checkout.commentPlaceholder': 'Кошумча каалоолор же буюртмага комментарийлер',
   
   // Auth
   'auth.login': 'Кирүү',

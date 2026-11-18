@@ -1,7 +1,13 @@
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/services/api';
 import type { Cart } from '@/types';
 import { getSessionId, isAuthenticated } from '@/utils/session';
+import { removeToken } from './useAuth';
+
+function isAuthorizationError(error: unknown): boolean {
+  return error instanceof Error && /unauthorized|forbidden/i.test(error.message);
+}
 
 function getCartScope() {
   const authenticated = isAuthenticated();
@@ -14,11 +20,28 @@ function getCartScope() {
 
 export function useCart() {
   const scope = getCartScope();
+  const [useGuestCart, setUseGuestCart] = useState(false);
+  const sessionId = scope.sessionId ?? getSessionId();
+  const sessionQueryKey = ['cart', 'session', sessionId] as const;
+
   return useQuery<Cart>({
-    queryKey: scope.queryKey,
-    queryFn: () => scope.authenticated
-      ? apiClient.get<Cart>('/cart')
-      : apiClient.get<Cart>(`/cart/session/${scope.sessionId}`),
+    queryKey: useGuestCart ? sessionQueryKey : scope.queryKey,
+    queryFn: async () => {
+      if (!scope.authenticated || useGuestCart) {
+        return apiClient.get<Cart>(`/cart/session/${sessionId}`);
+      }
+
+      try {
+        return await apiClient.get<Cart>('/cart');
+      } catch (error) {
+        if (!isAuthorizationError(error)) throw error;
+
+        // A stale token must not make the public cart inaccessible to a guest.
+        removeToken();
+        setUseGuestCart(true);
+        return apiClient.get<Cart>(`/cart/session/${sessionId}`);
+      }
+    },
   });
 }
 

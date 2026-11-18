@@ -56,6 +56,8 @@ export function ProductCreatePage() {
   const attributes = useQuery({
     queryKey: ['admin', 'product-attributes'],
     queryFn: () => apiClient.get<ProductAttribute[]>('/products/attributes'),
+    staleTime: 60000, // 1 minute
+    retry: 1,
   });
 
   const saveProduct = useMutation({

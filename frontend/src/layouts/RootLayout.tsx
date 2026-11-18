@@ -17,7 +17,7 @@ export function RootLayout() {
   const fallback = path.startsWith('/product/') || path.startsWith('/catalog/') ? '/catalog' : path === '/checkout' ? '/cart' : path === '/profile/orders' ? '/profile' : '/';
   
   // Скрыть Header, Footer, AI-чат, Scroll to Top и кнопку назад на страницах авторизации
-  const isAuthPage = path === '/login' || path === '/register';
+  const isAuthPage = path === '/login' || path === '/register' || path === '/admin/verify-2fa';
 
   return (
     <div className={styles.root}>

@@ -5,9 +5,10 @@ import { ProfileGuestPage } from '@/pages/ProfileGuestPage';
 
 interface AuthRouteProps {
   children: React.ReactNode;
+  redirectToLoginOnMobile?: boolean;
 }
 
-export function AuthRoute({ children }: AuthRouteProps) {
+export function AuthRoute({ children, redirectToLoginOnMobile = false }: AuthRouteProps) {
   const { data: user, isLoading, isError } = useCurrentUser();
   const hasToken = isAuthenticated();
   const location = useLocation();
@@ -30,7 +31,7 @@ export function AuthRoute({ children }: AuthRouteProps) {
 
   if (!hasToken) {
     // На мобильных показываем страницу гостя, на десктопе редирект
-    if (isMobile) {
+    if (isMobile && !redirectToLoginOnMobile) {
       return <ProfileGuestPage />;
     }
     // Сохраняем текущий путь для возврата после авторизации
@@ -43,7 +44,7 @@ export function AuthRoute({ children }: AuthRouteProps) {
 
   if (isError || !user) {
     // На мобильных показываем страницу гостя, на десктопе редирект
-    if (isMobile) {
+    if (isMobile && !redirectToLoginOnMobile) {
       return <ProfileGuestPage />;
     }
     // Сохраняем текущий путь для возврата после авторизации

@@ -28,6 +28,7 @@ export function CartPage() {
   const subtotal = Number(cart.data?.subtotal ?? 0);
   const hasEstimatedItems = cart.data?.items.some((item) => item.priceIsEstimate) ?? false;
   const canCheckout = subtotal >= minOrderAmount && !hasEstimatedItems;
+  const amountToMinimum = Math.max(0, minOrderAmount - subtotal);
   const currency = locale === 'ru' ? 'ru-RU' : 'ky-KG';
   const isAuthorizationError = cart.error instanceof Error && /unauthorized|forbidden/i.test(cart.error.message);
   const cartErrorMessage = isAuthorizationError
@@ -116,7 +117,15 @@ export function CartPage() {
                   <span className={styles.summaryLabelTotal}>{t('cart.total')}:</span>
                   <span className={styles.summaryValueTotal}>{subtotal.toLocaleString(currency)} сом</span>
                 </div>
-                {!canCheckout && <p className={styles.minOrderWarning}>{t('cart.minOrder')}</p>}
+                {!canCheckout && (
+                  <p className={styles.minOrderWarning}>
+                    {hasEstimatedItems
+                      ? t('cart.estimateNotice')
+                      : `${t('cart.minOrder')} ${locale === 'ru'
+                        ? `Добавьте ещё ${amountToMinimum.toLocaleString(currency)} сом.`
+                        : `Дагы ${amountToMinimum.toLocaleString(currency)} сомдук товар кошуңуз.`}`}
+                  </p>
+                )}
                 <Link to="/checkout" className={`${styles.checkoutBtn} ${!canCheckout ? styles.checkoutBtnDisabled : ''}`} onClick={(event) => { if (!canCheckout) event.preventDefault(); }} aria-disabled={!canCheckout}>
                   {t('cart.checkout')}
                 </Link>

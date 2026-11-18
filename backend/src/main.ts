@@ -8,6 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  // Trust proxy for correct IP detection on Vercel/AWS/GCP
+  // Required for rate limiting to work per-user instead of per-edge-server
+  app.getHttpAdapter().getInstance().set('trust proxy', true);
+
   // Global prefix
   app.setGlobalPrefix('api');
 

@@ -101,7 +101,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'checkout',
-        element: <AuthRoute><CheckoutPage /></AuthRoute>,
+        element: <AuthRoute redirectToLoginOnMobile><CheckoutPage /></AuthRoute>,
       },
 
       // Customer authentication pages share the storefront shell.

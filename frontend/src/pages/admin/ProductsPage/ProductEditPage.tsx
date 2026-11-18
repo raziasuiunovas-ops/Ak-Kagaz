@@ -48,6 +48,8 @@ export function ProductEditPage() {
   const attributes = useQuery({
     queryKey: ['admin', 'product-attributes'],
     queryFn: () => apiClient.get<ProductAttribute[]>('/products/attributes'),
+    staleTime: 60000, // 1 minute
+    retry: 1,
   });
 
   useEffect(() => {
@@ -135,6 +137,7 @@ export function ProductEditPage() {
 
   if (product.isLoading || !draft) return <LoadingState />;
   if (product.error) return <ErrorState message={product.error.message} />;
+  if (categories.isLoading) return <LoadingState />;
 
   const categoryOptions: SelectOption[] = [
     { value: '', label: 'Выберите категорию' },
