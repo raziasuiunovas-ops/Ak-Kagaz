@@ -135,13 +135,17 @@ export function ProductEditPage() {
   const change = (field: keyof ProductDraft, value: string | boolean) =>
     setDraft((current) => current ? { ...current, [field]: value } : current);
 
-  if (product.isLoading || !draft) return <LoadingState />;
+  // Показываем загрузку если товар грузится ИЛИ draft ещё не инициализирован
+  if (product.isLoading) return <LoadingState />;
   if (product.error) return <ErrorState message={product.error.message} />;
-  if (categories.isLoading) return <LoadingState />;
+  if (!draft) return <LoadingState />; // draft инициализируется после product.data
+  
+  // Не блокируем рендеринг, если категории не загрузились
+  // if (categories.isLoading) return <LoadingState />;
 
   const categoryOptions: SelectOption[] = [
     { value: '', label: 'Выберите категорию' },
-    ...(categories.data?.data.map((cat) => ({
+    ...(categories.data?.data?.map((cat) => ({
       value: cat.id,
       label: cat.translations.find((t) => t.locale === 'ru')?.name ?? cat.slug,
     })) ?? []),

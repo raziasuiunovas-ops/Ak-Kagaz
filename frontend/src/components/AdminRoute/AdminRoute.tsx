@@ -6,7 +6,7 @@ interface AdminRouteProps {
 }
 
 export function AdminRoute({ children }: AdminRouteProps) {
-  const { data: user, isLoading } = useCurrentUser();
+  const { data: user, isLoading, isError } = useCurrentUser();
 
   // Проверяем наличие токена
   if (!isAuthenticated()) {
@@ -25,6 +25,11 @@ export function AdminRoute({ children }: AdminRouteProps) {
         <p>Загрузка...</p>
       </div>
     );
+  }
+
+  // Если произошла ошибка при загрузке пользователя, перенаправляем на логин
+  if (isError || !user) {
+    return <Navigate to="/login" replace />;
   }
 
   // Проверяем роль пользователя

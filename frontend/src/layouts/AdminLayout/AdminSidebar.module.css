@@ -55,6 +55,30 @@
   font-size: 1rem;
 }
 
+.closeButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1f2937;
+}
+
+.closeButton:active {
+  transform: scale(0.95);
+}
+
 
 
 .nav {
@@ -178,6 +202,15 @@
   border-color: #78afd5;
 }
 
+[data-theme='dark'] .closeButton {
+  color: #c1cfda;
+}
+
+[data-theme='dark'] .closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f3f0e7;
+}
+
 /* Tablet & Mobile */
 @media (max-width: 1024px) {
   .sidebar {
@@ -190,5 +223,10 @@
 
   .sidebar.collapsed {
     width: 280px;
+  }
+  
+  /* Показываем кнопку закрытия только на мобильных */
+  .closeButton {
+    display: flex;
   }
 }

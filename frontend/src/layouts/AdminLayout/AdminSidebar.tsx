@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Icon } from '@/components/Icon';
+import { X } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
 interface AdminSidebarProps {
@@ -12,6 +13,10 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(() => {
     return localStorage.getItem('adminSidebarCollapsed') === 'true';
   });
+  const sidebarRef = useRef<HTMLElement>(null);
+  const touchStartX = useRef<number>(0);
+  const touchCurrentX = useRef<number>(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const handleToggle = (event: CustomEvent) => {
@@ -23,6 +28,53 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
       window.removeEventListener('toggleSidebar', handleToggle as EventListener);
     };
   }, []);
+
+  // Swipe to close
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar || !isOpen) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!e.touches[0]) return;
+      touchStartX.current = e.touches[0].clientX;
+      touchCurrentX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!e.touches[0]) return;
+      if (!isDragging) setIsDragging(true);
+      touchCurrentX.current = e.touches[0].clientX;
+      const diff = touchCurrentX.current - touchStartX.current;
+      
+      // Только свайп влево (закрытие)
+      if (diff < 0) {
+        sidebar.style.transform = `translateX(${diff}px)`;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      const diff = touchCurrentX.current - touchStartX.current;
+      
+      // Если свайпнули больше 80px влево - закрываем
+      if (diff < -80) {
+        onClose();
+      }
+      
+      // Возвращаем на место
+      sidebar.style.transform = '';
+      setIsDragging(false);
+    };
+
+    sidebar.addEventListener('touchstart', handleTouchStart);
+    sidebar.addEventListener('touchmove', handleTouchMove);
+    sidebar.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      sidebar.removeEventListener('touchstart', handleTouchStart);
+      sidebar.removeEventListener('touchmove', handleTouchMove);
+      sidebar.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isOpen, onClose, isDragging]);
 
   const menuItems = [
     { path: '/admin', label: 'Панель управления', icon: 'dashboard' },
@@ -42,7 +94,10 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   ];
 
   return (
-    <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''} ${isCollapsed ? styles.collapsed : ''}`}>
+    <aside 
+      ref={sidebarRef}
+      className={`${styles.sidebar} ${isOpen ? styles.open : ''} ${isCollapsed ? styles.collapsed : ''}`}
+    >
       <div className={styles.sidebarHeader}>
         <div className={styles.logo}>
           <img 
@@ -52,6 +107,15 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           />
           {!isCollapsed && <span className={styles.logoText}>АК КАГАЗ</span>}
         </div>
+        
+        {/* Кнопка закрытия - показывается только на мобильных */}
+        <button 
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label="Закрыть меню"
+        >
+          <X size={24} />
+        </button>
       </div>
 
       <nav className={styles.nav}>

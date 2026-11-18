@@ -1,10 +1,10 @@
 // API client configuration
 
-// Используем переменную окружения, если она задана, иначе fallback на /api
-export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
-
-// В dev-режиме Vite проксирует /api на backend через vite.config.ts
-// В production режиме должен быть полный URL к backend API
+// В development режиме используем прокси /api (настроен в vite.config.ts)
+// В production режиме используем полный URL из переменной окружения
+export const API_BASE_URL = import.meta.env.DEV
+  ? '/api'
+  : (import.meta.env.VITE_API_URL || '/api');
 
 export interface FetchOptions extends RequestInit {
   params?: Record<string, string | number | boolean>;

@@ -263,7 +263,8 @@ export function useCurrentUser() {
       return getMeAPI(token);
     },
     enabled: !!token,
-    retry: false,
+    retry: 1, // Повторить 1 раз при ошибке
     staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 }
