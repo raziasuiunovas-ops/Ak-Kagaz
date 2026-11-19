@@ -1,11 +1,27 @@
 .registerPage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+.visualColumn {
+  position: relative;
+  display: none;
+}
+
+.formColumn {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
   padding: 2rem 1rem;
   background-color: var(--color-background);
-  transition: background-color 0.3s ease;
+}
+
+@media (min-width: 1025px) {
+  .visualColumn {
+    display: block;
+  }
 }
 
 .backButton {
@@ -381,6 +397,10 @@
 /* Mobile (до 640px) */
 @media (max-width: 640px) {
   .registerPage {
+    grid-template-columns: 1fr;
+  }
+
+  .formColumn {
     padding: 1rem;
   }
 
@@ -404,6 +424,10 @@
 /* Tablet (641px - 1024px) */
 @media (min-width: 641px) and (max-width: 1024px) {
   .registerPage {
+    grid-template-columns: 1fr;
+  }
+
+  .formColumn {
     padding: 1.5rem 1rem;
   }
 

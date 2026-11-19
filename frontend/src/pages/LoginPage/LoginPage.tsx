@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Container } from '@/components/Container';
+import { AuthVisualPanel } from '@/components/AuthVisualPanel';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useLogin, useVerify2FA, useAdminLogin } from '@/hooks';
 import styles from './LoginPage.module.css';
@@ -70,7 +70,10 @@ export function LoginPage() {
 
   return (
     <div className={styles.loginPage}>
-      <Container size="narrow">
+      <div className={styles.visualColumn}>
+        <AuthVisualPanel variant="login" />
+      </div>
+      <div className={styles.formColumn}>
         <div className={styles.formCard}>
           <button 
             type="button" 
@@ -232,7 +235,7 @@ export function LoginPage() {
             </>
           )}
         </div>
-      </Container>
+      </div>
     </div>
   );
 }

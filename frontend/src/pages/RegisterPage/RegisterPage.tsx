@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Container } from '@/components/Container';
+import { AuthVisualPanel } from '@/components/AuthVisualPanel';
 import { useLocale } from '@/contexts/LocaleContext';
 import { useRegister } from '@/hooks';
 import styles from './RegisterPage.module.css';
@@ -54,7 +54,10 @@ export function RegisterPage() {
 
   return (
     <div className={styles.registerPage}>
-      <Container size="narrow">
+      <div className={styles.visualColumn}>
+        <AuthVisualPanel variant="register" />
+      </div>
+      <div className={styles.formColumn}>
         <div className={styles.formCard}>
           <button 
             type="button" 
@@ -260,7 +263,7 @@ export function RegisterPage() {
             {t('auth.continueWithGoogle')}
           </a>
         </div>
-      </Container>
+      </div>
     </div>
   );
 }
