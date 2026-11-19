@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/services/prisma.service';
+import { productCardInclude } from '../products/product-card.include';
 import { TrackViewDto } from './dto';
 
 @Injectable()
@@ -134,18 +135,7 @@ export class RecommendationsService {
           },
         ],
       },
-      include: {
-        translations: true,
-        images: { orderBy: { sortOrder: 'asc' } },
-        prices: {
-          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-          include: { tier: true },
-        },
-        reviews: {
-          where: { status: 'APPROVED' },
-          select: { rating: true },
-        },
-      },
+      include: productCardInclude(),
       take: limit,
     });
 
@@ -185,18 +175,7 @@ export class RecommendationsService {
             status: 'ACTIVE',
             category: { isActive: true },
           },
-          include: {
-            translations: true,
-            images: { orderBy: { sortOrder: 'asc' } },
-            prices: {
-              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-              include: { tier: true },
-            },
-            reviews: {
-              where: { status: 'APPROVED' },
-              select: { rating: true },
-            },
-          },
+          include: productCardInclude(),
           take: limit,
         });
       }
@@ -221,16 +200,7 @@ export class RecommendationsService {
       orderBy: { frequency: 'desc' },
       take: limit,
       include: {
-        relatedProduct: {
-          include: {
-            translations: true,
-            images: { orderBy: { sortOrder: 'asc' } },
-            prices: {
-              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-              include: { tier: true },
-            },
-          },
-        },
+        relatedProduct: { include: productCardInclude() },
       },
     });
 
@@ -244,16 +214,7 @@ export class RecommendationsService {
       orderBy: { frequency: 'desc' },
       take: limit - manual.length,
       include: {
-        relatedProduct: {
-          include: {
-            translations: true,
-            images: { orderBy: { sortOrder: 'asc' } },
-            prices: {
-              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-              include: { tier: true },
-            },
-          },
-        },
+        relatedProduct: { include: productCardInclude() },
       },
     });
 
@@ -285,18 +246,7 @@ export class RecommendationsService {
         status: 'ACTIVE',
         category: { isActive: true },
       },
-      include: {
-        translations: true,
-        images: { orderBy: { sortOrder: 'asc' } },
-        prices: {
-          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-          include: { tier: true },
-        },
-        reviews: {
-          where: { status: 'APPROVED' },
-          select: { rating: true },
-        },
-      },
+      include: productCardInclude(),
       take: limit,
     });
   }
@@ -311,14 +261,7 @@ export class RecommendationsService {
       take: limit,
       include: {
         product: {
-          include: {
-            translations: true,
-            images: { orderBy: { sortOrder: 'asc' } },
-            prices: {
-              where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-              include: { tier: true },
-            },
-          },
+          include: productCardInclude(),
         },
       },
     });
@@ -340,16 +283,7 @@ export class RecommendationsService {
         items: {
           where: { product: { status: 'ACTIVE', category: { isActive: true } } },
           include: {
-            product: {
-              include: {
-                translations: true,
-                images: { orderBy: { sortOrder: 'asc' } },
-                prices: {
-                  where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-                  include: { tier: true },
-                },
-              },
-            },
+            product: { include: productCardInclude() },
           },
         },
       },
@@ -418,29 +352,17 @@ export class RecommendationsService {
     });
 
     const productIds = popularProductIds.map((product) => product.productId);
-    const include = {
-      translations: true,
-      images: { orderBy: { sortOrder: 'asc' as const } },
-      variants: { orderBy: { sortOrder: 'asc' as const } },
-      attributes: { include: { attribute: true } },
-      prices: {
-        where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-        include: { tier: true },
-      },
-      reviews: { where: { status: 'APPROVED' as const }, select: { rating: true } },
-    };
-
     const [featured, ordered] = await Promise.all([
       this.prisma.product.findMany({
         where: { status: 'ACTIVE', isFeatured: true, category: { isActive: true } },
-        include,
+        include: productCardInclude(),
         orderBy: { updatedAt: 'desc' },
         take: limit,
       }),
       productIds.length
         ? this.prisma.product.findMany({
           where: { id: { in: productIds }, status: 'ACTIVE', category: { isActive: true } },
-          include,
+          include: productCardInclude(),
         })
         : Promise.resolve([]),
     ]);
@@ -479,18 +401,7 @@ export class RecommendationsService {
 
     return this.prisma.product.findMany({
       where: { id: { in: productIds }, status: 'ACTIVE', category: { isActive: true } },
-      include: {
-        translations: true,
-        images: { orderBy: { sortOrder: 'asc' } },
-        prices: {
-          where: { OR: [{ isActive: true, isEstimate: false }, { isEstimate: true }] },
-          include: { tier: true },
-        },
-        reviews: {
-          where: { status: 'APPROVED' },
-          select: { rating: true },
-        },
-      },
+      include: productCardInclude(),
     });
   }
 

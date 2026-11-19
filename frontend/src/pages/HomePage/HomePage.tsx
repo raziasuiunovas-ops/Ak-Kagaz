@@ -52,7 +52,7 @@ export function HomePage() {
     limit: 20,
     locale,
   });
-  const publishedProducts = useProducts({ locale, status: 'ACTIVE', limit: 100 });
+  const publishedProducts = useProducts({ locale, status: 'ACTIVE', limit: 30 });
 
   const trendingProducts = useTrendingProducts({
     limit: 10,

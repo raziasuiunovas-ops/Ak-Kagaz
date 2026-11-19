@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../common/services/prisma.service';
 import { CreateProductDto, UpdateProductDto } from './dto';
+import { productCardInclude } from './product-card.include';
 
 @Injectable()
 export class ProductsService {
@@ -192,10 +193,9 @@ export class ProductsService {
         where,
         skip,
         take: limit,
-        include: {
+        include: includeInactive ? {
           translations: locale ? { where: { locale } } : true,
           variants: true,
-          // Public cards need the product's full gallery, not only its thumbnail.
           images: { orderBy: { sortOrder: 'asc' } },
           category: { include: { translations: locale ? { where: { locale } } : true } },
           brand: true,
@@ -210,7 +210,7 @@ export class ProductsService {
             },
           },
           _count: { select: { reviews: true } },
-        },
+        } : productCardInclude(locale),
         orderBy: { createdAt: 'desc' },
       }),
       this.prisma.product.count({ where }),
