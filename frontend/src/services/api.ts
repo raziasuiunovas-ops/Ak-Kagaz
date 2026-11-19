@@ -81,10 +81,12 @@ class ApiClient {
         // DO NOT log: authorization headers, tokens, session IDs, request body
       });
 
-      // НЕ перенаправляем при 401 в админке - пусть пользователь сам решает
-      // if (response.status === 401) {
-      //   window.location.href = '/';
-      // }
+      // При 401 очищаем токены, но НЕ редиректим автоматически
+      // Пусть компоненты (AdminRoute, AuthRoute) сами решают что делать
+      if (response.status === 401) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('access_token');
+      }
 
       throw new Error(error.message || `HTTP error ${response.status}`);
     }

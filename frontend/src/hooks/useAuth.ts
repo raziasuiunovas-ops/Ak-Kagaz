@@ -45,7 +45,10 @@ interface TwoFactorRequiredResponse {
 
 type LoginResponse = AuthResponse | TwoFactorRequiredResponse;
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+// Используем ту же логику что и в api.ts для консистентности
+const API_URL = import.meta.env.DEV
+  ? '/api'
+  : (import.meta.env.VITE_API_URL || '/api');
 
 // Auth API calls
 async function loginAPI(credentials: LoginCredentials): Promise<LoginResponse> {
@@ -122,18 +125,36 @@ async function registerAPI(data: RegisterData): Promise<AuthResponse> {
 }
 
 async function getMeAPI(token: string) {
-  const response = await fetch(`${API_URL}/auth/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const response = await fetch(`${API_URL}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch user');
+    if (!response.ok) {
+      // Различаем типы ошибок для корректной обработки
+      if (response.status === 401 || response.status === 403) {
+        const error = new Error('Unauthorized');
+        (error as any).status = response.status;
+        throw error;
+      }
+      const error = new Error(`HTTP ${response.status}`);
+      (error as any).status = response.status;
+      throw error;
+    }
+
+    const payload = await response.json();
+    return payload.data ?? payload;
+  } catch (error) {
+    // Различаем network errors от HTTP errors
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      const networkError = new Error('Network error');
+      (networkError as any).isNetworkError = true;
+      throw networkError;
+    }
+    throw error;
   }
-
-  const payload = await response.json();
-  return payload.data ?? payload;
 }
 
 // Token management
@@ -263,7 +284,18 @@ export function useCurrentUser() {
       return getMeAPI(token);
     },
     enabled: !!token,
-    retry: 1, // Повторить 1 раз при ошибке
+    retry: (failureCount, error: any) => {
+      // Не повторяем при 401/403 - токен точно невалиден
+      if (error?.status === 401 || error?.status === 403) {
+        return false;
+      }
+      // Повторяем до 3 раз при network errors и других ошибках
+      return failureCount < 3;
+    },
+    retryDelay: (attemptIndex) => {
+      // Exponential backoff: 1s, 2s, 4s
+      return Math.min(1000 * 2 ** attemptIndex, 5000);
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
