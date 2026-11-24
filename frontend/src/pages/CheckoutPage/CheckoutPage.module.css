@@ -1,6 +1,7 @@
 .checkoutPage {
   padding: 2rem 0 4rem;
   min-height: 60vh;
+  min-width: 0;
 }
 
 .title {
@@ -66,7 +67,7 @@
 
 .formGrid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -200,7 +201,7 @@
 /* Tablet */
 @media (min-width: 768px) {
   .formGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .deliveryTypeGroup {
@@ -209,5 +210,41 @@
 
   .radioLabel {
     flex: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .checkoutPage {
+    padding: 1.25rem 0 2rem;
+  }
+
+  .title {
+    margin: 1rem 0 1.25rem;
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .checkoutForm {
+    gap: 1rem;
+  }
+
+  .section {
+    padding: 1rem;
+  }
+
+  .sectionTitle {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .radioLabel {
+    min-width: 0;
+    padding: 0.875rem;
+    overflow-wrap: anywhere;
+  }
+
+  .submitBtn {
+    min-height: 3rem;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
   }
 }

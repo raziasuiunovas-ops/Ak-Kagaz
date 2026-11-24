@@ -23,12 +23,16 @@ interface FinikWebhook {
 }
 
 const FINIK_PUBLIC_KEYS = {
-  production: `-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuF/PUmhMPPidcMxhZBPb\nBSGJoSphmCI+h6ru8fG8guAlcPMVlhs+ThTjw2LHABvciwtpj51ebJ4EqhlySPyT\nhqSfXI6Jp5dPGJNDguxfocohaz98wvT+WAF86DEglZ8dEsfoumojFUy5sTOBdHEu\ng94B4BbrJvjmBa1YIx9Azse4HFlWhzZoYPgyQpArhokeHOHIN2QFzJqeriANO+wV\naUMta2AhRVZHbfyJ36XPhGO6A5FYWQgjzkI65cxZs5LaNFmRx6pjnhjIeVKKgF99\n4OoYCzhuR9QmWkPl7tL4Kd68qa/xHLz0Psnuhm0CStWOYUu3J7ZpzRK8GoEXRcr8\ntQIDAQAB\n-----END PUBLIC KEY-----`,
+  production: `-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuF/PUmhMPPidcMxhZBPb\nBSGJoSphmCI+h6ru8fG8guAlcPMVlhs+ThTjw2LHABvciwtpj51ebJ4EqhlySPyT\nhqSfXI6Jp5dPGJNDguxfocohaz98wvT+WAF86DEglZ8dEsfoumojFUy5sTOBdHEu\ng94B4BbrJvjmBa1YIx9Azse4HFlWhzZoYPgyQpArhokeHOHIN2QFzJqeriANO+wV\naUMta2AhRVZHbfyJ36XPhGO6A5FYQWgjzkI65cxZs5LaNFmRx6pjnhjIeVKKgF99\n4OoYCzhuR9QmWkPl7tL4Kd68qa/xHLz0Psnuhm0CStWOYUu3J7ZpzRK8GoEXRcr8\ntQIDAQAB\n-----END PUBLIC KEY-----`,
   beta: `-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwlrlKz/8gLWd1ARWGA/8\no3a3Qy8G+hPifyqiPosiTY6nCHovANMIJXk6DH4qAqqZeLu8pLGxudkPbv8dSyG7\nF9PZEAryMPzjoB/9P/F6g0W46K/FHDtwTM3YIVvstbEbL19m8yddv/xCT9JPPJTb\nLsSTVZq5zCqvKzpupwlGS3Q3oPyLAYe+ZUn4Bx2J1WQrBu3b08fNaR3E8pAkCK27\nJqFnP0eFfa817VCtyVKcFHb5ij/D0eUP519Qr/pgn+gsoG63W4pPHN/pKwQUUiAy\nuLSHqL5S2yu1dffyMcMVi9E/Q2HCTcez5OvOllgOtkNYHSv9pnrMRuws3u87+hNT\nZwIDAQAB\n-----END PUBLIC KEY-----`,
 } as const;
 
-function resolveFinikEnvironment(value: string | undefined): 'beta' | 'production' {
-  const normalized = value?.trim().toLowerCase() || 'beta';
+function resolveFinikEnvironment(value: string | undefined, nodeEnv?: string): 'beta' | 'production' {
+  const normalized = value?.trim().toLowerCase();
+  if (!normalized && nodeEnv?.trim().toLowerCase() === 'production') {
+    throw new BadRequestException('FINIK_ENV must be set to beta or production');
+  }
+  if (!normalized) return 'beta';
   if (['beta', 'test', 'testing', 'sandbox', 'development', 'dev'].includes(normalized)) return 'beta';
   if (['production', 'prod', 'live'].includes(normalized)) return 'production';
   throw new BadRequestException('Finik environment is not configured');
@@ -88,7 +92,7 @@ export class PaymentsService {
       throw new BadRequestException('Order has already been paid');
     }
 
-    const env = resolveFinikEnvironment(this.config.get<string>('FINIK_ENV'));
+    const env = resolveFinikEnvironment(this.config.get<string>('FINIK_ENV'), this.config.get<string>('NODE_ENV'));
     const apiKey = this.config.get<string>('FINIK_API_KEY')?.trim();
     const privateKey = this.config.get<string>('FINIK_PRIVATE_KEY')?.replace(/\\n/g, '\n').trim();
     const accountId = this.config.get<string>('FINIK_ACCOUNT_ID')?.trim();
@@ -230,7 +234,7 @@ export class PaymentsService {
     const timestamp = normalizedHeaders['x-api-timestamp'];
     let env: 'beta' | 'production';
     try {
-      env = resolveFinikEnvironment(this.config.get<string>('FINIK_ENV'));
+      env = resolveFinikEnvironment(this.config.get<string>('FINIK_ENV'), this.config.get<string>('NODE_ENV'));
     } catch {
       throw new UnauthorizedException('Invalid payment notification');
     }

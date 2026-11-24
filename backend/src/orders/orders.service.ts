@@ -123,6 +123,16 @@ export class OrdersService {
 
       const total = subtotal + deliveryFee;
 
+      const contactNotes = [
+        [dto.firstName, dto.lastName].filter(Boolean).join(' ').trim(),
+        dto.phone?.trim(),
+      ].filter(Boolean);
+      const notes = [
+        contactNotes.length ? `Покупатель: ${contactNotes[0]}${contactNotes[1] ? ` · ${contactNotes[1]}` : ''}` : undefined,
+        dto.comment?.trim() ? `Комментарий: ${dto.comment.trim()}` : undefined,
+        dto.notes?.trim(),
+      ].filter(Boolean).join('\n') || undefined;
+
       // Generate order number
       const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
@@ -145,7 +155,7 @@ export class OrdersService {
           subtotal,
           deliveryFee,
           total,
-          notes: dto.notes,
+          notes,
         },
       });
 

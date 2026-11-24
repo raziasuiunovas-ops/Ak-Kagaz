@@ -1,8 +1,9 @@
 .homePage {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: clamp(2rem, 6vw, 4rem);
   padding-bottom: 4rem;
+  min-width: 0;
 }
 
 /* Hero Section */
@@ -79,6 +80,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
@@ -366,7 +368,7 @@
 /* Campaigns Grid */
 .campaignsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 24px;
 }
 
@@ -521,6 +523,24 @@
 }
 
 @media (max-width: 768px) {
+  .homePage {
+    padding-bottom: 2rem;
+  }
+
+  .section {
+    padding: 1.25rem 0;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .sectionTitle {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
   .catalogBanner {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.5rem;
@@ -538,6 +558,7 @@
 
 @media (max-width: 560px) {
   .categoriesGrid { grid-template-columns: minmax(0, 1fr); }
+  .sectionLink { font-size: 0.875rem; }
 }
 
 /* ============================================

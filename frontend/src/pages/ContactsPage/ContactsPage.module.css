@@ -1,6 +1,7 @@
 .contactsPage {
   padding: 2rem 0;
   min-height: 60vh;
+  min-width: 0;
 }
 
 .title {
@@ -59,6 +60,7 @@
 }
 
 .contactInfo {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -154,4 +156,47 @@
 [data-theme="dark"] .mapPlaceholder {
   background: linear-gradient(135deg, rgba(38, 87, 124, 0.2) 0%, rgba(38, 87, 124, 0.1) 100%);
   color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .contactsPage {
+    padding: 1.25rem 0 2rem;
+  }
+
+  .title {
+    margin: 1rem 0 1.25rem;
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .content {
+    gap: 1rem;
+  }
+
+  .section,
+  .mapSection {
+    padding: 1rem;
+    border-radius: 0.65rem;
+  }
+
+  .sectionTitle {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .contactsList {
+    gap: 1.25rem;
+  }
+
+  .contactItem {
+    gap: 0.875rem;
+  }
+
+  .contactIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .mapPlaceholder {
+    min-height: 14rem;
+  }
 }

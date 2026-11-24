@@ -1,6 +1,7 @@
 .deliveryPage {
   padding: 2rem 0;
   min-height: 60vh;
+  min-width: 0;
 }
 
 .title {
@@ -114,4 +115,47 @@
   background-color: rgba(229, 86, 4, 0.15);
   color: var(--color-secondary);
   border: 1px solid rgba(229, 86, 4, 0.3);
+}
+
+@media (max-width: 600px) {
+  .deliveryPage {
+    padding: 1.25rem 0 2rem;
+  }
+
+  .title {
+    margin: 1rem 0 1.25rem;
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .content {
+    gap: 1rem;
+  }
+
+  .section {
+    padding: 1rem;
+    border-radius: 0.65rem;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .headerIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
+  .list {
+    padding-left: 1.25rem;
+  }
+
+  .note {
+    padding: 0.875rem;
+  }
 }
