@@ -2,9 +2,10 @@ import { FormEvent, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Container } from '@/components/Container';
 import { useLocale } from '@/contexts/LocaleContext';
+import { API_BASE_URL } from '@/services/api';
 import styles from './LoginPage/LoginPage.module.css';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+const API_URL = API_BASE_URL;
 
 export function ForgotPasswordPage() {
   const { t } = useLocale();

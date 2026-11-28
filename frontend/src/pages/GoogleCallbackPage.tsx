@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale } from '@/contexts/LocaleContext';
 import { setToken } from '@/hooks/useAuth';
+import { API_BASE_URL } from '@/services/api';
 
 export function GoogleCallbackPage() {
   const navigate = useNavigate();
@@ -18,8 +19,7 @@ export function GoogleCallbackPage() {
     }
 
     setToken(token);
-    const apiUrl = import.meta.env.VITE_API_URL || '/api';
-    void fetch(`${apiUrl}/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
+    void fetch(`${API_BASE_URL}/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
       .then(async (response) => {
         if (!response.ok) throw new Error('Unable to load profile');
         const payload = await response.json();

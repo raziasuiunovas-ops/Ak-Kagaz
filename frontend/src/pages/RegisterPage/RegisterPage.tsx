@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthVisualPanel } from '@/components/AuthVisualPanel';
 import { useLocale } from '@/contexts/LocaleContext';
+import { API_BASE_URL } from '@/services/api';
 import { useRegister } from '@/hooks';
 import styles from './RegisterPage.module.css';
 
@@ -258,7 +259,7 @@ export function RegisterPage() {
           <Link to="/login" className={styles.loginLink}>
             <span>{t('auth.signIn')}</span>
           </Link>
-          <a href={`${import.meta.env.VITE_API_URL || '/api'}/auth/google`} className={styles.googleButton}>
+          <a href={`${API_BASE_URL}/auth/google`} className={styles.googleButton}>
             <GoogleMark />
             {t('auth.continueWithGoogle')}
           </a>

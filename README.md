@@ -233,7 +233,6 @@ npm run prisma:format --workspace=@ak-kagaz/backend
 ### Frontend (.env)
 
 ```env
-VITE_API_URL=http://localhost:4000/api
 VITE_GOOGLE_CLIENT_ID=<your-client-id>
 ```
 

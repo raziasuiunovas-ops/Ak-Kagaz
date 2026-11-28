@@ -1,10 +1,8 @@
 // API client configuration
 
-// В development режиме используем прокси /api (настроен в vite.config.ts)
-// В production режиме используем полный URL из переменной окружения
-export const API_BASE_URL = import.meta.env.DEV
-  ? '/api'
-  : (import.meta.env.VITE_API_URL || '/api');
+// Both Vite's development proxy and Vercel's same-origin rewrite route /api
+// to the backend. Keeping this relative also makes preview deployments work.
+export const API_BASE_URL = '/api';
 
 export interface FetchOptions extends RequestInit {
   params?: Record<string, string | number | boolean>;

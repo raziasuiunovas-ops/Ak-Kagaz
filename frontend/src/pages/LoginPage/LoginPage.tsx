@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthVisualPanel } from '@/components/AuthVisualPanel';
 import { useLocale } from '@/contexts/LocaleContext';
+import { API_BASE_URL } from '@/services/api';
 import { useLogin, useVerify2FA, useAdminLogin } from '@/hooks';
 import styles from './LoginPage.module.css';
 
@@ -228,7 +229,7 @@ export function LoginPage() {
               <Link to="/register" className={styles.registerLink}>
                 <span>{t('auth.signUp')}</span>
               </Link>
-              <a href={`${import.meta.env.VITE_API_URL || '/api'}/auth/google`} className={styles.googleButton}>
+              <a href={`${API_BASE_URL}/auth/google`} className={styles.googleButton}>
                 <GoogleMark />
                 {t('auth.continueWithGoogle')}
               </a>

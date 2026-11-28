@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '@/services/api';
 
 interface LoginCredentials {
   email: string;
@@ -45,10 +46,7 @@ interface TwoFactorRequiredResponse {
 
 type LoginResponse = AuthResponse | TwoFactorRequiredResponse;
 
-// Используем ту же логику что и в api.ts для консистентности
-const API_URL = import.meta.env.DEV
-  ? '/api'
-  : (import.meta.env.VITE_API_URL || '/api');
+const API_URL = API_BASE_URL;
 
 // Auth API calls
 async function loginAPI(credentials: LoginCredentials): Promise<LoginResponse> {
