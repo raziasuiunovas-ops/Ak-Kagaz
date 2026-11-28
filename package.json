@@ -32,7 +32,7 @@
   "author": "AK KAGAZ",
   "license": "UNLICENSED",
   "engines": {
-    "node": "22.x",
+    "node": "20.x",
     "npm": ">=9.0.0"
   },
   "devDependencies": {
