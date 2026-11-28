@@ -32,8 +32,7 @@
   "author": "AK KAGAZ",
   "license": "UNLICENSED",
   "engines": {
-    "node": "20.x",
-    "npm": ">=9.0.0"
+    "node": "18.x"
   },
   "devDependencies": {
     "@playwright/test": "^1.42.1",
