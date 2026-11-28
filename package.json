@@ -31,9 +31,6 @@
   ],
   "author": "AK KAGAZ",
   "license": "UNLICENSED",
-  "engines": {
-    "node": "18.x"
-  },
   "devDependencies": {
     "@playwright/test": "^1.42.1",
     "prettier": "^3.2.5",

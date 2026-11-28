@@ -3,6 +3,7 @@
   "installCommand": "npm ci",
   "outputDirectory": "frontend/dist",
   "buildCommand": "npm run build:backend && npm run build:frontend",
+  "framework": null,
   "functions": {
     "api/index.js": {
       "maxDuration": 30,
