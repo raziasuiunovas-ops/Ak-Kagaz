@@ -12,8 +12,7 @@ const BundleDetailPage = lazy(() => import('@/pages/BundleDetailPage/BundleDetai
 const CartPage = lazy(() => import('@/pages/CartPage/CartPage').then((module) => ({ default: module.CartPage })));
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage/FavoritesPage').then((module) => ({ default: module.FavoritesPage })));
 const CheckoutPage = lazy(() => import('@/pages/CheckoutPage/CheckoutPage').then((module) => ({ default: module.CheckoutPage })));
-const LoginPage = lazy(() => import('@/pages/LoginPage/LoginPage').then((module) => ({ default: module.LoginPage })));
-const RegisterPage = lazy(() => import('@/pages/RegisterPage/RegisterPage').then((module) => ({ default: module.RegisterPage })));
+const AuthPage = lazy(() => import('@/pages/AuthPage').then((module) => ({ default: module.AuthPage })));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage').then((module) => ({ default: module.ForgotPasswordPage })));
 const GoogleCallbackPage = lazy(() => import('@/pages/GoogleCallbackPage').then((module) => ({ default: module.GoogleCallbackPage })));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage/ProfilePage').then((module) => ({ default: module.ProfilePage })));
@@ -105,8 +104,9 @@ export const router = createBrowserRouter([
       },
 
       // Customer authentication pages share the storefront shell.
-      { path: 'login', element: <LoginPage /> },
-      { path: 'register', element: <RegisterPage /> },
+      { path: 'auth', element: <AuthPage /> },
+      { path: 'login', element: <Navigate to="/auth?tab=login" replace /> },
+      { path: 'register', element: <Navigate to="/auth?tab=register" replace /> },
       { path: 'forgot-password', element: <ForgotPasswordPage /> },
       { path: 'auth/google/callback', element: <GoogleCallbackPage /> },
 

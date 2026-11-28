@@ -242,6 +242,8 @@ const translationsRu: Record<string, string> = {
   'checkout.commentPlaceholder': 'Дополнительные пожелания или комментарии к заказу',
   
   // Auth
+  'auth.welcome': 'Добро пожаловать',
+  'auth.createAccount': 'Создать аккаунт',
   'auth.login': 'Вход',
   'auth.register': 'Регистрация',
   'auth.logout': 'Выйти',
@@ -547,6 +549,8 @@ const translationsKy: Record<string, string> = {
   'checkout.commentPlaceholder': 'Кошумча каалоолор же буюртмага комментарийлер',
   
   // Auth
+  'auth.welcome': 'Кош келиңиз',
+  'auth.createAccount': 'Аккаунт түзүү',
   'auth.login': 'Кирүү',
   'auth.register': 'Катталуу',
   'auth.logout': 'Чыгуу',
